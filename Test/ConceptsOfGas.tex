@@ -1,0 +1,214 @@
+%\section{气体基本概念}
+\subsection{状态方程}
+\begin{frame}{完全气体状态方程}
+  \only<1>{
+    \begin{description}
+      \item[\color{blue}理想气体] 假想的没有粘滞性的流体，即$\mu=0$
+      \item[\color{blue}完全气体] 假想气体，仅考虑分子热运动，忽略分子间内聚力与分子体积
+    \end{description}
+  }
+  完全气体状态方程——形式1：
+  \begin{equation*}
+    pV = nR_{u}T
+  \end{equation*}
+  \only<1>{
+    \begin{itemize}
+      \item $p$：气体绝对压强
+      \item $V$：气体体积
+      \item $n$：气体摩尔数
+      \item $R_{u}=8.314\mathrm{J/(mol\cdot K)}$：通用气体常数
+      \item $T$：气体绝对温度
+    \end{itemize}
+  }
+  \uncover<2>{
+    \vspace*{-1em}
+    \begin{equation*}
+      p
+      =
+      \frac{nM}{V}
+      \frac{R_{u}}{M}T
+      =
+      \frac{m}{V}
+      RT
+      =
+      \rho RT
+    \end{equation*}
+    完全气体状态方程——形式2：
+    \begin{equation*}
+      \frac{p}{\rho}
+      =
+      RT
+    \end{equation*}
+    \begin{equation*}
+      p\bar{v}=RT
+    \end{equation*}
+    \vspace*{-0.5em}
+    \begin{itemize}
+      \item $M$：气体分子摩尔质量
+      \item $m=nM$：气体质量
+      \item $\displaystyle R=\frac{R_{u}}{M}$：气体常数，单位为$\mathrm{J/(kg\cdot K)}$
+      \item $\bar{v}$：比体积$\bar{v}=1/\rho$
+    \end{itemize}
+  }
+\end{frame}
+
+
+\subsection{热动力性质}
+\begin{frame}{比热、焓、熵}
+  \begin{itemize}[<+-|alert@+>]
+    \item 单位质量的物质温度每升高一度所需的热量为{\color{blue}比热\color{red}$c$}。
+      %\item 气体比热取决于伴随温度变化的过程
+    \item 温度变化过程中体积保持不变的比热为{\color{blue}定容比热
+      \color{red}$\displaystyle c_{v} = \frac{\mathrm{d}e}{\mathrm{d}T}$}，
+      $e=c_{v}T$
+    \item 温度变化过程中压强保持不变的比热为{\color{blue}定压比热
+      \color{red}$\displaystyle c_{p}=\frac{\mathrm{d}h}{\mathrm{d}T} $}，
+      $h=c_{p}T$
+    \item {\color{blue}焓\color{red}$h= e + p\bar{v} = e + RT$}，$\displaystyle
+      \frac{\mathrm{d} h}{\mathrm{d} T}
+      =
+      \frac{\mathrm{d} e + \mathrm{d}(RT)}{\mathrm{d} T}
+      =
+      \frac{\mathrm{d} e}{\mathrm{d} T}
+      +
+      R
+      $
+      \begin{equation*}
+        c_{p} - c_{v} = R
+      \end{equation*}
+    \item {\color{blue}比热比\color{red}$\displaystyle \gamma=\frac{c_{p}}{c_{v}}$}。对完全气体绝热过程，$\gamma$等于绝热指数$K$
+    \item $\displaystyle c_{p} = \frac{\gamma}{\gamma-1}R$，$\displaystyle c_{v}=\frac{1}{\gamma-1}R$
+    \item {\color{blue}熵\color{red}$\displaystyle s = c_{v}\ln{\frac{p}{\rho^{\gamma}}}$}
+  \end{itemize}
+\end{frame}
+
+\subsection{过程方程}
+\begin{frame}{等熵过程}
+  \begin{itemize}
+    \item 等熵过程方程
+      \begin{equation*}
+        \frac{p}{\rho^{\gamma}}
+        =
+        p\bar{v}^{\gamma}
+        =
+        \mathrm{C}
+      \end{equation*}
+    \item 初、终态参数间关系
+      \begin{equation*}
+        \begin{aligned}
+          \frac{p_{2}}{p_{1}}
+           &=
+           \left(\frac{\rho_{2}}{\rho_{1}}\right)^{\gamma}
+           \\
+           \frac{p_{2}}{p_{1}}
+           &=
+           \left(\frac{\bar{v}_{1}}{\bar{v}_{2}}\right)^{\gamma}
+           \\
+           \frac{T_{2}}{T_{1}}
+           &=
+           \left(\frac{\rho_{2}}{\rho_{1}}\right)^{\gamma-1}
+           \\
+           \frac{T_{2}}{T_{1}}
+           &=
+           \left(\frac{\bar{v}_{1}}{\bar{v}_{2}}\right)^{\gamma-1}
+           \\
+           \frac{T_{2}}{T_{1}}
+           &=
+           \left(\frac{p_{2}}{p_{1}}\right)^{\frac{\gamma-1}{\gamma}}
+        \end{aligned}
+      \end{equation*}
+  \end{itemize}
+\end{frame}
+
+\subsection{气体压缩性}
+\begin{frame}{体积弹性模量}
+  \vspace*{-0.5em}
+  \begin{definition}[体积弹性模量]
+    \begin{equation*}
+      E_{v}
+      =
+      -\frac{\mathrm{d}p}{\mathrm{d}V/V}
+      \only<5>{
+        =
+        \frac{\mathrm{d}p}{\mathrm{d}\rho/\rho}
+      }
+    \end{equation*}
+    \vspace*{-1em}
+    \begin{itemize}
+      \item $\mathrm{d}p$：压强变化量
+      \item $\mathrm{d}V$：体积变化量
+      \item $V$：初始体积
+      \item 上式中负号是因为当$\mathrm{d}p$为正时，$\mathrm{d}V$为负
+      \item $E_{v}$越大，气体越难被压缩；$E_{v}$越小，气体越易被压缩；
+    \end{itemize}
+  \end{definition}
+  \vspace*{-1.5em}
+  \begin{equation*}
+    \only<2->{
+      m = \rho V
+    }
+  \end{equation*}
+  \begin{equation*}
+    \only<3->{
+      \mathrm{d}m
+      =
+      \rho\mathrm{d}V
+      +
+      V\mathrm{d}\rho
+      =
+      0
+    }
+  \end{equation*}
+  \begin{equation*}
+    \only<4->{
+      \frac{\mathrm{d}\rho}{\rho}
+      =
+      -\frac{\mathrm{d}V}{V}
+    }
+  \end{equation*}
+\end{frame}
+
+\begin{frame}{体积弹性模量——续}
+  对完全气体等温过程：
+  \begin{equation*}
+    \frac{\mathrm{d}p}{\mathrm{d}\rho}
+    =
+    RT
+  \end{equation*}
+  \begin{equation*}
+    E_{v}
+    =
+    \rho\frac{\mathrm{d}p}{\mathrm{d}\rho}
+    =
+    \rho RT
+    =
+    p
+  \end{equation*}
+  对绝热过程：
+  \begin{equation*}
+    \frac{p}{\rho^{\gamma}} = \mathrm{C}
+  \end{equation*}
+  \begin{equation*}
+    \mathrm{d}p
+    =
+    \mathrm{C}\gamma \rho^{\gamma-1}\mathrm{d}\rho
+    =
+    \frac{p}{\rho^{\gamma}}\gamma \rho^{\gamma-1}\mathrm{d}\rho
+  \end{equation*}
+  \begin{equation*}
+    \frac{\mathrm{d}p}{\mathrm{d}\rho}
+    =
+    \gamma\frac{p}{\rho}
+    =
+    \gamma RT
+  \end{equation*}
+  \begin{equation*}
+    E_{v}
+    =
+    \rho\frac{\mathrm{d}p}{\mathrm{d}\rho}
+    =
+    \gamma\rho RT
+    =\gamma p
+  \end{equation*}
+
+\end{frame}

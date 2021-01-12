@@ -1,0 +1,169 @@
+%\section{气体动力学基本方程组}
+\subsection{实际流体运动基本方程组}
+\begin{frame}{纳维-斯托克斯方程组}
+  \vspace*{-1.5em}
+  \begin{equation*}
+    \left\{
+      \begin{aligned}
+      &\frac{\partial \rho}{\partial t}
+      +
+      \frac{\partial (\rho u_{x})}{\partial x}
+      +
+      \frac{\partial (\rho u_{y})}{\partial y}
+      +
+      \frac{\partial (\rho u_{z})}{\partial z}
+      =
+      0
+      \\
+      &
+      \frac{\partial u_{x}}{\partial t}
+      +
+      u_{x}\frac{\partial u_{x}}{\partial x}
+      +
+      u_{y}\frac{\partial u_{x}}{\partial y}
+      +
+      u_{z}\frac{\partial u_{x}}{\partial z}
+      =
+      f_{x}
+      -
+      \frac{1}{\rho}\frac{\partial p}{\partial x}
+      +
+      \nu
+      \left(
+        \frac{\partial^{2} u_{x}}{\partial x^{2}}
+        +
+        \frac{\partial^{2} u_{x}}{\partial y^{2}}
+        +
+        \frac{\partial^{2} u_{x}}{\partial z^{2}}
+      \right)
+      \\
+      &
+      \frac{\partial u_{y}}{\partial t}
+      +
+      u_{x}\frac{\partial u_{y}}{\partial x}
+      +
+      u_{y}\frac{\partial u_{y}}{\partial y}
+      +
+      u_{z}\frac{\partial u_{y}}{\partial z}
+      =
+      f_{y}
+      -
+      \frac{1}{\rho}\frac{\partial p}{\partial y}
+      +
+      \nu
+      \left(
+        \frac{\partial^{2} u_{y}}{\partial x^{2}}
+        +
+        \frac{\partial^{2} u_{y}}{\partial y^{2}}
+        +
+        \frac{\partial^{2} u_{y}}{\partial z^{2}}
+      \right)
+      \\
+      &
+      \frac{\partial u_{z}}{\partial t}
+      +
+      u_{x}\frac{\partial u_{z}}{\partial x}
+      +
+      u_{y}\frac{\partial u_{z}}{\partial y}
+      +
+      u_{z}\frac{\partial u_{z}}{\partial z}
+      =
+      f_{z}
+      -
+      \frac{1}{\rho}\frac{\partial p}{\partial z}
+      +
+      \nu
+      \left(
+        \frac{\partial^{2} u_{z}}{\partial x^{2}}
+        +
+        \frac{\partial^{2} u_{z}}{\partial y^{2}}
+        +
+        \frac{\partial^{2} u_{z}}{\partial z^{2}}
+      \right)
+      \end{aligned}
+      \right.
+  \end{equation*}
+  \begin{equation*}
+    \left\{
+      \begin{aligned}
+    &\frac{\partial \rho}{\partial t}
+    +
+    \nabla\cdot(\rho\bm{u})
+    =
+    0
+    \\
+    &\frac{\partial \bm{u}}{\partial t}
+    +
+    \bm{u}\cdot \nabla\bm{u}
+    =
+    \bm{f}
+    -
+    \frac{1}{\rho}\nabla p
+    +
+    \nu\nabla^{2}\bm{u}
+      \end{aligned}
+      \right.
+  \end{equation*}
+\end{frame}
+
+\subsection{气体动力学基本方程组}
+\begin{frame}{气体动力学基本方程组}
+  \vspace*{-1em}
+  \begin{equation*}
+    \left\{
+      \begin{aligned}
+    &\frac{\partial \rho}{\partial t}
+    +
+    \nabla\cdot(\rho\bm{u})
+    =
+    0
+    \\
+    &
+    \frac{\mathrm{d} \bm{u}}{\mathrm{d} t}
+    =
+    \frac{\partial \bm{u}}{\partial t}
+    +
+    \bm{u}\cdot \nabla\bm{u}
+    =
+    \only<1-4>{
+    \bm{f}
+  }
+    -
+    \frac{1}{\rho}\nabla p
+    \only<1-2>{
+    +
+    \nu\nabla^{2}\bm{u}
+  }
+  \only<7-10>{
+  \\
+    &
+    \frac{\mathrm{d} s}{\mathrm{d} t}
+    =
+    0
+  }
+  \only<11->{
+  \\
+    &
+    \frac{p}{\rho^{\gamma}}
+    =
+    \mathrm{C}
+  }
+    \only<10-11>{
+    \\
+    &
+    p = \rho RT
+  }
+      \end{aligned}
+      \right.
+  \end{equation*}
+  \uncover<2->{
+  \begin{block}{气体假定条件}
+  \begin{enumerate}
+    \item<2-|alert@2> 忽略粘性的作用，将气体看作理想流体
+    \item<4-|alert@4> 忽略质量力的作用
+    \item<6-|alert@6> 忽略热传导的作用，将运动过程看作绝热过程
+    \item<9-|alert@9> 假设气体是完全气体，且比热是常数
+  \end{enumerate}
+  \end{block}
+}
+\end{frame}

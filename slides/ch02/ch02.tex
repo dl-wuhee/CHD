@@ -1,0 +1,31 @@
+%!TEX program=xelatex
+\documentclass{SWRHE_Beamer}
+\begin{document}
+
+\title{第二章 控制方程组}
+\author{李~丹}
+\institute{武汉大学水利水电学院}
+\date{\today}
+\frame{\titlepage}
+
+\AtBeginSection[]{
+\begin{frame}[shrink]%
+\frametitle{目录}
+\transfade
+\tableofcontents[currentsection, hideallsubsections]
+\end{frame}
+}
+
+\section{纳维-斯托克斯方程}
+\input{NSEquation.tex}
+
+\section{雷诺应力平均方程}
+\input{ReynoldsEquation.tex}
+
+\section{二维浅水方程}
+\input{TwoDimensionalShallowWaterEquation.tex}
+
+\section{一维圣维南方程}
+\input{SaintVenantEquation.tex}
+
+\end{document}
