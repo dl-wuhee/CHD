@@ -1,4 +1,4 @@
-%\chapter{控制方程}
+\chapter{控制方程}
 \section{纳维-斯托克斯方程}
 \subsection{模型}
 \subsection{连续性方程}
@@ -8,8 +8,68 @@
 \subsection{紊流连续性方程}
 \subsection{紊流运动方程}
 \subsection{紊流模型}
-\section{二维浅水方程}
+\section{平面二维浅水方程}
+天然河道水流运动一般都属于三维流动，运动要素即沿程变化，又沿水深和河宽方向变化。
+由于三维水流运动比较复杂，河流数值模拟常用的一种简化方法是将运动要素沿水深方向平
+均，把三维问题转化为平面二维问题。本节基于一定条件将三维流动的雷诺平均运动微分方
+程简化为平面二维浅水方程。
 \subsection{浅水假设}
+三维流动的雷诺平均运动微分方程如所示。
+\begin{equation}
+\begin{aligned}
+  \frac{\partial \widebar{u_{x}}}{\partial x} +
+  \frac{\partial \widebar{u_{y}}}{\partial y} +
+  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  &
+  =
+  0
+  \\
+  \frac{\partial \widebar{u_{x}}}{\partial t} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} 
+  &
+  =
+  \widebar{f_{x}} -
+  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+  \right)
+  \\
+  \frac{\partial \widebar{u_{y}}}{\partial t} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{z}})}{\partial z} 
+  &
+  =
+  \widebar{f_{y}} -
+  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial y} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial z^{2}}
+  \right)
+  \\
+  \frac{\partial \widebar{u_{z}}}{\partial t} +
+  \frac{\partial (\widebar{u_{z}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{z}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{z}}\widebar{u_{z}})}{\partial z} 
+  &
+  =
+  \widebar{f_{z}} -
+  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial z} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{z}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{z}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{z}}}{\partial z^{2}}
+  \right)
+\end{aligned}
+\end{equation}
 \subsection{浅水连续性方程}
 \subsection{浅水运动方程}
 \subsection{浅水方程形式}
