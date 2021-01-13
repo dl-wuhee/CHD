@@ -13,16 +13,19 @@
 由于三维水流运动比较复杂，河流数值模拟常用的一种简化方法是将运动要素沿水深方向平
 均，把三维问题转化为平面二维问题。本节基于一定条件将三维流动的雷诺平均运动微分方
 程简化为平面二维浅水方程。
-\subsection{浅水假设}
-三维流动的雷诺平均运动微分方程如所示。
-\begin{equation}
-\begin{aligned}
+\subsection{浅水假设和水深平均积分法则}
+\subsubsection{浅水假设}
+三维流动的雷诺平均运动微分方程如式\eqref{EqRaeC}-\eqref{EqRaeMez}所示。
+
+\begin{subequations}
+\begin{align}
   \frac{\partial \widebar{u_{x}}}{\partial x} +
   \frac{\partial \widebar{u_{y}}}{\partial y} +
   \frac{\partial \widebar{u_{z}}}{\partial z} 
   &
   =
   0
+ \label{EqRaeC}
   \\
   \frac{\partial \widebar{u_{x}}}{\partial t} +
   \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
@@ -38,6 +41,7 @@
     \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
     \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
   \right)
+ \label{EqRaeMex}
   \\
   \frac{\partial \widebar{u_{y}}}{\partial t} +
   \frac{\partial (\widebar{u_{y}}\widebar{u_{x}})}{\partial x} +
@@ -53,6 +57,7 @@
     \frac{\partial^{2} \widebar{u_{y}}}{\partial y^{2}} +
     \frac{\partial^{2} \widebar{u_{y}}}{\partial z^{2}}
   \right)
+ \label{EqRaeMey}
   \\
   \frac{\partial \widebar{u_{z}}}{\partial t} +
   \frac{\partial (\widebar{u_{z}}\widebar{u_{x}})}{\partial x} +
@@ -67,13 +72,194 @@
     \frac{\partial^{2} \widebar{u_{z}}}{\partial x^{2}} +
     \frac{\partial^{2} \widebar{u_{z}}}{\partial y^{2}} +
     \frac{\partial^{2} \widebar{u_{z}}}{\partial z^{2}}
+  \right) \label{EqRaeMez}
+\end{align}
+\end{subequations}
+
+在浅水湖泊或水库中，如果垂向加速度与重力加速度相比很小，则可以忽略垂向加速度，并
+假定沿水深方向的动水压强分布符合静水压强分布，则三维流动的运动微分方程可简化为：
+\begin{subequations}
+\begin{align}
+  \frac{\partial \widebar{u_{x}}}{\partial x} +
+  \frac{\partial \widebar{u_{y}}}{\partial y} +
+  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  &
+  =
+  0
+ \label{EqRaeCSimp}
+  \\
+  \frac{\partial \widebar{u_{x}}}{\partial t} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} 
+  &
+  =
+  -\frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
   \right)
-\end{aligned}
+ \label{EqRaeMexSimp}
+  \\
+  \frac{\partial \widebar{u_{y}}}{\partial t} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{y}}\widebar{u_{z}})}{\partial z} 
+  &
+  =
+  -\frac{1}{\rho}\frac{\partial \widebar{p}}{\partial y} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{y}}}{\partial z^{2}}
+  \right)
+ \label{EqRaeMeySimp}
+  \\
+  \frac{\partial \widebar{p}}{\partial z} 
+  =
+  -\rho g
+  \label{EqRaeMezSimp}
+\end{align}
+\label{EqRae}
+\end{subequations}
+
+\subsubsection{水深积分平均法则}
+在河道水流中，水平尺度一般远大于垂向尺度，流速等水力参数沿垂向的变化常采用其垂向
+平均值，并假定沿水深方向的动水压强分布符合静水压强分布。将式\ref{EqRae}沿水深积
+分平均，即可得到沿水深平均的平面二维流动的基本方程。
+
+在沿水深积分平均过程中，采用以下定义和公式：
+
+（1）定义水深为
+\begin{equation}
+  H = \zeta - Z_{0}
 \end{equation}
-\subsection{浅水连续性方程}
+式中，$H$为水深，$\zeta=\zeta(x,y,t)$、$Z_{0}=Z_{0}(x,y,t)$分别为某一基准面下的
+水面高程和河床高程（见图）
+
+\begin{figure}
+  \begin{tikzpicture}
+  \end{tikzpicture}
+  \caption{水位基准示意图}
+\end{figure}
+
+（2）定义沿水深平均流速$U_i$为
+\begin{equation}
+  U_i
+  =
+  \frac{1}{H}
+\int_{Z_{0}}^{\zeta}\!\overline{u_{i}}\mathrm{d}z
+\end{equation}
+式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
+
+（3）莱布尼兹公式
+\begin{equation}
+  \frac{\partial}{\partial x_{i}}
+  \int_{a}^{b}\!f\mathrm{d}z
+  =
+  \int_{a}^{b}\!
+  \frac{\partial f}{\partial x_{i}}\mathrm{d}z
+  +
+  \left.f\right|_{b}\frac{\partial b}{\partial x_{i}}
+  -
+  \left.f\right|_{a}\frac{\partial a}{\partial x_{i}}
+\end{equation}
+式中，$a$、$b$和$f$都是$x_{i}$的函数。
+
+（4）自由表面及河床底部运动学条件为：
+\begin{equation}
+  \left.\overline{u_{z}}\right|_{z=\zeta}
+    =
+    \frac{D\zeta}{Dt}
+    =
+    \frac{\partial\zeta}{\partial t}
+    +
+    \left.\overline{u_{x}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial x}
+      +
+    \left.\overline{u_{y}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial y}
+\end{equation}
+\begin{equation}
+  \left.\overline{u_{z}}\right|_{z=Z_{0}}
+    =
+    \frac{DZ_{0}}{Dt}
+    =
+    \frac{\partial Z_{0}}{\partial t}
+    +
+    \left.\overline{u_{x}}\right|_{z=Z_{0}}\frac{\partial Z_{0}}{\partial x}
+      +
+    \left.\overline{u_{y}}\right|_{z=Z_{0}}\frac{\partial Z_{0}}{\partial y}
+\end{equation}
+
+\subsection{沿水深平均的连续性方程}
+采用上述定义和公式对连续性方程\eqref{EqRaeCSimp}沿水深积分平均得：
+\begin{equation*}
+  \begin{aligned}
+  &\int_{Z_{0}}^{\zeta}\!
+  \left(
+  \frac{\partial \widebar{u_{x}}}{\partial x} +
+  \frac{\partial \widebar{u_{y}}}{\partial y} +
+  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \right)
+  \mathrm{d}z
+  \\
+  =&
+  \frac{\partial}{\partial x}
+  \int_{Z_{0}}^{\zeta}\!
+  \widebar{u_{x}}
+  \mathrm{d}z
+  -
+  \left.\widebar{u_{x}}\right|_{z=\zeta}
+    \frac{\partial\zeta}{\partial z}
+  +
+  \left.\widebar{u_{x}}\right|_{z=Z_{0}}
+    \frac{\partial Z_{0}}{\partial z}
+   + \\
+  &
+  \frac{\partial}{\partial y}
+  \int_{Z_{0}}^{\zeta}\!
+  \widebar{u_{y}}
+  \mathrm{d}z
+  -
+  \left.\widebar{u_{y}}\right|_{z=\zeta}
+    \frac{\partial\zeta}{\partial z}
+  +
+  \left.\widebar{u_{y}}\right|_{z=Z_{0}}
+    \frac{\partial Z_{0}}{\partial z}
+    + \\
+  &
+  \left.\widebar{u_{z}}\right|_{z=\zeta}
+    -
+    \left.\widebar{u_{z}}\right|_{z=Z_{0}}
+      \\
+  =&
+  \frac{\partial HU_{x}}{\partial x} +
+  \frac{\partial HU_{y}}{\partial x} +
+  \frac{\partial \zeta}{\partial t} -
+  \frac{\partial Z_{0}}{\partial t}
+  =
+  0
+  \end{aligned}
+\end{equation*}
+最后得
+\begin{equation}
+  \frac{\partial H}{\partial t} +
+  \frac{\partial HU_{x}}{\partial x} +
+  \frac{\partial HU_{y}}{\partial y}
+  =
+  0
+\end{equation}
+
 \subsection{浅水运动方程}
+
 \subsection{浅水方程形式}
+
 \section{一维圣维南方程}
+
 \subsection{一维连续性方程}
+
 \subsection{一维运动方程}
+
 \subsection{圣维南方程形式}
