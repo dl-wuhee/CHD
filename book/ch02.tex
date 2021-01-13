@@ -76,8 +76,9 @@
 \end{align}
 \end{subequations}
 
-在浅水湖泊或水库中，如果垂向加速度与重力加速度相比很小，则可以忽略垂向加速度，并
-假定沿水深方向的动水压强分布符合静水压强分布，则三维流动的运动微分方程可简化为：
+在河道、湖泊或水库水流中，水平尺度一般远大于垂向尺度。如果垂向加速度与重力加速度
+相比很小，则可以忽略垂向加速度，流速等水力参数沿垂向的变化常采用其垂向平均值，并
+假定沿水深方向的动水压强分布符合静水压强分布。三维流动的运动微分方程可简化为：
 \begin{subequations}
 \begin{align}
   \frac{\partial \widebar{u_{x}}}{\partial x} +
@@ -127,17 +128,14 @@
 \end{subequations}
 
 \subsubsection{水深积分平均法则}
-在河道水流中，水平尺度一般远大于垂向尺度，流速等水力参数沿垂向的变化常采用其垂向
-平均值，并假定沿水深方向的动水压强分布符合静水压强分布。将式\ref{EqRae}沿水深积
-分平均，即可得到沿水深平均的平面二维流动的基本方程。
-
-在沿水深积分平均过程中，采用以下定义和公式：
+将式\eqref{EqRae}沿水深积分平均，即可得到沿水深平均的平面二维流动的基本方程。在沿
+水深积分平均过程中，采用以下定义和公式：
 
 （1）定义水深为
 \begin{equation}
-  H = \zeta - Z_{0}
+  H = \zeta - z_{0}
 \end{equation}
-式中，$H$为水深，$\zeta=\zeta(x,y,t)$、$Z_{0}=Z_{0}(x,y,t)$分别为某一基准面下的
+式中，$H$为水深，$\zeta=\zeta(x,y,t)$、$z_{0}=z_{0}(x,y,t)$分别为某一基准面下的
 水面高程和河床高程（见图）
 
 \begin{figure}
@@ -151,7 +149,7 @@
   U_i
   =
   \frac{1}{H}
-\int_{Z_{0}}^{\zeta}\!\overline{u_{i}}\mathrm{d}z
+\int_{z_{0}}^{\zeta}\!\overline{u_{i}}\mathrm{d}z
 \end{equation}
 式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
 
@@ -166,6 +164,7 @@
   \left.f\right|_{b}\frac{\partial b}{\partial x_{i}}
   -
   \left.f\right|_{a}\frac{\partial a}{\partial x_{i}}
+    \label{EqCGeLeibnizLaw}
 \end{equation}
 式中，$a$、$b$和$f$都是$x_{i}$的函数。
 
@@ -180,24 +179,87 @@
     \left.\overline{u_{x}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial x}
       +
     \left.\overline{u_{y}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial y}
+    \label{EqCGeSMC}
 \end{equation}
 \begin{equation}
-  \left.\overline{u_{z}}\right|_{z=Z_{0}}
+  \left.\overline{u_{z}}\right|_{z=z_{0}}
     =
-    \frac{DZ_{0}}{Dt}
+    \frac{Dz_{0}}{Dt}
     =
-    \frac{\partial Z_{0}}{\partial t}
+    \frac{\partial z_{0}}{\partial t}
     +
-    \left.\overline{u_{x}}\right|_{z=Z_{0}}\frac{\partial Z_{0}}{\partial x}
+    \left.\overline{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
       +
-    \left.\overline{u_{y}}\right|_{z=Z_{0}}\frac{\partial Z_{0}}{\partial y}
+    \left.\overline{u_{y}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \label{EqCGeBMC}
 \end{equation}
 
 \subsection{沿水深平均的连续性方程}
 采用上述定义和公式对连续性方程\eqref{EqRaeCSimp}沿水深积分平均得：
+\begin{equation}
+  \int_{z_{0}}^{\zeta}\!
+  \left(
+  \frac{\partial \widebar{u_{x}}}{\partial x} +
+  \frac{\partial \widebar{u_{y}}}{\partial y} +
+  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \right)
+  \mathrm{d}z
+  =
+  0
+  \label{EqCGeRaeCE_Int}
+\end{equation}
+根据式\eqref{EqCGeLeibnizLaw}，式\eqref{EqCGeRaeCE_Int}中前两项分别可写成
+\begin{equation}
+  \int_{z_{0}}^{\zeta}\!
+  \frac{\partial \widebar{u_{x}}}{\partial x} 
+  \mathrm{d}z
+  =
+  \frac{\partial}{\partial x}
+  \int_{z_{0}}^{\zeta}\!
+  \widebar{u_{x}}
+  \mathrm{d}z
+  -
+  \left.\widebar{u_{x}}\right|_{z=\zeta}
+    \frac{\partial\zeta}{\partial z}
+  +
+  \left.\widebar{u_{x}}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial z}
+\label{EqCGeRaeCE_Int_x}
+\end{equation}
+\begin{equation}
+  \int_{z_{0}}^{\zeta}\!
+  \frac{\partial \widebar{u_{y}}}{\partial y} 
+  \mathrm{d}z
+  =
+  \frac{\partial}{\partial y}
+  \int_{z_{0}}^{\zeta}\!
+  \widebar{u_{y}}
+  \mathrm{d}z
+  -
+  \left.\widebar{u_{y}}\right|_{z=\zeta}
+    \frac{\partial\zeta}{\partial z}
+  +
+  \left.\widebar{u_{y}}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial z}
+\label{EqCGeRaeCE_Int_y}
+\end{equation}
+式\eqref{EqCGeRaeCE_Int}中最后一项
+\begin{equation}
+  \int_{z_{0}}^{\zeta}\!
+  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \mathrm{d}z
+  =
+  \left.\widebar{u_{z}}\right|_{z=\zeta}
+    -
+    \left.\widebar{u_{z}}\right|_{z=z_{0}}
+\label{EqCGeRaeCE_Int_z}
+\end{equation}
+将式\eqref{EqCGeRaeCE_Int_x}，\eqref{EqCGeRaeCE_Int_y}和\eqref{EqCGeRaeCE_Int_z}
+代入\eqref{EqCGeRaeCE_Int}，并利用自由表面及河床底部运动学条件式\eqref{EqCGeSMC}
+和\eqref{EqCGeBMC}，可得
 \begin{equation*}
   \begin{aligned}
-  &\int_{Z_{0}}^{\zeta}\!
+  &\int_{z_{0}}^{\zeta}\!
   \left(
   \frac{\partial \widebar{u_{x}}}{\partial x} +
   \frac{\partial \widebar{u_{y}}}{\partial y} +
@@ -207,38 +269,38 @@
   \\
   =&
   \frac{\partial}{\partial x}
-  \int_{Z_{0}}^{\zeta}\!
+  \int_{z_{0}}^{\zeta}\!
   \widebar{u_{x}}
   \mathrm{d}z
   -
   \left.\widebar{u_{x}}\right|_{z=\zeta}
     \frac{\partial\zeta}{\partial z}
   +
-  \left.\widebar{u_{x}}\right|_{z=Z_{0}}
-    \frac{\partial Z_{0}}{\partial z}
+  \left.\widebar{u_{x}}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial z}
    + \\
   &
   \frac{\partial}{\partial y}
-  \int_{Z_{0}}^{\zeta}\!
+  \int_{z_{0}}^{\zeta}\!
   \widebar{u_{y}}
   \mathrm{d}z
   -
   \left.\widebar{u_{y}}\right|_{z=\zeta}
     \frac{\partial\zeta}{\partial z}
   +
-  \left.\widebar{u_{y}}\right|_{z=Z_{0}}
-    \frac{\partial Z_{0}}{\partial z}
+  \left.\widebar{u_{y}}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial z}
     + \\
   &
   \left.\widebar{u_{z}}\right|_{z=\zeta}
     -
-    \left.\widebar{u_{z}}\right|_{z=Z_{0}}
+    \left.\widebar{u_{z}}\right|_{z=z_{0}}
       \\
   =&
   \frac{\partial HU_{x}}{\partial x} +
   \frac{\partial HU_{y}}{\partial x} +
   \frac{\partial \zeta}{\partial t} -
-  \frac{\partial Z_{0}}{\partial t}
+  \frac{\partial z_{0}}{\partial t}
   =
   0
   \end{aligned}
@@ -251,8 +313,231 @@
   =
   0
 \end{equation}
+也可以写成
+\begin{equation}
+  \frac{\partial H}{\partial t} +
+  \nabla\cdot(H\mathbf{U})
+  =
+  0
+\end{equation}
 
-\subsection{浅水运动方程}
+\subsection{沿水深平均的运动方程}
+以$x$方向为例，式\eqref{EqRaeMexSimp}沿水深积分为
+\begin{equation}
+    \int_{z_{0}}^{\zeta}\!
+    \left[
+  \frac{\partial \widebar{u_{x}}}{\partial t} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} +
+  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} -
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+  \right)
+  \right]
+  \mathrm{d}z
+  =
+  0
+  \label{EqCGeMex_Int}
+\end{equation}
+式\eqref{EqCGeMex_Int}中包含了非恒定流项积分、对流项积分、压力项积分和阻力项积分
+。接下来分项讨论。
+
+（1）非恒定流项积分
+\begin{equation}
+    \begin{aligned}
+    &
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}}{\partial t} 
+    \mathrm{d}z
+    =
+    \frac{\partial}{\partial t}
+    \int_{z_0}^{\zeta}\!
+    \widebar{u_{x}}
+    \mathrm{d}z
+    -
+    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial t}
+    +
+    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial t}
+        \\
+        =&
+    \frac{\partial HU_{x}}{\partial t}
+    -
+    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial t}
+    +
+    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial t}
+    \end{aligned}
+        \label{EqCGe_Mex_US_Int}
+\end{equation}
+
+（2）对流项积分
+
+首先将时均流速按照式\eqref{EqCGe_VelDecompse}进行分解
+\begin{equation}
+\begin{aligned}
+\widebar{u_{x}}
+=
+U_{x}+\Delta\widebar{u_{x}}
+\\
+\widebar{u_{y}}
+=
+U_{y}+\Delta\widebar{u_{y}}
+\end{aligned}
+\label{EqCGe_VelDecompse}
+\end{equation}
+式中，$\Delta\widebar{u_{x}}$和$\Delta\widebar{u_{y}}$分别为$x$和$y$的时均流速与
+垂线平均流速的差值。
+
+对流项中第一项的积分
+\begin{equation}
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
+    \mathrm{d}z
+    =
+    \frac{\partial}{\partial x}
+    \int_{z_0}^{\zeta}\!
+    \widebar{u_{x}}\widebar{u_{x}}
+    \mathrm{d}z
+    -
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \label{EqCGe_CT_1st}
+\end{equation}
+式中
+\begin{equation*}
+    \begin{aligned}
+    \int_{z_0}^{\zeta}\!
+    \widebar{u_{x}}\widebar{u_{x}}
+    \mathrm{d}z
+    &=
+    \int_{z_0}^{\zeta}\!
+    (U_{x}+\Delta\widebar{u_{x}})(U_{x}+\Delta\widebar{u_{x}})
+    \mathrm{d}z
+    \\
+    &=
+    \int_{z_0}^{\zeta}\!
+    (U_{x}U_{x}+2U_{x}\Delta\widebar{u_{x}}+\Delta\widebar{u_{x}}\Delta\widebar{u_{x}})
+    \mathrm{d}z
+    \\
+    &=
+    HU_{x}U_{x}
+    +
+    \int_{z_0}^{\zeta}\!
+    \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
+    \mathrm{d}z
+    \\
+    &=
+    \beta_{xx}HU_{x}U_{x}
+    \end{aligned}
+\end{equation*}
+其中
+\begin{equation}
+\beta_{xx}
+=
+1 +
+\frac
+{
+\int_{z_0}^{\zeta}\!
+    \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
+\mathrm{d}z
+}
+{HU_{x}U_{x}}
+\end{equation}
+是由于流速沿垂线分布不均匀而引入的修正系数，类似于水力学中的动量修正系数。
+$\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
+\begin{equation}
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
+    \mathrm{d}z
+    =
+    \frac{\partial HU_{x}U_{x}}{\partial x}
+    -
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+\end{equation}
+
+同理，对流项的第二项可写为
+\begin{equation}
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}\widebar{u_{y}}}{\partial y}
+    \mathrm{d}z
+    =
+    \frac{\partial HU_{x}U_{y}}{\partial x}
+    -
+    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    +
+    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+\end{equation}
+对流项的第三项
+\begin{equation}
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}\widebar{u_{z}}}{\partial z}
+    \mathrm{d}z
+    =
+    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z=\zeta}
+    -
+    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z=z_{0}}
+\end{equation}
+
+将非恒定流项和对流项积分相加，并利用自由表面和河床底部运动学条件可得：
+\begin{equation}
+    \int_{z_{0}}^{\zeta}\!
+    \left[
+  \frac{\partial \widebar{u_{x}}}{\partial t} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
+  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z}
+  \right]
+  \mathrm{d}z
+=
+\frac{\partial HU_{x}}{\partial t}
++
+\frac{\partial HU_{x}U_{x}}{\partial x}
++
+\frac{\partial HU_{x}U_{y}}{\partial y}
+\end{equation}
+
+（3）压力项积分
+\begin{equation}
+  \begin{aligned}
+    \int_{z_{0}}^{\zeta}\!
+    \frac{\partial \widebar{p}}{\partial x}
+    \mathrm{d}z
+    &=
+    \frac{\partial}{\partial x}
+    \int_{z_0}^{\zeta}\!
+    \widebar{p}
+    \mathrm{d}z
+    -
+    \left.\widebar{p}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\widebar{p}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+      \\
+    &=
+    \frac{\partial}{\partial x}
+    \int_{z_0}^{\zeta}\!
+    \rho g(\zeta-z)
+    \mathrm{d}z
+    -
+    \left.\rho g(\zeta-z)\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\rho g(\zeta-z)\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+      \\
+    &=
+    \rho gH\frac{\partial H}{\partial x} 
+    +
+    \rho gH\frac{\partial z_{0}}{\partial x} 
+    =
+    \rho gH\frac{\partial \zeta}{\partial x} 
+  \end{aligned}
+\end{equation}
+
+（4）阻力项积分
 
 \subsection{浅水方程形式}
 
