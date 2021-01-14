@@ -790,8 +790,143 @@ $\overline{A}$为微小流段的平均过水面积。当流段内过水断面面
   \label{EqCGe_SVe_Ce}
 \end{equation}
 
-
+如果在该流段内有旁侧入流或出流，且单位长度旁侧入流流量为$q$（$q>0$为入流，$q<0$为出流
+），考虑旁侧入流得明槽一维非恒定流连续性方程为
+\begin{equation}
+\frac{\partial A}{\partial t}
++
+\frac{\partial Q}{\partial x}
+=
+q
+\end{equation}
 
 \subsection{一维运动方程}
+设坐标轴$x$方向与水流流动方向一致，根据牛顿第二定律建立运动方程。为分析简单起见
+，首先考虑棱柱体明槽（如图）的情况。
+
+作用在1-1断面的所有外力在$x$方向的分力有：
+
+（1）总动水压力。
+
+设压强分布服从静水压强分布，则作用在1-1断面的水压力
+\begin{equation}
+P
+=
+\int_{0}^{h}\! \rho g(h-y)\xi(y)\mathrm{d}y
+\end{equation}
+式中，$\xi(y)$为过水断面上距渠底$y$处的宽度。
+作用于2-2断面的水压力为$P+\frac{\partial P}{\partial x}\mathrm{d}x$。则沿$x$方向
+的总动水压力
+\begin{equation}
+  \begin{aligned}
+    \sum P
+    =&
+    P - \left(P+\frac {\partial P} {\partial x}\mathrm{d}x\right)
+    \\
+    =&
+    -\gamma \mathrm{d}x 
+    \left[
+      \frac{\partial h}{\partial x}
+      \int_{0}^{h}\!
+      \zeta(y)
+      \mathrm{d}y
+      +
+      \int_{0}^{h}\!
+      (h-y)
+      \frac{\partial \zeta(y)}{\partial x}
+      \mathrm{d}y
+    \right]
+  \end{aligned}
+  \label{EqCGe_SVe_Me_Pressure}
+\end{equation}
+因假定明槽为棱柱体明槽，有$\frac{\partial \xi(y)}{\partial x}=0$。则有
+\begin{equation}
+\sum P
+=
+-\gamma A\frac{\partial h}{\partial x}\mathrm{d}x
+\end{equation}
+
+（2）重力
+\begin{equation}
+  \mathrm{d}G_{x}
+  =
+  \mathrm{d}G\sin\alpha
+  =
+  -\gamma A\mathrm{d}x\frac{\partial z}{\partial x}
+\end{equation}
+式中，$\alpha$为坐标轴$x$与水平方向的夹角，$A$为过水断面面积。
+
+（3）侧壁面上的阻力
+\begin{equation}
+\mathrm{d}T
+=
+\tau_{0}\chi\mathrm{d}x
+=
+\gamma RJ\chi\mathrm{d}x
+=
+\gamma AJ\mathrm{d}x
+\end{equation}
+式中，$\chi$为过水断面湿周，$R$为过水断面水力半径，$J$为水力坡度，
+$\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
+
+其次，由于流速$U$是$x$和$t$的函数，则水流沿$x$方向的加速度$a_{x}$为
+\begin{equation}
+  a_{x}
+=
+\frac{\mathrm{d} U}{\mathrm{d} t}
+=
+\frac{\partial U}{\partial t}
++
+U
+\frac{\partial U}{\partial x}
+\end{equation}
+微小流段内的水体质量为$\mathrm{d}m=\rho A\mathrm{d}x$。
+
+根据牛顿第二定律，有$\sum F_{x}=\mathrm{d}ma_{x}$，即
+\begin{equation}
+-\gamma A\frac{\partial h}{\partial x}\mathrm{d}x
+-\gamma A\frac{\partial z}{\partial x}\mathrm{d}x
+-\gamma AJ\mathrm{d}x
+=
+\rho A\mathrm{d}x
+\left(
+\frac{\partial U}{\partial t}
++
+U
+\frac{\partial U}{\partial x}
+\right)
+\end{equation}
+上式两边同除以$\gamma A\mathrm{d}x$并整理得：
+\begin{equation}
+\frac{\partial z}{\partial x}
++
+\frac{1}{g}
+\frac{\partial U}{\partial t}
++
+\frac{U}{g}
+\frac{\partial U}{\partial x}
++
+J
+=
+0
+\label{EqCGe_SVe_Me}
+\end{equation}
+式\eqref{EqCGe_SVe_Me}即为棱柱体明槽非恒定流运动方程得一般形式。对于非棱柱体明槽
+（比如河槽向下游缩窄或展宽），则两岸壁将对微小流段水体作用一附加压力，该附加压力
+可表示为
+\begin{equation}
+  Vp^{\prime}
+  =
+  \int_{0}^{h}\!
+  \left[
+    \rho g(h-y)
+    \frac{\partial \xi(y)}{\partial x}
+    \mathrm{d}x
+  \right]
+  \mathrm{d}y
+\end{equation}
+将附加压力代式\eqref{EqCGe_SVe_Me_Pressure}入中，恰好与该式最后一项抵消。因此对
+于非棱柱体明槽，式\eqref{EqCGe_SVe_Me}仍适用。
 
 \subsection{圣维南方程不同形式}
+
