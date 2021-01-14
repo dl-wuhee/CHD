@@ -166,7 +166,7 @@
   \left.f\right|_{a}\frac{\partial a}{\partial x_{i}}
     \label{EqCGeLeibnizLaw}
 \end{equation}
-式中，$a$、$b$和$f$都是$x_{i}$的函数。
+式中，$x_{i}=x$，$y$，$t$。$a$、$b$和$f$都是$x_{i}$的函数。
 
 （4）自由表面及河床底部运动学条件为：
 \begin{equation}
@@ -538,13 +538,260 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \end{equation}
 
 （4）阻力项积分
+\begin{equation}
+  \begin{aligned}
+    &\int_{z_{0}}^{\zeta}\!
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}}
+    \mathrm{d}z
+    =
+    \int_{z_{0}}^{\zeta}\!
+    \frac{\partial}{\partial x}
+    \left(\frac{\partial \widebar{u_{x}}}{\partial x}\right)
+    \mathrm{d}z
+    =
+    \frac{\partial}{\partial x}
+    \int_{z_0}^{\zeta}\!
+    \frac{\partial \widebar{u_{x}}}{\partial x}
+    \mathrm{d}z
+    -
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \\
+    =&
+    \frac{\partial}{\partial x}
+    \left(
+    \frac{\partial}{\partial x}
+    \int_{z_0}^{\zeta}\!
+    \widebar{u_{x}}
+    \mathrm{d}z
+    -
+    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \right)
+    -
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+      \\
+    =&
+    \frac{\partial^{2} HU_{x}}{\partial x^{2}} +
+    \frac{\partial}{\partial x}
+    \left(
+    -
+    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \right)
+    -
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    +
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+  \end{aligned}
+  \label{EqCGe_Shear_1}
+\end{equation}
 
-\subsection{浅水方程形式}
+类似地
+\begin{equation}
+    \int_{z_{0}}^{\zeta}\!
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
+    \mathrm{d}z
+    =
+    \frac{\partial^{2} HU_{x}}{\partial y^{2}} +
+    \frac{\partial}{\partial y}
+    \left(
+    -
+    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    +
+    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \right)
+    -
+    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    +
+    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+  \label{EqCGe_Shear_2}
+\end{equation}
+\begin{equation}
+    \int_{z_{0}}^{\zeta}\!
+    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
+    \mathrm{d}z
+    =
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=\zeta}
+      -
+      \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=z_{0}}
+  \label{EqCGe_Shear_3}
+\end{equation}
+将式\eqref{EqCGe_Shear_1}至\eqref{EqCGe_Shear_3}相加，得
+\begin{equation}
+  \begin{aligned}
+    &\int_{z_{0}}^{\zeta}\!
+    \nu_{t}
+    \left(
+      \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
+      \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
+      \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+    \right)
+    \mathrm{d}z =\\
+     &
+    \nu_{t}
+    \left(
+    \frac{\partial^{2} HU_{x}}{\partial x^{2}} +
+    \frac{\partial^{2} HU_{x}}{\partial y^{2}}
+  \right)
+  \\
+      -&\nu_{t}
+      \left[
+    \frac{\partial}{\partial x}
+    \left(
+    \frac{\partial \zeta}{\partial x}
+\left.\widebar{u_{x}}\right|_{z=\zeta}
+\right)
++
+    \frac{\partial}{\partial y}
+    \left(
+    \frac{\partial \zeta}{\partial y}
+\left.\widebar{u_{x}}\right|_{z=\zeta}
+\right)
++
+\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}
+    \frac{\partial \zeta}{\partial x}
+  +
+\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=\zeta}
+    \frac{\partial \zeta}{\partial y}
+    -
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=\zeta}
+        \right]
+        \\
+      +&\nu_{t}
+      \left[
+    \frac{\partial}{\partial x}
+    \left(
+    \frac{\partial z_{0}}{\partial x}
+\left.\widebar{u_{x}}\right|_{z=z_{0}}
+\right)
++
+    \frac{\partial}{\partial y}
+    \left(
+    \frac{\partial z_{0}}{\partial y}
+\left.\widebar{u_{x}}\right|_{z=z_{0}}
+\right)
++
+\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial x}
+  +
+\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=z_{0}}
+    \frac{\partial z_{0}}{\partial y}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=z_{0}}
+        \right]
+  \end{aligned}
+  \label{EqCGe_Shear_Total}
+\end{equation}
+式\eqref{EqCGe_Shear_Total}中右边后两项分别为由底部床面阻力和自由表面风阻力引起
+的阻力项，通常可以式\eqref{EqCGe_Shear}表示：
+\begin{equation}
+  g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -
+  C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
+  \label{EqCGe_Shear}
+\end{equation}
+式中，$C_{w}$为无因此风应力系数，$\rho_{a}$为空气密度，$\omega$为风速，$\beta$为
+风向与$x$方向的夹角。最后，$x$方向的运动方程为
+\begin{equation}
+  \begin{aligned}
+  \frac{\partial HU_{x}}{\partial t} +
+  &\frac{\partial HU_{x}U_{x}}{\partial x} +
+  \frac{\partial HU_{x}U_{y}}{\partial y} 
+  =\\
+  &-gH\frac{\partial \zeta}{\partial x}
+  -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  +
+  \nu_{t}\left(
+    \frac{\partial^{2}HU_{x}}{\partial x^{2}}+
+    \frac{\partial^{2}HU_{x}}{\partial y^{2}}
+\right)
+  +C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
+  \end{aligned}
+  \label{EqCGe_Me_x}
+\end{equation}
+同理可得，$y$方向运动方程为
+\begin{equation}
+  \begin{aligned}
+  \frac{\partial HU_{y}}{\partial t} +
+  &\frac{\partial HU_{x}U_{y}}{\partial x} +
+  \frac{\partial HU_{y}U_{y}}{\partial y} 
+  =\\
+  &-gH\frac{\partial \zeta}{\partial y}
+  -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  +
+  \nu_{t}\left(
+    \frac{\partial^{2}HU_{y}}{\partial x^{2}}+
+    \frac{\partial^{2}HU_{y}}{\partial y^{2}}
+\right)
+  +C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\sin\beta
+  \end{aligned}
+  \label{EqCGe_Me_y}
+\end{equation}
 
-\section{一维圣维南方程}
+当自由表面风应力影响较小时，风应力项可以忽略。此外，当模拟区域尺度较大，还要考虑
+地球自转的影响，可在方程\eqref{EqCGe_Me_x}和\eqref{EqCGe_Me_y}右边分别加入科氏力。
+\begin{equation}
+  \begin{aligned}
+    f_x = 2\omega\sin\varphi U_{x} 
+    \\
+    f_y = 2\omega\sin\varphi U_{y} 
+  \end{aligned}
+\end{equation}
+式中，$\omega$为地球自转角速度，$\varphi$为模拟区域所处纬度。
 
+根据推导过程中所采用的假定条件，在使用二维浅水方程时应注意以下问题：
+\begin{enumerate}
+  \item 方程推导中引用了牛顿流体所满足的本构关系式，因此上述方程只适用于牛顿流体
+，对类似高含沙水流的非牛顿流体不适用。
+ \item 方程推导中对流体做了均质不可压的假设，因此上述方程只能在含沙量较小的情况下近似使
+用，当含沙量较大时，应考虑密度变化的影响。
+\item 在垂向积分过程中，略去流速等水力参数沿垂直方向的变化，并假定沿水深方向的动水压强
+分布符合静水压强分布。因此所研究问题的水平尺度应远大于垂向尺度，流速等水力参数沿
+垂直方向的变化较之沿水平方向的变化要小得多。
+\end{enumerate}
+
+\subsection{二维平面浅水方程不同形式}
+
+\section{一维非恒定流基本控制方程}
 \subsection{一维连续性方程}
+如图\ref{FigCGe_}所示，在明槽非恒定流中，沿水流流动方向取长为$\mathrm{d}x$的微小
+流段。流段进口1-1断面流量为$Q$，在$\Delta t$时段内，从1-1断面进入流段的液体
+质量为$\rho Q\Delta t$。流段出口2-2断面流量为$Q+\frac{\partial Q}{\partial
+x}\mathrm{d}x$，在$\Delta t$时段内，从2-2断面流出的液体质量为$\rho Q\Delta
+t+\rho\frac{\partial Q}{\partial x}\mathrm{d}x\Delta t$。该时段内进出此流段的液体
+质量差为$-\rho\frac{\partial Q}{\partial x}\mathrm{d}x\Delta t$。
+
+时段内的质量差表现为流段内的槽蓄量变化。在起始时刻，流段内的槽蓄量为
+$\rho\overline{A}\mathrm{d}x$。而经过$\Delta t$时段后，流段内的槽蓄量为
+$\rho\left(\overline{A}+\frac{\partial\overline{A}}{\partial t}\Delta
+t\right)\mathrm{d}x$。$\Delta t$时段内，流段内的槽蓄量变化量为
+$\rho\frac{\partial \overline{A}}{\partial t}\Delta t\mathrm{d}x$。其中
+$\overline{A}$为微小流段的平均过水面积。当流段内过水断面面积变化较小时，可直接用
+1-1断面段面积$A$来替代$\overline{A}$。
+
+因此，根据质量守恒原理，进出该流段的液体质量差等于流段内槽蓄量改变量，即
+\begin{equation*}
+  -\rho\frac{\partial Q}{\partial x}\mathrm{d}x\Delta t
+  =
+  \rho\frac{\partial A}{\partial t}\mathrm{d}x\Delta t
+\end{equation*}
+化简后得到明槽一维非恒定流连续性方程
+\begin{equation}
+  \frac{\partial A}{\partial t}
+  +
+  \frac{\partial Q}{\partial x}
+  =
+  0
+  \label{EqCGe_SVe_Ce}
+\end{equation}
+
+
 
 \subsection{一维运动方程}
 
-\subsection{圣维南方程形式}
+\subsection{圣维南方程不同形式}
