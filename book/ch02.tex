@@ -3,11 +3,67 @@
 \subsection{模型}
 \subsection{连续性方程}
 \subsection{运动方程}
-\section{雷诺应力平均方程}
-\subsection{紊流基础特征}
-\subsection{紊流连续性方程}
-\subsection{紊流运动方程}
+
+\section{雷诺时均方程}
+\subsection{紊流物理量时均值定义及性质}
+根据大量相关实验观测，紊流具有有涡性、不规则性、耗能性、连续性、三维性以及非定常
+性等特征。因此，紊流运动要素都具有随机性。为了后续分析方便，紊流运动要素的瞬时值
+常被分解成时均值和脉动值。任一运动要素$\phi$的时均值定义为：
+\begin{equation}
+  \widebar{\phi}
+  =
+  \frac{1}{\Delta t}
+  \int_{t}^{t+\Delta t}\!
+  \phi(t)
+  \mathrm{d}t
+  \label{EqCGe_RA}
+\end{equation}
+其中，时间间隔$\Delta t$相对于紊流的随机脉动周期而言足够大，但相对于流场的各种时
+均量的缓慢变化周期来说，应足够小。如果时均值随时间变化，成为非稳态的时均紊流；如
+果时均值不随时间变化，成为准稳态紊流，简称稳态紊流。
+
+运动要素的瞬时值$\phi$，时均值$\widebar{\phi}$及脉动值$\phi^{\prime}$之间有如下
+关系：
+\begin{equation}
+  \phi = \widebar{\phi} + \phi^{\prime}
+  \label{EqCGe_RA_Comp}
+\end{equation}
+
+设$\phi$和$f$是两个瞬时值，$\widebar{\phi}$和$\widebar{f}$为相应的时均值，
+$\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}和
+\eqref{EqCGe_RA_Comp}，下列基本关系成立：
+\begin{equation}
+  \begin{aligned}
+  &\widebar{\phi^{\prime}} = 0
+  \quad\quad
+  \widebar{\widebar{\phi}} = \widebar{\phi}
+  \quad\quad
+  \overline{\widebar{\phi}+\phi^{\prime}} = \widebar{\phi}
+  \\
+  & \overline{\widebar{\phi}f} = \widebar{\phi}\widebar{f}
+  \quad\quad
+  \overline{\widebar{\phi}\widebar{f}} = \widebar{\phi}\widebar{f}
+  \quad\quad
+  \overline{\widebar{\phi}f^{\prime}} = 0
+  \quad\quad
+  \overline{\phi f} = \widebar{\phi}\widebar{f} +
+  \overline{\phi^{\prime}f^{\prime}}
+  \\
+  & \overline{\frac{\partial\phi}{\partial x_{i}}} = \frac{\partial \widebar{\phi}}{\partial x_{i}}
+  \quad\quad
+  \overline{\frac{\partial^{2}\phi}{\partial x_{i}^{2}}} = \frac{\partial^{2}
+  \widebar{\phi}}{\partial x_{i}^{2}}
+  \quad\quad
+  \overline{\frac{\partial\phi^{\prime}}{\partial x_{i}}} = 0
+  \quad\quad
+  \overline{\frac{\partial^{2}\phi^{\prime}}{\partial x_{i}^{2}}} = 0
+\end{aligned}
+\end{equation}
+
+\subsection{雷诺时均连续性方程}
+\subsection{雷诺时均运动方程}
 \subsection{紊流模型}
+
 \section{平面二维浅水方程}
 天然河道水流运动一般都属于三维流动，运动要素即沿程变化，又沿水深和河宽方向变化。
 由于三维水流运动比较复杂，河流数值模拟常用的一种简化方法是将运动要素沿水深方向平
@@ -16,7 +72,6 @@
 \subsection{浅水假设和水深平均积分法则}
 \subsubsection{浅水假设}
 三维流动的雷诺平均运动微分方程如式\eqref{EqRaeC}-\eqref{EqRaeMez}所示。
-
 \begin{subequations}
 \begin{align}
   \frac{\partial \widebar{u_{x}}}{\partial x} +
@@ -133,9 +188,9 @@
 
 （1）定义水深为
 \begin{equation}
-  H = \zeta - z_{0}
+  H =  z_{s} - z_{b}
 \end{equation}
-式中，$H$为水深，$\zeta=\zeta(x,y,t)$、$z_{0}=z_{0}(x,y,t)$分别为某一基准面下的
+式中，$H$为水深，$ z_{s}= z_{s}(x,y,t)$、$z_{b}=z_{b}(x,y,t)$分别为某一基准面下的
 水面高程和河床高程（见图）
 
 \begin{figure}
@@ -149,7 +204,7 @@
   U_i
   =
   \frac{1}{H}
-\int_{z_{0}}^{\zeta}\!\overline{u_{i}}\mathrm{d}z
+\int_{z_{b}}^{ z_{s}}\!\overline{u_{i}}\mathrm{d}z
 \end{equation}
 式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
 
@@ -170,34 +225,34 @@
 
 （4）自由表面及河床底部运动学条件为：
 \begin{equation}
-  \left.\overline{u_{z}}\right|_{z=\zeta}
+  \left.\overline{u_{z}}\right|_{z_{s}}
     =
-    \frac{D\zeta}{Dt}
+    \frac{D z_{s}}{Dt}
     =
-    \frac{\partial\zeta}{\partial t}
+    \frac{\partial z_{s}}{\partial t}
     +
-    \left.\overline{u_{x}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial x}
+    \left.\overline{u_{x}}\right|_{z_{s}}\frac{\partial z_{s}}{\partial x}
       +
-    \left.\overline{u_{y}}\right|_{z=\zeta}\frac{\partial\zeta}{\partial y}
+    \left.\overline{u_{y}}\right|_{z_{s}}\frac{\partial z_{s}}{\partial y}
     \label{EqCGeSMC}
 \end{equation}
 \begin{equation}
-  \left.\overline{u_{z}}\right|_{z=z_{0}}
+  \left.\overline{u_{z}}\right|_{z_{b}}
     =
-    \frac{Dz_{0}}{Dt}
+    \frac{Dz_{b}}{Dt}
     =
-    \frac{\partial z_{0}}{\partial t}
+    \frac{\partial z_{b}}{\partial t}
     +
-    \left.\overline{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\overline{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       +
-    \left.\overline{u_{y}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \left.\overline{u_{y}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
     \label{EqCGeBMC}
 \end{equation}
 
 \subsection{沿水深平均的连续性方程}
 采用上述定义和公式对连续性方程\eqref{EqRaeCSimp}沿水深积分平均得：
 \begin{equation}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \left(
   \frac{\partial \widebar{u_{x}}}{\partial x} +
   \frac{\partial \widebar{u_{y}}}{\partial y} +
@@ -210,48 +265,48 @@
 \end{equation}
 根据式\eqref{EqCGeLeibnizLaw}，式\eqref{EqCGeRaeCE_Int}中前两项分别可写成
 \begin{equation}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u_{x}}}{\partial x} 
   \mathrm{d}z
   =
   \frac{\partial}{\partial x}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \widebar{u_{x}}
   \mathrm{d}z
   -
-  \left.\widebar{u_{x}}\right|_{z=\zeta}
-    \frac{\partial\zeta}{\partial z}
+  \left.\widebar{u_{x}}\right|_{z_{s}}
+    \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{x}}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial z}
+  \left.\widebar{u_{x}}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial z}
 \label{EqCGeRaeCE_Int_x}
 \end{equation}
 \begin{equation}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u_{y}}}{\partial y} 
   \mathrm{d}z
   =
   \frac{\partial}{\partial y}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \widebar{u_{y}}
   \mathrm{d}z
   -
-  \left.\widebar{u_{y}}\right|_{z=\zeta}
-    \frac{\partial\zeta}{\partial z}
+  \left.\widebar{u_{y}}\right|_{z_{s}}
+    \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{y}}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial z}
+  \left.\widebar{u_{y}}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial z}
 \label{EqCGeRaeCE_Int_y}
 \end{equation}
 式\eqref{EqCGeRaeCE_Int}中最后一项
 \begin{equation}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u_{z}}}{\partial z} 
   \mathrm{d}z
   =
-  \left.\widebar{u_{z}}\right|_{z=\zeta}
+  \left.\widebar{u_{z}}\right|_{z_{s}}
     -
-    \left.\widebar{u_{z}}\right|_{z=z_{0}}
+    \left.\widebar{u_{z}}\right|_{z_{b}}
 \label{EqCGeRaeCE_Int_z}
 \end{equation}
 将式\eqref{EqCGeRaeCE_Int_x}，\eqref{EqCGeRaeCE_Int_y}和\eqref{EqCGeRaeCE_Int_z}
@@ -259,7 +314,7 @@
 和\eqref{EqCGeBMC}，可得
 \begin{equation*}
   \begin{aligned}
-  &\int_{z_{0}}^{\zeta}\!
+  &\int_{z_{b}}^{ z_{s}}\!
   \left(
   \frac{\partial \widebar{u_{x}}}{\partial x} +
   \frac{\partial \widebar{u_{y}}}{\partial y} +
@@ -269,38 +324,38 @@
   \\
   =&
   \frac{\partial}{\partial x}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \widebar{u_{x}}
   \mathrm{d}z
   -
-  \left.\widebar{u_{x}}\right|_{z=\zeta}
-    \frac{\partial\zeta}{\partial z}
+  \left.\widebar{u_{x}}\right|_{z_{s}}
+    \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{x}}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial z}
+  \left.\widebar{u_{x}}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial z}
    + \\
   &
   \frac{\partial}{\partial y}
-  \int_{z_{0}}^{\zeta}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \widebar{u_{y}}
   \mathrm{d}z
   -
-  \left.\widebar{u_{y}}\right|_{z=\zeta}
-    \frac{\partial\zeta}{\partial z}
+  \left.\widebar{u_{y}}\right|_{z_{s}}
+    \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{y}}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial z}
+  \left.\widebar{u_{y}}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial z}
     + \\
   &
-  \left.\widebar{u_{z}}\right|_{z=\zeta}
+  \left.\widebar{u_{z}}\right|_{z_{s}}
     -
-    \left.\widebar{u_{z}}\right|_{z=z_{0}}
+    \left.\widebar{u_{z}}\right|_{z_{b}}
       \\
   =&
   \frac{\partial HU_{x}}{\partial x} +
   \frac{\partial HU_{y}}{\partial x} +
-  \frac{\partial \zeta}{\partial t} -
-  \frac{\partial z_{0}}{\partial t}
+  \frac{\partial  z_{s}}{\partial t} -
+  \frac{\partial z_{b}}{\partial t}
   =
   0
   \end{aligned}
@@ -324,7 +379,7 @@
 \subsection{沿水深平均的运动方程}
 以$x$方向为例，式\eqref{EqRaeMexSimp}沿水深积分为
 \begin{equation}
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \left[
   \frac{\partial \widebar{u_{x}}}{\partial t} +
   \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
@@ -350,25 +405,25 @@
 \begin{equation}
     \begin{aligned}
     &
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}}{\partial t} 
     \mathrm{d}z
     =
     \frac{\partial}{\partial t}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \widebar{u_{x}}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial t}
+    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
     +
-    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial t}
+    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
         \\
         =&
     \frac{\partial HU_{x}}{\partial t}
     -
-    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial t}
+    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
     +
-    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial t}
+    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
     \end{aligned}
         \label{EqCGe_Mex_US_Int}
 \end{equation}
@@ -393,40 +448,40 @@ U_{y}+\Delta\widebar{u_{y}}
 
 对流项中第一项的积分
 \begin{equation}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
     \mathrm{d}z
     =
     \frac{\partial}{\partial x}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \widebar{u_{x}}\widebar{u_{x}}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \label{EqCGe_CT_1st}
 \end{equation}
 式中
 \begin{equation*}
     \begin{aligned}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \widebar{u_{x}}\widebar{u_{x}}
     \mathrm{d}z
     &=
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     (U_{x}+\Delta\widebar{u_{x}})(U_{x}+\Delta\widebar{u_{x}})
     \mathrm{d}z
     \\
     &=
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     (U_{x}U_{x}+2U_{x}\Delta\widebar{u_{x}}+\Delta\widebar{u_{x}}\Delta\widebar{u_{x}})
     \mathrm{d}z
     \\
     &=
     HU_{x}U_{x}
     +
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
     \mathrm{d}z
     \\
@@ -441,7 +496,7 @@ U_{y}+\Delta\widebar{u_{y}}
 1 +
 \frac
 {
-\int_{z_0}^{\zeta}\!
+\int_{z_0}^{ z_{s}}\!
     \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
 \mathrm{d}z
 }
@@ -450,43 +505,43 @@ U_{y}+\Delta\widebar{u_{y}}
 是由于流速沿垂线分布不均匀而引入的修正系数，类似于水力学中的动量修正系数。
 $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
     \mathrm{d}z
     =
     \frac{\partial HU_{x}U_{x}}{\partial x}
     -
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
 \end{equation}
 
 同理，对流项的第二项可写为
 \begin{equation}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}\widebar{u_{y}}}{\partial y}
     \mathrm{d}z
     =
     \frac{\partial HU_{x}U_{y}}{\partial x}
     -
-    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
 \end{equation}
 对流项的第三项
 \begin{equation}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}\widebar{u_{z}}}{\partial z}
     \mathrm{d}z
     =
-    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z=\zeta}
+    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z_{s}}
     -
-    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z=z_{0}}
+    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z_{b}}
 \end{equation}
 
 将非恒定流项和对流项积分相加，并利用自由表面和河床底部运动学条件可得：
 \begin{equation}
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \left[
   \frac{\partial \widebar{u_{x}}}{\partial t} +
   \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
@@ -505,96 +560,96 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 （3）压力项积分
 \begin{equation}
   \begin{aligned}
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial \widebar{p}}{\partial x}
     \mathrm{d}z
     &=
     \frac{\partial}{\partial x}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \widebar{p}
     \mathrm{d}z
     -
-    \left.\widebar{p}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\widebar{p}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{p}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\widebar{p}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       \\
     &=
     \frac{\partial}{\partial x}
-    \int_{z_0}^{\zeta}\!
-    \rho g(\zeta-z)
+    \int_{z_0}^{ z_{s}}\!
+    \rho g( z_{s}-z)
     \mathrm{d}z
     -
-    \left.\rho g(\zeta-z)\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\rho g( z_{s}-z)\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\rho g(\zeta-z)\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\rho g( z_{s}-z)\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       \\
     &=
     \rho gH\frac{\partial H}{\partial x} 
     +
-    \rho gH\frac{\partial z_{0}}{\partial x} 
+    \rho gH\frac{\partial z_{b}}{\partial x} 
     =
-    \rho gH\frac{\partial \zeta}{\partial x} 
+    \rho gH\frac{\partial  z_{s}}{\partial x} 
   \end{aligned}
 \end{equation}
 
 （4）阻力项积分
 \begin{equation}
   \begin{aligned}
-    &\int_{z_{0}}^{\zeta}\!
+    &\int_{z_{b}}^{ z_{s}}\!
     \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}}
     \mathrm{d}z
     =
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial}{\partial x}
     \left(\frac{\partial \widebar{u_{x}}}{\partial x}\right)
     \mathrm{d}z
     =
     \frac{\partial}{\partial x}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \frac{\partial \widebar{u_{x}}}{\partial x}
     \mathrm{d}z
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \\
     =&
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial}{\partial x}
-    \int_{z_0}^{\zeta}\!
+    \int_{z_0}^{ z_{s}}\!
     \widebar{u_{x}}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       \\
     =&
     \frac{\partial^{2} HU_{x}}{\partial x^{2}} +
     \frac{\partial}{\partial x}
     \left(
     -
-    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}\frac{\partial \zeta}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial x}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
   \end{aligned}
   \label{EqCGe_Shear_1}
 \end{equation}
 
 类似地
 \begin{equation}
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
     \mathrm{d}z
     =
@@ -602,30 +657,30 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \frac{\partial}{\partial y}
     \left(
     -
-    \left.\widebar{u_{x}}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\widebar{u_{x}}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=\zeta}\frac{\partial \zeta}{\partial y}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=z_{0}}\frac{\partial z_{0}}{\partial y}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
   \label{EqCGe_Shear_2}
 \end{equation}
 \begin{equation}
-    \int_{z_{0}}^{\zeta}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
     \mathrm{d}z
     =
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=\zeta}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{s}}
       -
-      \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=z_{0}}
+      \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{b}}
   \label{EqCGe_Shear_3}
 \end{equation}
 将式\eqref{EqCGe_Shear_1}至\eqref{EqCGe_Shear_3}相加，得
 \begin{equation}
   \begin{aligned}
-    &\int_{z_{0}}^{\zeta}\!
+    &\int_{z_{b}}^{ z_{s}}\!
     \nu_{t}
     \left(
       \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
@@ -644,45 +699,46 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
       \left[
     \frac{\partial}{\partial x}
     \left(
-    \frac{\partial \zeta}{\partial x}
-\left.\widebar{u_{x}}\right|_{z=\zeta}
+    \frac{\partial  z_{s}}{\partial x}
+\left.\widebar{u_{x}}\right|_{z_{s}}
 \right)
 +
     \frac{\partial}{\partial y}
     \left(
-    \frac{\partial \zeta}{\partial y}
-\left.\widebar{u_{x}}\right|_{z=\zeta}
+    \frac{\partial  z_{s}}{\partial y}
+\left.\widebar{u_{x}}\right|_{z_{s}}
 \right)
 +
-\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=\zeta}
-    \frac{\partial \zeta}{\partial x}
+\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}
+    \frac{\partial  z_{s}}{\partial x}
   +
-\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=\zeta}
-    \frac{\partial \zeta}{\partial y}
+\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{s}}
+    \frac{\partial  z_{s}}{\partial y}
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=\zeta}
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{s}}
         \right]
         \\
       +&\nu_{t}
       \left[
     \frac{\partial}{\partial x}
     \left(
-    \frac{\partial z_{0}}{\partial x}
-\left.\widebar{u_{x}}\right|_{z=z_{0}}
+    \frac{\partial z_{b}}{\partial x}
+\left.\widebar{u_{x}}\right|_{z_{b}}
 \right)
 +
     \frac{\partial}{\partial y}
     \left(
-    \frac{\partial z_{0}}{\partial y}
-\left.\widebar{u_{x}}\right|_{z=z_{0}}
+    \frac{\partial z_{b}}{\partial y}
+\left.\widebar{u_{x}}\right|_{z_{b}}
 \right)
 +
-\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial x}
+\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial x}
   +
-\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z=z_{0}}
-    \frac{\partial z_{0}}{\partial y}
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z=z_{0}}
+\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{b}}
+    \frac{\partial z_{b}}{\partial y}
+-
+    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{b}}
         \right]
   \end{aligned}
   \label{EqCGe_Shear_Total}
@@ -703,7 +759,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
   &\frac{\partial HU_{x}U_{x}}{\partial x} +
   \frac{\partial HU_{x}U_{y}}{\partial y} 
   =\\
-  &-gH\frac{\partial \zeta}{\partial x}
+  &-gH\frac{\partial  z_{s}}{\partial x}
   -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
@@ -721,7 +777,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
   &\frac{\partial HU_{x}U_{y}}{\partial x} +
   \frac{\partial HU_{y}U_{y}}{\partial y} 
   =\\
-  &-gH\frac{\partial \zeta}{\partial y}
+  &-gH\frac{\partial  z_{s}}{\partial y}
   -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
@@ -765,12 +821,11 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
   =
   0
     \\
-  %\begin{aligned}
   \frac{\partial HU_{x}}{\partial t} +
   \frac{\partial HU_{x}U_{x}}{\partial x} +
   \frac{\partial HU_{x}U_{y}}{\partial y} 
   =
-  -gH\frac{\partial \zeta}{\partial x}
+  -gH\frac{\partial  z_{s}}{\partial x}
   -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
@@ -782,7 +837,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
   \frac{\partial HU_{x}U_{y}}{\partial x} +
   \frac{\partial HU_{y}U_{y}}{\partial y} 
   =
-  -gH\frac{\partial \zeta}{\partial y}
+  -gH\frac{\partial  z_{s}}{\partial y}
   -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
@@ -791,6 +846,111 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \right)
   \end{gathered}
 \end{equation}
+
+当床面阻力占主导作用时，还可进一步忽略紊动阻力项。
+\begin{equation}
+  \begin{gathered}
+  \frac{\partial H}{\partial t} +
+  \frac{\partial HU_{x}}{\partial x} +
+  \frac{\partial HU_{y}}{\partial y}
+  =
+  0
+    \\
+  \frac{\partial HU_{x}}{\partial t} +
+  \frac{\partial (HU_{x}U_{x}+gH^{2}/2)}{\partial x} +
+  \frac{\partial HU_{x}U_{y}}{\partial y} 
+  =
+  -gH\frac{\partial z_{b}}{\partial x}
+  -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+    \\
+  \frac{\partial HU_{y}}{\partial t} +
+  \frac{\partial HU_{x}U_{y}}{\partial x} +
+  \frac{\partial (HU_{y}U_{y}+gH^{2}/2)}{\partial y} 
+  =
+  -gH\frac{\partial z_{b}}{\partial y}
+  -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  \end{gathered}
+\end{equation}
+
+此外，为了书写的简化，用$h$替代$H$，$u$替代$U_{x}$，$v$替代$U_{y}$，定义$x$和$y$
+方向的流量分别为$q_{x}=hu$和$q_{y}=hv$，上式可写成
+\begin{equation}
+  \begin{gathered}
+  \frac{\partial h}{\partial t} +
+  \frac{\partial q_{x}}{\partial x} +
+  \frac{\partial q_{y}}{\partial y}
+  =
+  0
+    \\
+  \frac{\partial q_{x}}{\partial t} +
+  \frac{\partial (uq_{x}+gh^{2}/2)}{\partial x} +
+  \frac{\partial vq_{y}}{\partial y} 
+  =
+  -gh\frac{\partial z_{b}}{\partial x}
+  -g\frac{n^{2}u\sqrt{u^{2}+v^{2}}}{h^{1/3}}
+    \\
+  \frac{\partial q_{y}}{\partial t} +
+  \frac{\partial uq_{y}}{\partial x} +
+  \frac{\partial (vq_{y}+gh^{2}/2)}{\partial y} 
+  =
+  -gh\frac{\partial z_{b}}{\partial y}
+  -g\frac{n^{2}v\sqrt{u^{2}+v^{2}}}{h^{1/3}}
+  \end{gathered}
+\end{equation}
+上式的向量形式为：
+\begin{equation}
+  \frac{\partial \mathbf{q}}{\partial t} +
+  \frac{\partial \mathbf{f}}{\partial x} +
+  \frac{\partial \mathbf{g}}{\partial y}
+  =
+  \mathbf{S_{b}} + \mathbf{S_{f}}
+\end{equation}
+%或
+%\begin{equation}
+  %\frac{\partial \mathbf{q}}{\partial t} +
+  %\nabla\cdot(\mathbf{F}) =
+  %\mathbf{S}
+%\end{equation}
+其中，$\mathbf{q}$为守恒变量向量，$\mathbf{f}$和$\mathbf{g}$分别为$x$和$y$方向的
+通量向量，$\mathbf{S_{b}}$和$\mathbf{S_{f}}$分别为河床底坡和阻力源项向量。这些向
+量的具体元素为：
+\begin{equation}
+  \mathbf{q} =
+  \begin{bmatrix}
+    h \\
+    hu \\
+    hv \\
+  \end{bmatrix}
+  ,
+  \mathbf{f} =
+  \begin{bmatrix}
+    hu \\
+    hu^{2} + \frac{1}{2}gh^{2} \\
+    huv \\
+  \end{bmatrix}
+  ,
+  \mathbf{g} =
+  \begin{bmatrix}
+    hv \\
+    huv \\
+    hu^{2} + \frac{1}{2}gh^{2} \\
+  \end{bmatrix}
+  ,
+  \mathbf{S_{b}} =
+  \begin{bmatrix}
+    0 \\
+    -gh\frac{\partial z_{b}}{\partial x} \\
+    -gh\frac{\partial z_{b}}{\partial y} \\
+  \end{bmatrix}
+  ,
+  \mathbf{S_{f}} =
+  \begin{bmatrix}
+    0 \\
+    -g\frac{n^{2}u\sqrt{u^2+v^2}}{h^{1/3}} \\
+    -g\frac{n^{2}v\sqrt{u^2+v^2}}{h^{1/3}} \\
+  \end{bmatrix}
+\end{equation}
+
 
 \section{一维非恒定流基本控制方程}
 \subsection{一维连续性方程}
@@ -863,12 +1023,12 @@ P
     \left[
       \frac{\partial h}{\partial x}
       \int_{0}^{h}\!
-      \zeta(y)
+       z_{s}(y)
       \mathrm{d}y
       +
       \int_{0}^{h}\!
       (h-y)
-      \frac{\partial \zeta(y)}{\partial x}
+      \frac{\partial  z_{s}(y)}{\partial x}
       \mathrm{d}y
     \right]
   \end{aligned}
@@ -1132,3 +1292,33 @@ J
   \end{gathered}
   \label{EqCGe_SV_AQ_2}
 \end{equation}
+
+\section{偏微分方程类型和性质}
+\subsection{偏微分方程形式}
+本章前几节所推导的方程都属于偏微分方程，形式各异。对同一模型建立的控制方程也有多
+种不同的形式。在数值计算中，若控制方程的对流项采用散度的形式来表示，这类方程被称
+为守恒型的控制方程，否则被称为非恒定形式。
+
+理论上，从微元体角度来看，守恒型微分方程和非守恒型微分方程是等价的，都是同一物理
+定律的数学表示。但是，数值计算是对有限大小的计算单元进行的，对有限大小的计算体积
+，两种形式的控制方程有不同的特性。守恒型微分方程允许流动参数在计算单元或控制体内
+部存在间断；而非守恒型微分方程要求流动参数是可微的。因此，基于守恒型微分方程的数
+值方法，可以直接用来计算有间断（如激波）的流场，且不用对间断进行任何特殊处理。这
+类数值方法被称为激波捕捉方法。而基于非守恒型为微分方程的数值方法，一般无法正确的
+计算有间断的流场。为了处理有间断的流动，这类方法必须与激波装配方法联合使用。简单
+来说，激波装配方法是把间断从流场中分离出来，当作流场的边界来处理。
+
+\subsection{控制方程的数学分类及其对数值解的影响}
+
+\subsubsection{双曲型方程}
+
+\subsubsection{抛物型方程}
+
+\subsubsection{椭圆型方程}
+
+\subsubsection{NS方程的数学性质}
+
+\subsubsection{二维浅水方程的数学性质}
+
+\subsubsection{一维浅水方程的数学性质}
+
