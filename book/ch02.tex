@@ -1,7 +1,14 @@
 \chapter{控制方程}
 \section{纳维-斯托克斯方程}
-\subsection{模型}
+%\subsection{模型}
 \subsection{连续性方程}
+连续性方程是将质量守恒定律应用到流场中固定的无穷小微元所导出的。如图所示，在流场
+中任取一微小正交六面体，各边分别与直角坐标系各轴平行。设各边边长分别为
+$\mathrm{d}x$、$\mathrm{d}y$和$\mathrm{d}z$。
+
+
+
+
 \subsection{运动方程}
 
 \section{雷诺时均方程}
@@ -10,7 +17,7 @@
 性等特征。因此，紊流运动要素都具有随机性。为了后续分析方便，紊流运动要素的瞬时值
 常被分解成时均值和脉动值。任一运动要素$\phi$的时均值定义为：
 \begin{equation}
-  \widebar{\phi}
+  \overline{\phi}
   =
   \frac{1}{\Delta t}
   \int_{t}^{t+\Delta t}\!
@@ -22,159 +29,526 @@
 均量的缓慢变化周期来说，应足够小。如果时均值随时间变化，成为非稳态的时均紊流；如
 果时均值不随时间变化，成为准稳态紊流，简称稳态紊流。
 
-运动要素的瞬时值$\phi$，时均值$\widebar{\phi}$及脉动值$\phi^{\prime}$之间有如下
+运动要素的瞬时值$\phi$，时均值$\overline{\phi}$及脉动值$\phi^{\prime}$之间有如下
 关系：
 \begin{equation}
-  \phi = \widebar{\phi} + \phi^{\prime}
+  \phi = \overline{\phi} + \phi^{\prime}
   \label{EqCGe_RA_Comp}
 \end{equation}
 
-设$\phi$和$f$是两个瞬时值，$\widebar{\phi}$和$\widebar{f}$为相应的时均值，
+设$\phi$和$f$是两个瞬时值，$\overline{\phi}$和$\overline{f}$为相应的时均值，
 $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}和
 \eqref{EqCGe_RA_Comp}，下列基本关系成立：
 \begin{equation}
   \begin{aligned}
-  &\widebar{\phi^{\prime}} = 0
+  &\overline{\phi^{\prime}} = 0
   \quad\quad
-  \widebar{\widebar{\phi}} = \widebar{\phi}
+  \overline{\overline{\phi}} = \overline{\phi}
   \quad\quad
-  \overline{\widebar{\phi}+\phi^{\prime}} = \widebar{\phi}
+  \overline{\overline{\phi}+\phi^{\prime}} = \overline{\phi}
   \\
-  & \overline{\widebar{\phi}f} = \widebar{\phi}\widebar{f}
+  & \overline{\overline{\phi}f} = \overline{\phi}\overline{f}
   \quad\quad
-  \overline{\widebar{\phi}\widebar{f}} = \widebar{\phi}\widebar{f}
+  \overline{\overline{\phi}\overline{f}} = \overline{\phi}\overline{f}
   \quad\quad
-  \overline{\widebar{\phi}f^{\prime}} = 0
+  \overline{\overline{\phi}f^{\prime}} = 0
   \quad\quad
-  \overline{\phi f} = \widebar{\phi}\widebar{f} +
+  \overline{\phi f} = \overline{\phi}\overline{f} +
   \overline{\phi^{\prime}f^{\prime}}
   \\
-  & \overline{\frac{\partial\phi}{\partial x_{i}}} = \frac{\partial \widebar{\phi}}{\partial x_{i}}
+  & \overline{\frac{\partial\phi}{\partial x_{i}}} = \frac{\partial \overline{\phi}}{\partial x_{i}}
   \quad\quad
   \overline{\frac{\partial^{2}\phi}{\partial x_{i}^{2}}} = \frac{\partial^{2}
-  \widebar{\phi}}{\partial x_{i}^{2}}
+  \overline{\phi}}{\partial x_{i}^{2}}
   \quad\quad
   \overline{\frac{\partial\phi^{\prime}}{\partial x_{i}}} = 0
   \quad\quad
   \overline{\frac{\partial^{2}\phi^{\prime}}{\partial x_{i}^{2}}} = 0
 \end{aligned}
+\label{EqCGe_RA_cal}
 \end{equation}
 
 \subsection{雷诺时均连续性方程}
-\subsection{雷诺时均运动方程}
-\subsection{紊流模型}
+将$u$、$v$和$w$表示成时均值和脉动值之和，并带入连续性方程\eqref{}，并做时均运算
+，
+\begin{equation*}
+  \overline{
+    \frac{\partial(\overline{u}+u^{\prime})}{\partial x} 
+  }
+  +
+  \overline{
+    \frac{\partial(\overline{v}+v^{\prime})}{\partial y} 
+  }
+  +
+  \overline{
+    \frac{\partial(\overline{w}+w^{\prime})}{\partial z} 
+  }
+  =
+    \frac{\partial \overline{u}}{\partial x} +
+    \frac{\partial \overline{v}}{\partial y} +
+    \frac{\partial \overline{w}}{\partial z} +
+    \frac{\partial \overline{u^{\prime}}}{\partial x} +
+    \frac{\partial \overline{v^{\prime}}}{\partial y} +
+    \frac{\partial \overline{w^{\prime}}}{\partial z}
+    =0
+\end{equation*}
+运用式\eqref{EqCGe_RA_cal}，可得
+\begin{equation}
+    \frac{\partial \overline{u}}{\partial x} +
+    \frac{\partial \overline{v}}{\partial y} +
+    \frac{\partial \overline{w}}{\partial z}
+    =
+    0
+\end{equation}
+上式表明，紊流速度的时均值仍满足连续性方程。
 
-\section{平面二维浅水方程}
-天然河道水流运动一般都属于三维流动，运动要素即沿程变化，又沿水深和河宽方向变化。
-由于三维水流运动比较复杂，河流数值模拟常用的一种简化方法是将运动要素沿水深方向平
-均，把三维问题转化为平面二维问题。本节基于一定条件将三维流动的雷诺平均运动微分方
-程简化为平面二维浅水方程。
-\subsection{浅水假设和水深平均积分法则}
-\subsubsection{浅水假设}
-三维流动的雷诺平均运动微分方程如式\eqref{EqRaeC}-\eqref{EqRaeMez}所示。
+\subsection{雷诺时均运动方程}
+以$x$方向的运动方程为例，采取类似于连续性方程的处理，有
+\begin{equation*}
+  \begin{aligned}
+  \overline{
+    \frac{\partial (\overline{u}+u^{\prime})}{\partial t}
+  }
+  +
+  \overline{
+    \frac{\partial (\overline{u}+u^{\prime})^{2}}{\partial x}
+  }
+  +
+  \overline{
+    \frac{\partial (\overline{u}+u^{\prime})(\overline{v}+v^{\prime})}{\partial y}
+  }
+  +
+  \overline{
+    \frac{\partial (\overline{u}+u^{\prime})(\overline{w}+w^{\prime})}{\partial z}
+  }
+  \\
+  =
+  \overline{f_{x}}
+  -\frac{1}{\rho}
+  \overline{
+    \frac{\partial (\overline{p}+p^{\prime})}{\partial x}
+  }
+  +
+  \nu
+  \left[
+  \overline{
+    \frac{\partial^{2} (\overline{u}+u^{\prime})}{\partial x^{2}}
+  }
+  +
+  \overline{
+    \frac{\partial^{2} (\overline{u}+u^{\prime})}{\partial y^{2}}
+  }
+  +
+  \overline{
+    \frac{\partial^{2} (\overline{u}+u^{\prime})}{\partial z^{2}}
+  }
+    \right ]
+  \end{aligned}
+\end{equation*}
+运用式\eqref{EqCGe_RA_cal}，可得
+\begin{equation*}
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial \widebar{u}\widebar{u}}{\partial x} +
+  \frac{\partial \widebar{u}\widebar{v}}{\partial y} +
+  \frac{\partial \widebar{u}\widebar{w}}{\partial z} +
+  \frac{\partial \overline{u^{\prime}u^{\prime}}}{\partial x} +
+  \frac{\partial \overline{u^{\prime}v^{\prime}}}{\partial y} +
+  \frac{\partial \overline{u^{\prime}w^{\prime}}}{\partial z} 
+  =
+  \overline{f_{x}}
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} +
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial z x^{2}} 
+\right)
+\end{equation*}
+将上式左侧脉动值乘积的时均值移到等号右侧，得：
+\begin{equation}
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial \widebar{u}\widebar{u}}{\partial x} +
+  \frac{\partial \widebar{u}\widebar{v}}{\partial y} +
+  \frac{\partial \widebar{u}\widebar{w}}{\partial z} 
+  =
+  \overline{f_{x}}
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} -
+  \left(
+  \frac{\partial \overline{u^{\prime}u^{\prime}}}{\partial x} +
+  \frac{\partial \overline{u^{\prime}v^{\prime}}}{\partial y} +
+  \frac{\partial \overline{u^{\prime}w^{\prime}}}{\partial z} 
+\right)
++
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial z x^{2}} 
+\right)
+\label{EqCGe_Ra_Me_temp1}
+\end{equation}
+同理可得，$y$和$z$方向的雷诺平均方程为：
+\begin{equation}
+  \frac{\partial \overline{v}}{\partial t} +
+  \frac{\partial \widebar{v}\widebar{u}}{\partial x} +
+  \frac{\partial \widebar{v}\widebar{v}}{\partial y} +
+  \frac{\partial \widebar{v}\widebar{w}}{\partial z} 
+  =
+  \overline{f_{y}}
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial y} -
+  \left(
+  \frac{\partial \overline{v^{\prime}u^{\prime}}}{\partial x} +
+  \frac{\partial \overline{v^{\prime}v^{\prime}}}{\partial y} +
+  \frac{\partial \overline{v^{\prime}w^{\prime}}}{\partial z} 
+\right)
++
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{v}}{\partial z^{2}} 
+\right)
+\label{EqCGe_Ra_Me_temp2}
+\end{equation}
+\begin{equation}
+  \frac{\partial \overline{w}}{\partial t} +
+  \frac{\partial \widebar{w}\widebar{u}}{\partial x} +
+  \frac{\partial \widebar{w}\widebar{v}}{\partial y} +
+  \frac{\partial \widebar{w}\widebar{w}}{\partial z} 
+  =
+  \overline{f_{z}}
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial z} -
+  \left(
+  \frac{\partial \overline{w^{\prime}u^{\prime}}}{\partial x} +
+  \frac{\partial \overline{w^{\prime}v^{\prime}}}{\partial y} +
+  \frac{\partial \overline{w^{\prime}w^{\prime}}}{\partial z} 
+\right)
++
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{w}}{\partial z^{2}} 
+\right)
+\label{EqCGe_Ra_Me_temp3}
+\end{equation}
+
+对式\eqref{EqCGe_Ra_Me_temp1}至\eqref{EqCGe_Ra_Me_temp3}分别乘上密度$\rho$，可得
+\begin{equation}
+  \begin{aligned}
+  \frac{\partial \rho\overline{u}}{\partial t} +
+  &\frac{\partial \rho\widebar{u}\widebar{u}}{\partial x} +
+  \frac{\partial \rho\widebar{u}\widebar{v}}{\partial y} +
+  \frac{\partial \rho\widebar{u}\widebar{w}}{\partial z} 
+  = \\
+  &\rho \overline{f_{x}}
+  -\frac{\partial \overline{p}}{\partial x} +
+  \left[
+    \frac{\partial (-\rho\overline{u^{\prime}u^{\prime}})}{\partial x} +
+    \frac{\partial (-\rho\overline{u^{\prime}v^{\prime}})}{\partial y} +
+    \frac{\partial (-\rho\overline{u^{\prime}w^{\prime}})}{\partial z} 
+\right]
++
+  \mu
+  \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial z x^{2}} 
+\right)
+\label{EqCGe_Ra_Me_1}
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+  \frac{\partial \rho\overline{v}}{\partial t} +
+  &\frac{\partial \rho\widebar{v}\widebar{u}}{\partial x} +
+  \frac{\partial \rho\widebar{v}\widebar{v}}{\partial y} +
+  \frac{\partial \rho\widebar{v}\widebar{w}}{\partial z} 
+  = \\
+  &\rho \overline{f_{y}}
+  -\frac{\partial \overline{p}}{\partial y} +
+  \left[
+    \frac{\partial (-\rho\overline{v^{\prime}u^{\prime}})}{\partial x} +
+    \frac{\partial (-\rho\overline{v^{\prime}v^{\prime}})}{\partial y} +
+  \frac{\partial (-\rho\overline{v^{\prime}w^{\prime}})}{\partial z} 
+\right]
++
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{v}}{\partial z^{2}} 
+\right)
+\label{EqCGe_Ra_Me_2}
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  \begin{aligned}
+  \frac{\partial \rho\overline{w}}{\partial t} +
+  &\frac{\partial \rho\widebar{w}\widebar{u}}{\partial x} +
+  \frac{\partial \rho\widebar{w}\widebar{v}}{\partial y} +
+  \frac{\partial \rho\widebar{w}\widebar{w}}{\partial z} 
+  = \\
+  &\rho \overline{f_{z}}
+  -\frac{\partial \overline{p}}{\partial z} +
+  \left[
+    \frac{\partial (-\rho\overline{w^{\prime}u^{\prime}})}{\partial x} +
+    \frac{\partial (-\rho\overline{w^{\prime}v^{\prime}})}{\partial y} +
+  \frac{\partial (-\rho\overline{w^{\prime}w^{\prime}})}{\partial z} 
+\right]
++
+  \mu
+  \left(
+    \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
+  \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{w}}{\partial z^{2}} 
+\right)
+\label{EqCGe_Ra_Me_3}
+  \end{aligned}
+\end{equation}
+式\eqref{EqCGe_Ra_Me_1}至\eqref{EqCGe_Ra_Me_3}即紊流时均流动的运动微分方程，由雷
+诺导出，通常称为雷诺时均方程。与纳维-斯托克斯方程相比，雷诺时均方程多出了紊动附
+加应力（也称雷诺应力）项$-\rho \overline{u^{\prime}_{i}u^{\prime}_{j}}$，
+$i,j=1,2,3$分别对应$x$，$y$和$z$方向。当$i=j$时，为紊动产生的时均附加正应力，
+当$i\neq j$时，为紊动产生的时均附加切应力。
+
+在雷诺时均方程组中，紊动附加应力共有9项，其中只有6个独立变量，另外还有4个变量（
+$\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时均方程组只
+有4个方程。因此，雷诺时均方程不封闭，必须附加方程或条件才能求解出上述10个变量。
+根据附加方程或条件数目不同，用来封闭的紊流模型可分为零方程模型、一方程模型、二方
+程模型和代数应力模型等。在水动力学数值模拟中，应用较多的是零方程模型。下面主要介
+绍零方程模型。其他紊流模型可参考其他教材。
+
+\subsection{零方程紊流模型}
+布辛涅斯克类比层流粘性力等于动力粘滞系数$\mu$乘以旋转角速度的二倍，提出雷诺应力
+等于紊动动力粘滞系数（或称涡粘性系数）$\eta$乘以时均角速度的二倍，即
+\begin{equation}
+  -\rho \overline{u^{\prime}_{i}u^{\prime}_{j}}
+  =
+  \eta
+  \left(
+    \frac{\partial \overline{u_{i}}}{\partial x_{j}} +
+    \frac{\partial \overline{u_{j}}}{\partial x_{j}}
+   \right)
+\end{equation}
+
+类似层流运动粘滞系数$\nu$，定义$\nu_{t}=\eta/\rho$为紊动运动粘滞系数。布辛涅斯
+克将紊动附加应力与时均流速联系起来，使雷诺时均方程组封闭，为解决紊流问题开辟了一
+条很好的途径。但是，布辛涅斯克假定$\eta$为常量，与实际有一定出入。普朗特于1952年
+提出动量传递理论和掺长假设，给出了计算二维恒定均匀紊流附加应力的半经验公式
+\begin{equation}
+  \tau_{xy}
+  =
+  -\rho \overline{u^{\prime}v^{\prime}}
+  =
+  \rho l^{2}
+  \left|
+  \frac{\partial \overline{u}}{\partial y}
+  \right|
+  \frac{\partial \overline{u}}{\partial y}
+\end{equation}
+式中，$l$为掺长。普朗特认为，在近壁区，可以假定讨论点的掺长与该店至壁面的距离成
+正比，即
+\begin{equation}
+  l = \kappa y
+\end{equation}
+式中，$\kappa$为卡门常数，由实验资料确定。普朗特掺长理论在近壁区给出的结果同实际
+资料吻合较好，因而得到广泛应用。
+
+根据布辛涅斯克假定，雷诺时均方程可以变为：
+\begin{equation}
+\begin{gathered}
+  \frac{\partial \overline{u}}{\partial x} +
+  \frac{\partial \overline{v}}{\partial y} +
+  \frac{\partial \overline{w}}{\partial z} 
+  =
+  0
+  \\
+  \begin{split}
+  \frac{\partial \overline{u}}{\partial t} +
+  &\frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{u}\widebar{w})}{\partial z} 
+  = \\
+  &\overline{f_{x}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
+  \right)
+  +
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
+  \right)
+  \end{split}
+  \\
+  \begin{split}
+  \frac{\partial \overline{v}}{\partial t} +
+  &\frac{\partial (\widebar{v}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{v}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{v}\widebar{w})}{\partial z} 
+  = \\
+  &\overline{f_{y}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial y} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial z^{2}}
+  \right)
+  +
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial z^{2}}
+  \right)
+  \end{split}
+  \\
+  \begin{split}
+  \frac{\partial \overline{w}}{\partial t} +
+  &\frac{\partial (\widebar{w}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{w}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{w}\widebar{w})}{\partial z} 
+  = \\
+  &\overline{f_{z}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial z} +
+  \nu_{t}
+  \left(
+    \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial z^{2}}
+  \right)
+  +
+  \nu
+  \left(
+    \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial z^{2}}
+  \right)
+  \end{split}
+\end{gathered}
+\end{equation}
+
+层流的动力粘滞系数$\mu$一般远小于紊动动力粘滞系数$\eta$，因此上式中层流阻力项可
+以忽略，雷诺时均方程为
 \begin{subequations}
 \begin{align}
-  \frac{\partial \widebar{u_{x}}}{\partial x} +
-  \frac{\partial \widebar{u_{y}}}{\partial y} +
-  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \frac{\partial \overline{u}}{\partial x} +
+  \frac{\partial \overline{v}}{\partial y} +
+  \frac{\partial \overline{w}}{\partial z} 
   &
   =
   0
  \label{EqRaeC}
   \\
-  \frac{\partial \widebar{u_{x}}}{\partial t} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} 
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{u}\widebar{w})}{\partial z} 
   &
   =
-  \widebar{f_{x}} -
-  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} +
+  \overline{f_{x}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} +
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \right)
  \label{EqRaeMex}
   \\
-  \frac{\partial \widebar{u_{y}}}{\partial t} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{z}})}{\partial z} 
+  \frac{\partial \overline{v}}{\partial t} +
+  \frac{\partial (\widebar{v}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{v}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{v}\widebar{w})}{\partial z} 
   &
   =
-  \widebar{f_{y}} -
-  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial y} +
+  \overline{f_{y}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial y} +
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial z^{2}}
   \right)
  \label{EqRaeMey}
   \\
-  \frac{\partial \widebar{u_{z}}}{\partial t} +
-  \frac{\partial (\widebar{u_{z}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{z}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{z}}\widebar{u_{z}})}{\partial z} 
+  \frac{\partial \overline{w}}{\partial t} +
+  \frac{\partial (\widebar{w}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{w}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{w}\widebar{w})}{\partial z} 
   &
   =
-  \widebar{f_{z}} -
-  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial z} +
+  \overline{f_{z}} -
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial z} +
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{z}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{z}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{z}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{w}}{\partial z^{2}}
   \right) \label{EqRaeMez}
 \end{align}
 \end{subequations}
 
+
+\section{平面二维浅水方程}
+天然河道水流运动一般都属于三维流动，运动要素即沿程变化，又沿水深和河宽方向变化。
+由于三维水流运动比较复杂，河流数值模拟常用的一种简化方法是将运动要素沿水深方向平
+均，把三维问题转化为平面二维问题。本节基于一定条件将三维流动的雷诺时均运动微分方
+程简化为平面二维浅水方程。
+\subsection{浅水假设和水深平均积分法则}
+\subsubsection{浅水假设}
 在河道、湖泊或水库水流中，水平尺度一般远大于垂向尺度。如果垂向加速度与重力加速度
 相比很小，则可以忽略垂向加速度，流速等水力参数沿垂向的变化常采用其垂向平均值，并
-假定沿水深方向的动水压强分布符合静水压强分布。三维流动的运动微分方程可简化为：
+假定沿水深方向的动水压强分布符合静水压强分布。三维流动的雷诺时均微分方程式
+\eqref{EqRaeC}-\eqref{EqRaeMez}可简化为：
 \begin{subequations}
 \begin{align}
-  \frac{\partial \widebar{u_{x}}}{\partial x} +
-  \frac{\partial \widebar{u_{y}}}{\partial y} +
-  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \frac{\partial \overline{u}}{\partial x} +
+  \frac{\partial \overline{v}}{\partial y} +
+  \frac{\partial \overline{w}}{\partial z} 
   &
   =
   0
  \label{EqRaeCSimp}
   \\
-  \frac{\partial \widebar{u_{x}}}{\partial t} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} 
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{u}\widebar{w})}{\partial z} 
   &
   =
-  -\frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} +
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} +
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \right)
  \label{EqRaeMexSimp}
   \\
-  \frac{\partial \widebar{u_{y}}}{\partial t} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{y}}\widebar{u_{z}})}{\partial z} 
+  \frac{\partial \overline{v}}{\partial t} +
+  \frac{\partial (\overline{v}\overline{u})}{\partial x} +
+  \frac{\partial (\overline{v}\overline{v})}{\partial y} +
+  \frac{\partial (\overline{v}\overline{w})}{\partial z} 
   &
   =
-  -\frac{1}{\rho}\frac{\partial \widebar{p}}{\partial y} +
+  -\frac{1}{\rho}\frac{\partial \overline{p}}{\partial y} +
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{y}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{v}}{\partial z^{2}}
   \right)
  \label{EqRaeMeySimp}
   \\
-  \frac{\partial \widebar{p}}{\partial z} 
+  \frac{\partial \overline{p}}{\partial z} 
   =
   -\rho g
   \label{EqRaeMezSimp}
@@ -190,7 +564,7 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 \begin{equation}
   H =  z_{s} - z_{b}
 \end{equation}
-式中，$H$为水深，$ z_{s}= z_{s}(x,y,t)$、$z_{b}=z_{b}(x,y,t)$分别为某一基准面下的
+式中，$H=H(x,y,t)$为水深，$ z_{s}= z_{s}(x,y,t)$、$z_{b}=z_{b}(x,y,t)$分别为某一基准面下的
 水面高程和河床高程（见图）
 
 \begin{figure}
@@ -199,12 +573,18 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
   \caption{水位基准示意图}
 \end{figure}
 
-（2）定义沿水深平均流速$U_i$为
+（2）定义沿水深平均流速$U$和$V$
 \begin{equation}
-  U_i
+  U
   =
   \frac{1}{H}
-\int_{z_{b}}^{ z_{s}}\!\overline{u_{i}}\mathrm{d}z
+\int_{z_{b}}^{ z_{s}}\!\overline{u}\mathrm{d}z
+\quad
+\quad
+  V
+  =
+  \frac{1}{H}
+\int_{z_{b}}^{ z_{s}}\!\overline{v}\mathrm{d}z
 \end{equation}
 式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
 
@@ -225,27 +605,27 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 
 （4）自由表面及河床底部运动学条件为：
 \begin{equation}
-  \left.\overline{u_{z}}\right|_{z_{s}}
+  \left.\overline{w}\right|_{z_{s}}
     =
     \frac{D z_{s}}{Dt}
     =
     \frac{\partial z_{s}}{\partial t}
     +
-    \left.\overline{u_{x}}\right|_{z_{s}}\frac{\partial z_{s}}{\partial x}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial z_{s}}{\partial x}
       +
-    \left.\overline{u_{y}}\right|_{z_{s}}\frac{\partial z_{s}}{\partial y}
+    \left.\overline{v}\right|_{z_{s}}\frac{\partial z_{s}}{\partial y}
     \label{EqCGeSMC}
 \end{equation}
 \begin{equation}
-  \left.\overline{u_{z}}\right|_{z_{b}}
+  \left.\overline{w}\right|_{z_{b}}
     =
     \frac{Dz_{b}}{Dt}
     =
     \frac{\partial z_{b}}{\partial t}
     +
-    \left.\overline{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       +
-    \left.\overline{u_{y}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
+    \left.\overline{v}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
     \label{EqCGeBMC}
 \end{equation}
 
@@ -254,9 +634,9 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 \begin{equation}
   \int_{z_{b}}^{ z_{s}}\!
   \left(
-  \frac{\partial \widebar{u_{x}}}{\partial x} +
-  \frac{\partial \widebar{u_{y}}}{\partial y} +
-  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \frac{\partial \overline{u}}{\partial x} +
+  \frac{\partial \overline{v}}{\partial y} +
+  \frac{\partial \overline{w}}{\partial z} 
   \right)
   \mathrm{d}z
   =
@@ -266,47 +646,47 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 根据式\eqref{EqCGeLeibnizLaw}，式\eqref{EqCGeRaeCE_Int}中前两项分别可写成
 \begin{equation}
   \int_{z_{b}}^{ z_{s}}\!
-  \frac{\partial \widebar{u_{x}}}{\partial x} 
+  \frac{\partial \overline{u}}{\partial x} 
   \mathrm{d}z
   =
   \frac{\partial}{\partial x}
   \int_{z_{b}}^{ z_{s}}\!
-  \widebar{u_{x}}
+  \overline{u}
   \mathrm{d}z
   -
-  \left.\widebar{u_{x}}\right|_{z_{s}}
+  \left.\overline{u}\right|_{z_{s}}
     \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{x}}\right|_{z_{b}}
+  \left.\overline{u}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial z}
 \label{EqCGeRaeCE_Int_x}
 \end{equation}
 \begin{equation}
   \int_{z_{b}}^{ z_{s}}\!
-  \frac{\partial \widebar{u_{y}}}{\partial y} 
+  \frac{\partial \overline{v}}{\partial y} 
   \mathrm{d}z
   =
   \frac{\partial}{\partial y}
   \int_{z_{b}}^{ z_{s}}\!
-  \widebar{u_{y}}
+  \overline{v}
   \mathrm{d}z
   -
-  \left.\widebar{u_{y}}\right|_{z_{s}}
+  \left.\overline{v}\right|_{z_{s}}
     \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{y}}\right|_{z_{b}}
+  \left.\overline{v}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial z}
 \label{EqCGeRaeCE_Int_y}
 \end{equation}
 式\eqref{EqCGeRaeCE_Int}中最后一项
 \begin{equation}
   \int_{z_{b}}^{ z_{s}}\!
-  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \frac{\partial \overline{w}}{\partial z} 
   \mathrm{d}z
   =
-  \left.\widebar{u_{z}}\right|_{z_{s}}
+  \left.\overline{w}\right|_{z_{s}}
     -
-    \left.\widebar{u_{z}}\right|_{z_{b}}
+    \left.\overline{w}\right|_{z_{b}}
 \label{EqCGeRaeCE_Int_z}
 \end{equation}
 将式\eqref{EqCGeRaeCE_Int_x}，\eqref{EqCGeRaeCE_Int_y}和\eqref{EqCGeRaeCE_Int_z}
@@ -316,44 +696,44 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
   \begin{aligned}
   &\int_{z_{b}}^{ z_{s}}\!
   \left(
-  \frac{\partial \widebar{u_{x}}}{\partial x} +
-  \frac{\partial \widebar{u_{y}}}{\partial y} +
-  \frac{\partial \widebar{u_{z}}}{\partial z} 
+  \frac{\partial \overline{u}}{\partial x} +
+  \frac{\partial \overline{v}}{\partial y} +
+  \frac{\partial \overline{w}}{\partial z} 
   \right)
   \mathrm{d}z
   \\
   =&
   \frac{\partial}{\partial x}
   \int_{z_{b}}^{ z_{s}}\!
-  \widebar{u_{x}}
+  \overline{u}
   \mathrm{d}z
   -
-  \left.\widebar{u_{x}}\right|_{z_{s}}
+  \left.\overline{u}\right|_{z_{s}}
     \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{x}}\right|_{z_{b}}
+  \left.\overline{u}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial z}
    + \\
   &
   \frac{\partial}{\partial y}
   \int_{z_{b}}^{ z_{s}}\!
-  \widebar{u_{y}}
+  \overline{v}
   \mathrm{d}z
   -
-  \left.\widebar{u_{y}}\right|_{z_{s}}
+  \left.\overline{v}\right|_{z_{s}}
     \frac{\partial z_{s}}{\partial z}
   +
-  \left.\widebar{u_{y}}\right|_{z_{b}}
+  \left.\overline{v}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial z}
     + \\
   &
-  \left.\widebar{u_{z}}\right|_{z_{s}}
+  \left.\overline{w}\right|_{z_{s}}
     -
-    \left.\widebar{u_{z}}\right|_{z_{b}}
+    \left.\overline{w}\right|_{z_{b}}
       \\
   =&
-  \frac{\partial HU_{x}}{\partial x} +
-  \frac{\partial HU_{y}}{\partial x} +
+  \frac{\partial HU}{\partial x} +
+  \frac{\partial HV}{\partial x} +
   \frac{\partial  z_{s}}{\partial t} -
   \frac{\partial z_{b}}{\partial t}
   =
@@ -363,8 +743,8 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 最后得
 \begin{equation}
   \frac{\partial H}{\partial t} +
-  \frac{\partial HU_{x}}{\partial x} +
-  \frac{\partial HU_{y}}{\partial y}
+  \frac{\partial HU}{\partial x} +
+  \frac{\partial HV}{\partial y}
   =
   0
 \end{equation}
@@ -381,16 +761,16 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 \begin{equation}
     \int_{z_{b}}^{ z_{s}}\!
     \left[
-  \frac{\partial \widebar{u_{x}}}{\partial t} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z} +
-  \frac{1}{\rho}\frac{\partial \widebar{p}}{\partial x} -
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{u}\widebar{w})}{\partial z} +
+  \frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} -
   \nu_{t}
   \left(
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \right)
   \right]
   \mathrm{d}z
@@ -406,24 +786,24 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
     \begin{aligned}
     &
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}}{\partial t} 
+    \frac{\partial \overline{u}}{\partial t} 
     \mathrm{d}z
     =
     \frac{\partial}{\partial t}
     \int_{z_0}^{ z_{s}}\!
-    \widebar{u_{x}}
+    \overline{u}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
     +
-    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
         \\
         =&
-    \frac{\partial HU_{x}}{\partial t}
+    \frac{\partial HU}{\partial t}
     -
-    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial t}
     +
-    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial t}
     \end{aligned}
         \label{EqCGe_Mex_US_Int}
 \end{equation}
@@ -433,60 +813,60 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 首先将时均流速按照式\eqref{EqCGe_VelDecompse}进行分解
 \begin{equation}
 \begin{aligned}
-\widebar{u_{x}}
+\overline{u}
 =
-U_{x}+\Delta\widebar{u_{x}}
+u+\Delta\overline{u}
 \\
-\widebar{u_{y}}
+\overline{v}
 =
-U_{y}+\Delta\widebar{u_{y}}
+v+\Delta\overline{v}
 \end{aligned}
 \label{EqCGe_VelDecompse}
 \end{equation}
-式中，$\Delta\widebar{u_{x}}$和$\Delta\widebar{u_{y}}$分别为$x$和$y$的时均流速与
+式中，$\Delta\overline{u}$和$\Delta\overline{v}$分别为$x$和$y$的时均流速与
 垂线平均流速的差值。
 
 对流项中第一项的积分
 \begin{equation}
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
+    \frac{\partial \widebar{u}\widebar{u}}{\partial x}
     \mathrm{d}z
     =
     \frac{\partial}{\partial x}
     \int_{z_0}^{ z_{s}}\!
-    \widebar{u_{x}}\widebar{u_{x}}
+    \widebar{u}\widebar{u}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\widebar{u}\widebar{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\widebar{u}\widebar{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \label{EqCGe_CT_1st}
 \end{equation}
 式中
 \begin{equation*}
     \begin{aligned}
     \int_{z_0}^{ z_{s}}\!
-    \widebar{u_{x}}\widebar{u_{x}}
+    \widebar{u}\widebar{u}
     \mathrm{d}z
     &=
     \int_{z_0}^{ z_{s}}\!
-    (U_{x}+\Delta\widebar{u_{x}})(U_{x}+\Delta\widebar{u_{x}})
+    (u+\Delta\overline{u})(u+\Delta\overline{u})
     \mathrm{d}z
     \\
     &=
     \int_{z_0}^{ z_{s}}\!
-    (U_{x}U_{x}+2U_{x}\Delta\widebar{u_{x}}+\Delta\widebar{u_{x}}\Delta\widebar{u_{x}})
+    (uu+2u\Delta\overline{u}+\Delta\overline{u}\Delta\overline{u})
     \mathrm{d}z
     \\
     &=
-    HU_{x}U_{x}
+    HUU
     +
     \int_{z_0}^{ z_{s}}\!
-    \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
+    \Delta\overline{u}\Delta\overline{u}
     \mathrm{d}z
     \\
     &=
-    \beta_{xx}HU_{x}U_{x}
+    \beta_{xx}HUU
     \end{aligned}
 \end{equation*}
 其中
@@ -497,81 +877,81 @@ U_{y}+\Delta\widebar{u_{y}}
 \frac
 {
 \int_{z_0}^{ z_{s}}\!
-    \Delta\widebar{u_{x}}\Delta\widebar{u_{x}}
+    \Delta\overline{U}\Delta\overline{U}
 \mathrm{d}z
 }
-{HU_{x}U_{x}}
+{Huu}
 \end{equation}
 是由于流速沿垂线分布不均匀而引入的修正系数，类似于水力学中的动量修正系数。
 $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}\widebar{u_{x}}}{\partial x}
+    \frac{\partial \widebar{u}\widebar{u}}{\partial x}
     \mathrm{d}z
     =
-    \frac{\partial HU_{x}U_{x}}{\partial x}
+    \frac{\partial HUU}{\partial x}
     -
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\widebar{u}\widebar{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\widebar{u}\widebar{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
 \end{equation}
 
 同理，对流项的第二项可写为
 \begin{equation}
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}\widebar{u_{y}}}{\partial y}
+    \frac{\partial \widebar{u}\widebar{v}}{\partial y}
     \mathrm{d}z
     =
-    \frac{\partial HU_{x}U_{y}}{\partial x}
+    \frac{\partial HUV}{\partial x}
     -
-    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
+    \left.\widebar{u}\widebar{v}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\widebar{u_{x}}\widebar{u_{y}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
+    \left.\widebar{u}\widebar{v}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
 \end{equation}
 对流项的第三项
 \begin{equation}
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}\widebar{u_{z}}}{\partial z}
+    \frac{\partial \widebar{u}\widebar{w}}{\partial z}
     \mathrm{d}z
     =
-    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z_{s}}
+    \left.\widebar{u}\widebar{w}\right|_{z_{s}}
     -
-    \left.\widebar{u_{x}}\widebar{u_{z}}\right|_{z_{b}}
+    \left.\widebar{u}\widebar{w}\right|_{z_{b}}
 \end{equation}
 
 将非恒定流项和对流项积分相加，并利用自由表面和河床底部运动学条件可得：
 \begin{equation}
     \int_{z_{b}}^{ z_{s}}\!
     \left[
-  \frac{\partial \widebar{u_{x}}}{\partial t} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{x}})}{\partial x} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{y}})}{\partial y} +
-  \frac{\partial (\widebar{u_{x}}\widebar{u_{z}})}{\partial z}
+  \frac{\partial \overline{u}}{\partial t} +
+  \frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+  \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
+  \frac{\partial (\widebar{u}\widebar{w})}{\partial z}
   \right]
   \mathrm{d}z
 =
-\frac{\partial HU_{x}}{\partial t}
+\frac{\partial HU}{\partial t}
 +
-\frac{\partial HU_{x}U_{x}}{\partial x}
+\frac{\partial HUU}{\partial x}
 +
-\frac{\partial HU_{x}U_{y}}{\partial y}
+\frac{\partial HUV}{\partial y}
 \end{equation}
 
 （3）压力项积分
 \begin{equation}
   \begin{aligned}
     \int_{z_{b}}^{ z_{s}}\!
-    \frac{\partial \widebar{p}}{\partial x}
+    \frac{\partial \overline{p}}{\partial x}
     \mathrm{d}z
     &=
     \frac{\partial}{\partial x}
     \int_{z_0}^{ z_{s}}\!
-    \widebar{p}
+    \overline{p}
     \mathrm{d}z
     -
-    \left.\widebar{p}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\overline{p}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{p}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\overline{p}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       \\
     &=
     \frac{\partial}{\partial x}
@@ -596,53 +976,53 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
   \begin{aligned}
     &\int_{z_{b}}^{ z_{s}}\!
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}}
     \mathrm{d}z
     =
     \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial}{\partial x}
-    \left(\frac{\partial \widebar{u_{x}}}{\partial x}\right)
+    \left(\frac{\partial \overline{u}}{\partial x}\right)
     \mathrm{d}z
     =
     \frac{\partial}{\partial x}
     \int_{z_0}^{ z_{s}}\!
-    \frac{\partial \widebar{u_{x}}}{\partial x}
+    \frac{\partial \overline{u}}{\partial x}
     \mathrm{d}z
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \\
     =&
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial}{\partial x}
     \int_{z_0}^{ z_{s}}\!
-    \widebar{u_{x}}
+    \overline{u}
     \mathrm{d}z
     -
-    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
       \\
     =&
-    \frac{\partial^{2} HU_{x}}{\partial x^{2}} +
+    \frac{\partial^{2} HU}{\partial x^{2}} +
     \frac{\partial}{\partial x}
     \left(
     -
-    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial x}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
+    \left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{b}}\frac{\partial z_{b}}{\partial x}
   \end{aligned}
   \label{EqCGe_Shear_1}
 \end{equation}
@@ -650,31 +1030,31 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 类似地
 \begin{equation}
     \int_{z_{b}}^{ z_{s}}\!
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}}
     \mathrm{d}z
     =
-    \frac{\partial^{2} HU_{x}}{\partial y^{2}} +
+    \frac{\partial^{2} HU}{\partial y^{2}} +
     \frac{\partial}{\partial y}
     \left(
     -
-    \left.\widebar{u_{x}}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
+    \left.\overline{u}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\widebar{u_{x}}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
+    \left.\overline{u}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
     \right)
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
+    \left.\frac{\partial \overline{u}}{\partial y}\right|_{z_{s}}\frac{\partial  z_{s}}{\partial y}
     +
-    \left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
+    \left.\frac{\partial \overline{u}}{\partial y}\right|_{z_{b}}\frac{\partial z_{b}}{\partial y}
   \label{EqCGe_Shear_2}
 \end{equation}
 \begin{equation}
     \int_{z_{b}}^{ z_{s}}\!
-    \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}}
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}}
     \mathrm{d}z
     =
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{s}}
+    \left.\frac{\partial \overline{u}}{\partial z}\right|_{z_{s}}
       -
-      \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{b}}
+      \left.\frac{\partial \overline{u}}{\partial z}\right|_{z_{b}}
   \label{EqCGe_Shear_3}
 \end{equation}
 将式\eqref{EqCGe_Shear_1}至\eqref{EqCGe_Shear_3}相加，得
@@ -683,16 +1063,16 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     &\int_{z_{b}}^{ z_{s}}\!
     \nu_{t}
     \left(
-      \frac{\partial^{2} \widebar{u_{x}}}{\partial x^{2}} +
-      \frac{\partial^{2} \widebar{u_{x}}}{\partial y^{2}} +
-      \frac{\partial^{2} \widebar{u_{x}}}{\partial z^{2}}
+      \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+      \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+      \frac{\partial^{2} \overline{u}}{\partial z^{2}}
     \right)
     \mathrm{d}z =\\
      &
     \nu_{t}
     \left(
-    \frac{\partial^{2} HU_{x}}{\partial x^{2}} +
-    \frac{\partial^{2} HU_{x}}{\partial y^{2}}
+    \frac{\partial^{2} HU}{\partial x^{2}} +
+    \frac{\partial^{2} HU}{\partial y^{2}}
   \right)
   \\
       -&\nu_{t}
@@ -700,22 +1080,22 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial  z_{s}}{\partial x}
-\left.\widebar{u_{x}}\right|_{z_{s}}
+\left.\overline{u}\right|_{z_{s}}
 \right)
 +
     \frac{\partial}{\partial y}
     \left(
     \frac{\partial  z_{s}}{\partial y}
-\left.\widebar{u_{x}}\right|_{z_{s}}
+\left.\overline{u}\right|_{z_{s}}
 \right)
 +
-\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{s}}
+\left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{s}}
     \frac{\partial  z_{s}}{\partial x}
   +
-\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{s}}
+\left.\frac{\partial \overline{u}}{\partial y}\right|_{z_{s}}
     \frac{\partial  z_{s}}{\partial y}
     -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{s}}
+    \left.\frac{\partial \overline{u}}{\partial z}\right|_{z_{s}}
         \right]
         \\
       +&\nu_{t}
@@ -723,22 +1103,22 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial z_{b}}{\partial x}
-\left.\widebar{u_{x}}\right|_{z_{b}}
+\left.\overline{u}\right|_{z_{b}}
 \right)
 +
     \frac{\partial}{\partial y}
     \left(
     \frac{\partial z_{b}}{\partial y}
-\left.\widebar{u_{x}}\right|_{z_{b}}
+\left.\overline{u}\right|_{z_{b}}
 \right)
 +
-\left.\frac{\partial \widebar{u_{x}}}{\partial x}\right|_{z_{b}}
+\left.\frac{\partial \overline{u}}{\partial x}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial x}
   +
-\left.\frac{\partial \widebar{u_{x}}}{\partial y}\right|_{z_{b}}
+\left.\frac{\partial \overline{u}}{\partial y}\right|_{z_{b}}
     \frac{\partial z_{b}}{\partial y}
 -
-    \left.\frac{\partial \widebar{u_{x}}}{\partial z}\right|_{z_{b}}
+    \left.\frac{\partial \overline{u}}{\partial z}\right|_{z_{b}}
         \right]
   \end{aligned}
   \label{EqCGe_Shear_Total}
@@ -746,7 +1126,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 式\eqref{EqCGe_Shear_Total}中右边后两项分别为由底部床面阻力和自由表面风阻力引起
 的阻力项，通常可以式\eqref{EqCGe_Shear}表示：
 \begin{equation}
-  g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   -
   C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
   \label{EqCGe_Shear}
@@ -755,16 +1135,16 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 风向与$x$方向的夹角。最后，$x$方向的运动方程为
 \begin{equation}
   \begin{aligned}
-  \frac{\partial HU_{x}}{\partial t} +
-  &\frac{\partial HU_{x}U_{x}}{\partial x} +
-  \frac{\partial HU_{x}U_{y}}{\partial y} 
+  \frac{\partial HU}{\partial t} +
+  &\frac{\partial HUU}{\partial x} +
+  \frac{\partial HUV}{\partial y} 
   =\\
   &-gH\frac{\partial  z_{s}}{\partial x}
-  -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
-    \frac{\partial^{2}HU_{x}}{\partial x^{2}}+
-    \frac{\partial^{2}HU_{x}}{\partial y^{2}}
+    \frac{\partial^{2}HU}{\partial x^{2}}+
+    \frac{\partial^{2}HU}{\partial y^{2}}
 \right)
   +C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
   \end{aligned}
@@ -773,16 +1153,16 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 同理可得，$y$方向运动方程为
 \begin{equation}
   \begin{aligned}
-  \frac{\partial HU_{y}}{\partial t} +
-  &\frac{\partial HU_{x}U_{y}}{\partial x} +
-  \frac{\partial HU_{y}U_{y}}{\partial y} 
+  \frac{\partial HV}{\partial t} +
+  &\frac{\partial HUV}{\partial x} +
+  \frac{\partial HVV}{\partial y} 
   =\\
   &-gH\frac{\partial  z_{s}}{\partial y}
-  -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}V\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
-    \frac{\partial^{2}HU_{y}}{\partial x^{2}}+
-    \frac{\partial^{2}HU_{y}}{\partial y^{2}}
+    \frac{\partial^{2}HV}{\partial x^{2}}+
+    \frac{\partial^{2}HV}{\partial y^{2}}
 \right)
   +C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\sin\beta
   \end{aligned}
@@ -793,9 +1173,9 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 地球自转的影响，可在方程\eqref{EqCGe_Me_x}和\eqref{EqCGe_Me_y}右边分别加入科氏力。
 \begin{equation}
   \begin{aligned}
-    f_x = 2\omega\sin\varphi U_{x} 
+    f_x = 2\omega\sin\varphi U 
     \\
-    f_y = 2\omega\sin\varphi U_{y} 
+    f_y = 2\omega\sin\varphi V 
   \end{aligned}
 \end{equation}
 式中，$\omega$为地球自转角速度，$\varphi$为模拟区域所处纬度。
@@ -816,33 +1196,33 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
   \begin{gathered}
   \frac{\partial H}{\partial t} +
-  \frac{\partial HU_{x}}{\partial x} +
-  \frac{\partial HU_{y}}{\partial y}
+  \frac{\partial HU}{\partial x} +
+  \frac{\partial HV}{\partial y}
   =
   0
     \\
-  \frac{\partial HU_{x}}{\partial t} +
-  \frac{\partial HU_{x}U_{x}}{\partial x} +
-  \frac{\partial HU_{x}U_{y}}{\partial y} 
+  \frac{\partial HU}{\partial t} +
+  \frac{\partial HUU}{\partial x} +
+  \frac{\partial HUV}{\partial y} 
   =
   -gH\frac{\partial  z_{s}}{\partial x}
-  -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
-    \frac{\partial^{2}HU_{x}}{\partial x^{2}}+
-    \frac{\partial^{2}HU_{x}}{\partial y^{2}}
+    \frac{\partial^{2}HU}{\partial x^{2}}+
+    \frac{\partial^{2}HU}{\partial y^{2}}
 \right)
     \\
-  \frac{\partial HU_{y}}{\partial t} +
-  \frac{\partial HU_{x}U_{y}}{\partial x} +
-  \frac{\partial HU_{y}U_{y}}{\partial y} 
+  \frac{\partial HV}{\partial t} +
+  \frac{\partial HUV}{\partial x} +
+  \frac{\partial HVV}{\partial y} 
   =
   -gH\frac{\partial  z_{s}}{\partial y}
-  -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}V\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   +
   \nu_{t}\left(
-    \frac{\partial^{2}HU_{y}}{\partial x^{2}}+
-    \frac{\partial^{2}HU_{y}}{\partial y^{2}}
+    \frac{\partial^{2}HV}{\partial x^{2}}+
+    \frac{\partial^{2}HV}{\partial y^{2}}
 \right)
   \end{gathered}
 \end{equation}
@@ -851,28 +1231,28 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
   \begin{gathered}
   \frac{\partial H}{\partial t} +
-  \frac{\partial HU_{x}}{\partial x} +
-  \frac{\partial HU_{y}}{\partial y}
+  \frac{\partial HU}{\partial x} +
+  \frac{\partial HV}{\partial y}
   =
   0
     \\
-  \frac{\partial HU_{x}}{\partial t} +
-  \frac{\partial (HU_{x}U_{x}+gH^{2}/2)}{\partial x} +
-  \frac{\partial HU_{x}U_{y}}{\partial y} 
+  \frac{\partial HU}{\partial t} +
+  \frac{\partial (HUU+gH^{2}/2)}{\partial x} +
+  \frac{\partial HUV}{\partial y} 
   =
   -gH\frac{\partial z_{b}}{\partial x}
-  -g\frac{n^{2}U_{x}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
     \\
-  \frac{\partial HU_{y}}{\partial t} +
-  \frac{\partial HU_{x}U_{y}}{\partial x} +
-  \frac{\partial (HU_{y}U_{y}+gH^{2}/2)}{\partial y} 
+  \frac{\partial HV}{\partial t} +
+  \frac{\partial HUV}{\partial x} +
+  \frac{\partial (HVV+gH^{2}/2)}{\partial y} 
   =
   -gH\frac{\partial z_{b}}{\partial y}
-  -g\frac{n^{2}U_{y}\sqrt{U_{x}^{2}+U_{y}^{2}}}{H^{1/3}}
+  -g\frac{n^{2}V\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   \end{gathered}
 \end{equation}
 
-此外，为了书写的简化，用$h$替代$H$，$u$替代$U_{x}$，$v$替代$U_{y}$，定义$x$和$y$
+此外，为了书写的简化，用$h$替代$H$，$u$替代$U$，$v$替代$V$，定义$x$和$y$
 方向的流量分别为$q_{x}=hu$和$q_{y}=hv$，上式可写成
 \begin{equation}
   \begin{gathered}
