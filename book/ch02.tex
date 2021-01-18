@@ -1,15 +1,116 @@
 \chapter{控制方程}
 \section{纳维-斯托克斯方程}
 %\subsection{模型}
-\subsection{连续性方程}
-连续性方程是将质量守恒定律应用到流场中固定的无穷小微元所导出的。如图所示，在流场
-中任取一微小正交六面体，各边分别与直角坐标系各轴平行。设各边边长分别为
-$\mathrm{d}x$、$\mathrm{d}y$和$\mathrm{d}z$。
+\subsection{连续性微分方程}
+连续性微分方程是质量守恒定律在流场中固定的无穷小微元控制体所导出的，即单位时间内
+净流入控制体内的质量等于单位时间内控制体内质量的增加量。如图所示，在流场中任取
+一无穷小正交六面体控制体，各边分别与直角坐标系各轴平行。设各边边长分别为$\mathrm{d}x$、
+$\mathrm{d}y$和$\mathrm{d}z$。中心点坐标为$(x,y,z)$，密度为$\rho(x,y,z)$，速度为
+$(u(x,y,z), v(x,y,z), w(x,y,z))$。
 
+以$x$方向为例，流体从控制体的左侧和右侧两个面进出控制体。左侧面的中心点坐标为
+$(x-\frac{\mathrm{d}x}{2},y,z)$。根据泰勒展开并略去高阶无穷小量，单位时间内从左侧面
+流入控制体的质量为
+\begin{equation*}
+\left[\rho u-\frac{\partial (\rho u)}{\partial x}\frac {\mathrm{d}x}{2}\right]\mathrm{d}y\mathrm{d}z
+\end{equation*}
 
+单位时间内从右侧面流出控制体的质量为
+\begin{equation*}
+\left[\rho u+\frac{\partial (\rho u)}{\partial x}\frac {\mathrm{d}x}{2}\right]\mathrm{d}y\mathrm{d}z
+\end{equation*}
 
+因此，单位时间沿$x$方向净流入控制体的质量为
+\begin{equation}
+-\frac{\partial (\rho u)}{\partial x}\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation}
 
-\subsection{运动方程}
+同理，单位时间内沿$y$、$z$方向净流入控制体的质量分别为
+\begin{equation*}
+-\frac{\partial (\rho v)}{\partial y}\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\mbox{和}
+-\frac{\partial (\rho w)}{\partial z}\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation*}
+
+因而单位时间内净流入控制体内的质量为
+\begin{equation}
+-
+\left[
+  \frac {\partial (\rho u)} {\partial x}
+  +
+  \frac {\partial (\rho v)} {\partial y}
+  +
+  \frac {\partial (\rho w)} {\partial z}
+\right]
+\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation}
+
+控制体的质量为$\rho\mathrm{d}x\mathrm{d}y\mathrm{d}z$，单位时间内控制体内质量的增加量为
+\begin{equation}
+  \frac{\partial}{\partial t}(\rho\mathrm{d}x\mathrm{d}y\mathrm{d}z) = 
+  \frac{\partial \rho}{\partial  t}\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation}
+
+根据质量守恒定律，有
+\begin{equation}
+  \frac{\partial \rho}{\partial  t}\mathrm{d}x\mathrm{d}y\mathrm{d}z
+  =
+-
+\left[
+  \frac {\partial (\rho u)} {\partial x}
+  +
+  \frac {\partial (\rho v)} {\partial y}
+  +
+  \frac {\partial (\rho w)} {\partial z}
+\right]
+\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation}
+上式两边同除以$\mathrm{d}x\mathrm{d}y\mathrm{d}z$后，将等号右边所有项移到左边，即得连续性
+微分方程
+\begin{equation}
+  \frac{\partial \rho}{\partial  t} 
+  +
+  \frac{\partial (\rho u)}{\partial  x} 
+  +
+  \frac{\partial (\rho v)}{\partial  y} 
+  +
+  \frac{\partial (\rho w)}{\partial  z} 
+  =
+  0
+\end{equation}
+对均质不可压缩流体，$\rho$为常数，连续性方程可写成
+\begin{equation}
+  \frac{\partial u}{\partial  x} 
+  +
+  \frac{\partial v}{\partial  y} 
+  +
+  \frac{\partial w}{\partial  z} 
+  =
+  0
+  \label{EqCGe_NS_Ce}
+\end{equation}
+
+\subsection{动量方程}
+动量方程是牛顿第二定律或动量守恒定律得数学表达式。考虑一个随流运动的无穷小正交六
+面体流体微团。微团中心点所在坐标为$(x,y,z)$，中心点密度为$\rho$，中心点速度为
+$(u, v, w)$。则该微团的质量
+为
+\begin{equation}
+m = \rho\mathrm{d}x\mathrm{d}y\mathrm{d}z
+\end{equation}
+
+$x$方向的牛顿第二定律为
+\begin{equation}
+  F_{x} = ma_{x}
+\end{equation}
+式中，$F_{x}$和$a_{x}$分别是微团所受外力和加速度在$x$方向的分量。
+
+根据加速度的定义，随流运动的流体微团的加速度等于它的速度随时间的变化率，即速度的
+随体导数
+\begin{equation}
+  a_{x} = 
+  \frac{\mathrm{D}u}{\mathrm{D}t}
+\end{equation}
 
 \section{雷诺时均方程}
 \subsection{紊流物理量时均值定义及性质}
@@ -69,7 +170,7 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
 \end{equation}
 
 \subsection{雷诺时均连续性方程}
-将$u$、$v$和$w$表示成时均值和脉动值之和，并带入连续性方程\eqref{}，并做时均运算
+将$u$、$v$和$w$表示成时均值和脉动值之和，并带入连续性方程\eqref{EqCGe_NS_Ce}，并做时均运算
 ，
 \begin{equation*}
   \overline{
