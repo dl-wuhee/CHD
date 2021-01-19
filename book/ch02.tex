@@ -5,34 +5,27 @@
 连续性微分方程是质量守恒定律在流场中固定的无穷小微元控制体所导出的，即单位时间内
 净流入控制体内的质量等于单位时间内控制体内质量的增加量。如图所示，在流场中任取
 一无穷小正交六面体控制体，各边分别与直角坐标系各轴平行。设各边边长分别为$\mathrm{d}x$、
-$\mathrm{d}y$和$\mathrm{d}z$。中心点坐标为$(x,y,z)$，密度为$\rho(x,y,z)$，速度为
-$(u(x,y,z), v(x,y,z), w(x,y,z))$。
+$\mathrm{d}y$和$\mathrm{d}z$。
 
 以$x$方向为例，流体从控制体的左侧和右侧两个面进出控制体。左侧面的中心点坐标为
-$(x-\frac{\mathrm{d}x}{2},y,z)$。根据泰勒展开并略去高阶无穷小量，单位时间内从左侧面
-流入控制体的质量为
-\begin{equation*}
-  \left[\rho u-\frac{\partial (\rho u)}{\partial x}\frac {\mathrm{d}x}{2}\right]\mathrm{d}y\mathrm{d}z
-\end{equation*}
-
+$(x,y,z)$，密度为$\rho(x,y,z)$，速度为$(u(x,y,z), v(x,y,z), w(x,y,z))$。
+单位时间内从左侧面流入控制体的质量为$\rho u\mathrm{d}y\mathrm{d}z$。
+右侧面的中心点坐标为$(x+\mathrm{d}x,y,z)$。根据泰勒展开并略去高阶无穷小量，
 单位时间内从右侧面流出控制体的质量为
 \begin{equation*}
   \left[\rho u+\frac{\partial (\rho u)}{\partial x}\frac {\mathrm{d}x}{2}\right]\mathrm{d}y\mathrm{d}z
 \end{equation*}
-
 因此，单位时间沿$x$方向净流入控制体的质量为
 \begin{equation}
   -\frac{\partial (\rho u)}{\partial x}\mathrm{d}x\mathrm{d}y\mathrm{d}z
 \end{equation}
-
 同理，单位时间内沿$y$、$z$方向净流入控制体的质量分别为
 \begin{equation*}
   -\frac{\partial (\rho v)}{\partial y}\mathrm{d}x\mathrm{d}y\mathrm{d}z
   \mbox{和}
   -\frac{\partial (\rho w)}{\partial z}\mathrm{d}x\mathrm{d}y\mathrm{d}z
 \end{equation*}
-
-因而单位时间内净流入控制体内的质量为
+因此，单位时间内净流入控制体内的质量为
 \begin{equation}
   -
   \left[
@@ -120,9 +113,24 @@ $\mathbf{f}=(f_{x}, f_{y}, f_{z})$。$x$方向所受的体积力为：
   F_{x} = \rho f_{x}\mathrm{d}x\mathrm{d}y\mathrm{d}z
   \label{EqCGe_Bf_x}
 \end{equation}
-表面力是直接作用在六个外表面上的力，包括：（1）作用在外表面上的压强；（2）作用在
-外表面上正应力和切应力。
-
+表面力$T_{x}$是直接作用在六个外表面上的力，包括：（1）作用在外表面上的压力；（2）作用在
+外表面上正应力和切应力。在$x$方向上，只有左侧面和右侧面的压力，分别为
+$p\mathrm{d}y\mathrm{d}z$和$-(p+\frac{\partial p}{\partial x}\mathrm{d}x)$。作用在
+六个外表面上在$x$方向上的正应力和切应力共6个，即
+左侧面上的
+$-\tau_{xx}\mathrm{d}y\mathrm{d}z$，
+右侧面上的
+$(\tau_{xx}+\frac{\partial \tau_{xx}}{\partial x}\mathrm{d}x)\mathrm{d}y\mathrm{d}z$，
+前侧面上的
+$-\tau_{yx}\mathrm{d}x\mathrm{d}z$，
+后侧面上的
+$(\tau_{yx}+\frac{\partial \tau_{yx}}{\partial y}\mathrm{d}y)\mathrm{d}x\mathrm{d}z$，
+底侧面上的
+$-\tau_{zx}\mathrm{d}x\mathrm{d}y$，
+顶侧面上的
+$(\tau_{zx}+\frac{\partial \tau_{zx}}{\partial z}\mathrm{d}z)\mathrm{d}x\mathrm{d}y$。
+上述应力表述中，下标第一项表示该作用面的法向方向，第二项表示应力的正向方向，正负
+号表示力的方向。
 \begin{equation}
   \begin{aligned}
     T_{x} =&
@@ -292,6 +300,7 @@ $\mathbf{f}=(f_{x}, f_{y}, f_{z})$。$x$方向所受的体积力为：
   \end{aligned}
   \label{EqCGe_NS_Me_general}
 \end{equation}
+
 在17世纪晚期，牛顿给出了牛顿内摩擦定律，即流体内部切应力正比于剪切变形速率。1845
 年，斯托克斯给出如下关系式
 \begin{equation}
