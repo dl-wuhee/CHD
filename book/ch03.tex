@@ -1,6 +1,260 @@
 \chapter{有限差分法}
+上一章推导的控制方程的解析解，如果可以得出，将可以给出所有因变量在求解域上连续函
+数。然而，除了个别极其简单的流动情况，这类方程的解析解往往很难获得。因此，我们只
+能退而求其次，通过将连续的空间和时间分割成不连续的散点（分别称为网格点和时间节点
+），并将控制方程在这些散点上离散，得出与原方程近似但可求解的代数方程组，最终得出
+原方程在这些散点上的近似解。
+
+在实际的数值模拟过程中，网格点或时间节点的划分是不均匀的。为了后续推导方便，本章
+假定网格点和时间节点的间距都是均匀分布的。此外，本章只关注结构网格，对非结构网格
+可参见其他参考书。
+
+
 \section{泰勒展开}
+考虑一个$x$的连续函数$f(x)$在$x$处的所有阶导数都存在。那么，$f$在点$x+\Delta x$
+处的值可以通过在点$x$处的泰勒级数展开来估算。
+\begin{equation}
+  f(x+\Delta x)
+  =
+  f(x)
+  +
+  \frac{\partial f}{\partial x}\Delta x
+  +
+  \frac{\partial^{2} f}{\partial x^{2}}\frac{\Delta x^{2}}{2}
+  +
+  \cdots
+  +
+  \frac{\partial^{n} f}{\partial x^{n}}\frac{\Delta x^{n}}{n!}
+  +
+  \cdots
+\end{equation}
+
+假定$f(x)=\sin{2\pi x}$，且已知$x=0.2$处，函数值$f=0.9511$。我们希望估算
+$x+\Delta x=0.22$处的函数值。根据方程表达式，该点的精确值为0.9823。首先，我们利
+用泰勒级数展开的第一项来估算，有
+\begin{equation}
+  \begin{aligned}
+    f(x+\Delta x) \approx f(x)  \\
+    f(0.22) \approx f(0.2) = 0.9511
+  \end{aligned} 
+\end{equation}
+估算值的相对误差为$(0.9823-0.9511)/0.9823=3.176\%$。接着，我们利用展开式的前两项
+来估算，有
+\begin{equation}
+  \begin{aligned}
+    f(x+\Delta x) &\approx f(x) + \frac{\partial f}{\partial x}\Delta x
+  \\
+    f(0.22) &\approx f(0.2) + 2\pi\cos{[2\pi(0.2)]}(0.02)
+    \\
+            &\approx 0.9511 + 0.388 = 0.9899
+\end{aligned}
+\end{equation}
+估算值的相对误差为$(0.9899-0.9823)/0.9823=0.775\%$，相比于第一次的估算值更加接近
+精确值。最后，为了获得更加精确的估算值，我们可以利用展开式的前三项，有
+\begin{equation}
+  \begin{aligned}
+    f(x+\Delta x) &\approx f(x) + \frac{\partial f}{\partial x}\Delta x
+    +
+    \frac{\partial^{2} f}{\partial x^{2}}\frac{(\Delta x)^{2}}{2}
+  \\
+    f(0.22) &\approx f(0.2) + 2\pi\cos{[2\pi(0.2)]}(0.02) -
+    4\pi^{2}\sin{[2\pi(0.2)]}\frac{0.02^{2}}{2}
+    \\
+            &\approx 0.9511 + 0.0388 - 0.0075
+    \\
+            &\approx 0.9824
+\end{aligned}
+\end{equation}
+估算值的相对误差为$(0.9824-0.9823)/0.9823=0.01\%$，即仅用泰勒展开式的前三项就可
+以得到一个非常接近精确值的估算值。
+
 \section{离散基础知识}
+图中给出了一个结构网格的例子。图中，网格点，即两条网格线的交点，可以用$(i,j)$进
+行标示，其中，$i$是沿$x$方向的索引，$j$是沿$y$方向的索引。假定图中$P$的索引为
+$(i,j)$，那么，紧邻$P$右边的点的索引为$(i+1,j)$，紧邻$P$左边的点的索引为
+$(i-1,j)$，紧邻$P$上边的点的索引为$(i,j+1)$，紧邻$P$下边的点的索引为$(i,j-1)$。
+
+点$(i,j)$上$x$方向速度用$u_{i,j}$表示，点$(i+1,j)$上$x$方向速度$u_{i+1,j}$可以在
+点$(i,j)$上通过泰勒级数展开为：
+\begin{equation}
+  u_{i+1,j}
+  =
+  u_{i,j} + 
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  \Delta x
+  +
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  \frac{(\Delta x)^{2}}{2}
+  +
+  \left(
+    \frac{\partial^{3} u}{\partial x^{3}}
+  \right)_{i,j}
+  \frac{(\Delta x)^{3}}{3!}
+  +
+  \cdots
+  \label{EqBD_Tsp_F}
+\end{equation}
+用上式求解$(\partial u/\partial x)_{i,j}$，可得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  =
+  \underbrace{
+  \frac{u_{i+1,j}-u_{i,j}}{\Delta x}
+}_{\mbox{差分表达式}}
+  -
+  \underbrace{
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  \frac{\Delta x}{2}
+  -
+  \left(
+    \frac{\partial^{3} u}{\partial x^{3}}
+  \right)_{i,j}
+  \frac{(\Delta x)^{2}}{6}
+  +
+  \cdots
+}_{\mbox{截断误差}}
+\label{EqBD_Tes}
+\end{equation}
+上式中，如果我们用等号右边的差商$(u_{i+1,j}-u_{i,j})/\Delta x$来近似
+$(\partial u/\partial x)_{i,j}$，则该项为偏导数的差分表达式，等号右边的其他项为截断误
+差，可以省略。即，
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  \approx
+  \frac{u_{i+1,j}-u_{i,j}}{\Delta x}
+\end{equation}
+
+式\eqref{EqBD_Tes}也可写成
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  =
+  \frac{u_{i+1,j}-u_{i,j}}{\Delta x}
+  +
+  O(\Delta x)
+  \label{EqBD_1P1AF}
+\end{equation}
+从上式可看出，被省略的截断误差中$\Delta x$的幂次最小的那一项决定了上式的精度
+。截断误差中$\Delta x$的幂次即为式\eqref{EqBD_1P1AF}的精度。上式中截断误差中
+$\Delta x$的最小幂次为1。因而，式\eqref{EqBD_1P1AF}为一阶精度，此外，式\eqref{EqBD_1P1AF}
+中差分表达式使用了网格点$(i,j)$及其右侧相邻网格点$(i+1,j)$的信息，没有使用
+$(i,j)$左侧网格点信息。因此，式\eqref{EqBD_1P1AF}也叫做向前差分。综上，式
+\eqref{EqBD_1P1AF}为一阶偏导数$(\partial u/\partial x)_{i,j}$的一阶向前差分。
+
+同理，$u_{i-1,j}$在$(i,j)$上进行泰勒级数展开为
+\begin{equation}
+  u_{i-1,j}
+  =
+  u_{i,j} - 
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  \Delta x
+  +
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  \frac{(\Delta x)^{2}}{2}
+  -
+  \left(
+    \frac{\partial^{3} u}{\partial x^{3}}
+  \right)_{i,j}
+  \frac{(\Delta x)^{3}}{3!}
+  +
+  \cdots
+  \label{EqBD_Tsp_B}
+\end{equation}
+利用上式求解$(\partial u/\partial x)_{i,j}$，得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  =
+  \frac{u_{i,j}-u_{i-1,j}}{\Delta x}
+  +
+  O(\Delta x)
+  \label{EqBD_1P1AB}
+\end{equation}
+上式中没有使用网格点$(i,j)$右侧网格点信息。因而，式\eqref{EqBD_1P1AB}为向后差分
+。此外，上式中，截断误差中$\Delta x$的最低幂次为1。因此，式\eqref{EqBD_1P1AB}为
+一阶偏导数$(\partial u/\partial x)_{i,j}$的一阶向后差分。
+
+在计算水动力学、计算流体力学的实际应用中，一阶精度往往是不够的。为了构造一个二阶
+精度的差分，将式\eqref{EqBD_Tsp_B}从式\eqref{EqBD_Tsp_F}中减去：
+\begin{equation}
+  u_{i+1,j} - u_{i-1,j}
+  =
+  2
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  \Delta x
+  +
+  2
+  \left(
+    \frac{\partial^3 u}{\partial x^3}
+  \right)_{i,j}
+  \frac{(\Delta x)^3}{3!}
+  +
+  \cdots
+\end{equation}
+上式可写成
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  =
+  \frac{u_{i+1,j} - u_{i-1,j}}{2\Delta x}
+  +
+  O(\Delta x)^2
+  \label{EqBD_1P2AC}
+\end{equation}
+式\eqref{EqBD_1P2AC}中使用了点$(i,j)$两侧节点$(i+1,j)$和$(i-1,j)$的信息。另外，
+式\eqref{EqBD_1P2AC}中截断误差的最低幂次为2。因此，式\eqref{EqBD_1P2AC}是一阶偏
+导数$(\partial u/\partial x)_{i,j}$的二阶中心差分。
+
+同理，可以得到一阶偏导数$(\partial u/\partial y)_{i,j}$
+的差分格式。总结如下：
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  =
+  \left\{
+    \begin{aligned}
+      &\frac{u_{i+1,j}-u_{i,j}}{\Delta x} + O(\Delta x) & \mbox{一阶向前差分} \\
+      &\frac{u_{i,j}-u_{i-1,j}}{\Delta x} + O(\Delta x) & \mbox{一阶向后差分} \\
+      &\frac{u_{i+1,j}-u_{i-1,j}}{2\Delta x} + O(\Delta x)^{2} \quad& \mbox{二阶中心差分} \\
+    \end{aligned}
+  \right.
+\end{equation}
+
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i,j}
+  =
+  \left\{
+    \begin{aligned}
+      &\frac{u_{i,j+1}-u_{i,j}}{\Delta y} + O(\Delta y) & \mbox{一阶向前差分} \\
+      &\frac{u_{i,j}-u_{i,j-1}}{\Delta y} + O(\Delta y) & \mbox{一阶向后差分} \\
+      &\frac{u_{i,j+1}-u_{i,j-1}}{2\Delta y} + O(\Delta y)^{2} \quad& \mbox{二阶中心差分} \\
+    \end{aligned}
+  \right.
+\end{equation}
+
+
 \section{差分方程}
 \section{相容性、稳定性和收敛性}
 
