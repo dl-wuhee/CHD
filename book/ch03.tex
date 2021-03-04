@@ -9,7 +9,6 @@
 假定网格点和时间节点的间距都是均匀分布的。此外，本章只关注结构网格，对非结构网格
 可参见其他参考书。
 
-
 \section{泰勒展开}
 考虑一个$x$的连续函数$f(x)$在$x$处的所有阶导数都存在。那么，$f$在点$x+\Delta x$
 处的值可以通过在点$x$处的泰勒级数展开来估算。
@@ -74,6 +73,7 @@ $x+\Delta x=0.22$处的函数值。根据方程表达式，该点的精确值为
 $(i,j)$，那么，紧邻$P$右边的点的索引为$(i+1,j)$，紧邻$P$左边的点的索引为
 $(i-1,j)$，紧邻$P$上边的点的索引为$(i,j+1)$，紧邻$P$下边的点的索引为$(i,j-1)$。
 
+\subsection{一阶偏导数的差分表达式}
 点$(i,j)$上$x$方向速度用$u_{i,j}$表示，点$(i+1,j)$上$x$方向速度$u_{i+1,j}$可以在
 点$(i,j)$上通过泰勒级数展开为：
 \begin{equation}
@@ -254,6 +254,175 @@ $(i,j)$左侧网格点信息。因此，式\eqref{EqBD_1P1AF}也叫做向前差�
   \right.
 \end{equation}
 
+\subsection{二阶偏导数的差分表达式}
+将式\eqref{EqBD_Tsp_F}和式\eqref{EqBD_Tsp_B}相加，可得
+\begin{equation}
+  u_{i+1,j} + u_{i-1,j}
+  =
+  2u_{i,j}+
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}(\Delta x)^{2}
+  +
+  \left(
+    \frac{\partial^{4} u}{\partial x^{4}}
+  \right)_{i,j}\frac{(\Delta x)^{4}}{12}
+  +
+  \cdots
+\end{equation}
+利用上式求解出$(\partial^{2}u/\partial x^{2})_{i,j}$，
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}} 
+  \right)_{i,j}
+  =
+  \frac{u_{i+1,j}-2u_{i,j}+u_{i-1,j}}{(\Delta x)^{2}}
+  +
+  O(\Delta x)^2
+  \label{EqBD_2P2AC}
+\end{equation}
+式\eqref{EqBD_2P2AC}中，等号右边第一项是二阶偏导数$(\partial^{2}u/\partial x^{2})_{i,j}$的中心差分
+截断误差中$\Delta x$的最小幂次为2，因此该式为二阶精度。同理，我们可以得到
+$(\partial^{2}u/\partial y^{2})_{i,j}$的二阶精度中心差分，
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial y^{2}} 
+  \right)_{i,j}
+  =
+  \frac{u_{i,j+1}-2u_{i,j}+u_{i,j-1}}{(\Delta y)^{2}}
+  +
+  O(\Delta y)^2
+  \label{EqBD_2Py2AC}
+\end{equation}
+
+对于二阶混合偏导，如$\partial^{2} u/\partial x\partial y$，可以采用与上面类似的
+处理方式得到。首先，将式\eqref{EqBD_Tsp_F}对$y$求偏导，得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i+1,j}
+  =
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i,j}
+  +
+  \left(
+    \frac{\partial^{2} u}{\partial x\partial y}
+  \right)_{i,j}\Delta x
+  +
+  \left(
+    \frac{\partial^{3} u}{\partial x^{2}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{2}}{2} 
+  +
+  \left(
+    \frac{\partial^{4} u}{\partial x^{3}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{3}}{6} 
+  +
+  \cdots
+  \label{EqBD_Tsp_F_py}
+\end{equation}
+然后，将式\eqref{EqBD_Tsp_B}对$y$求偏导，得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i-1,j}
+  =
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i,j}
+  -
+  \left(
+    \frac{\partial^{2} u}{\partial x\partial y}
+  \right)_{i,j}\Delta x
+  +
+  \left(
+    \frac{\partial^{3} u}{\partial x^{2}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{2}}{2} 
+  -
+  \left(
+    \frac{\partial^{4} u}{\partial x^{3}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{3}}{6} 
+  +
+  \cdots
+  \label{EqBD_Tsp_B_py}
+\end{equation}
+将式\eqref{EqBD_Tsp_F_py}中减去式\eqref{EqBD_Tsp_B_py}，得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i+1,j}
+  -
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i-1,j}
+  =
+  2
+  \left(
+    \frac{\partial^{2} u}{\partial x\partial y}
+  \right)_{i,j}\Delta x
+  +
+  \left(
+    \frac{\partial^{4} u}{\partial x^{3}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{3}}{3} 
+  +
+  \cdots
+\end{equation}
+从上式中求解$(\partial^{2}u/\partial x\partial y)$，得
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial x\partial y}
+  \right)_{i,j}
+  =
+  \frac{(\partial u/\partial y)_{i+1,j}-(\partial u/\partial y)_{i-1,j}}{2\Delta x}
+  -
+  \left(
+    \frac{\partial^{4} u}{\partial x^{3}\partial y}
+  \right)_{i,j}\frac{(\Delta x)^{3}}{6} 
+  +
+  \cdots
+  \label{EqBD_2PM2A}
+\end{equation}
+上式中等式右侧第一项中需要求解$(\partial u/\partial y)_{i+1,j}$和$(\partial
+u/\partial y)_{i-1,j}$。利用上一小节所得到一阶偏导数的中心差分，得
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i+1,j}
+  =
+  \frac{u_{i+1,j+1}-2u_{i+1,j}-u_{i+1,j-1}}{2\Delta y} + O(\Delta y)^{2}
+\end{equation}
+\begin{equation}
+  \left(
+    \frac{\partial u}{\partial y}
+  \right)_{i-1,j}
+  =
+  \frac{u_{i-1,j+1}-2u_{i-1,j}-u_{i-1,j-1}}{2\Delta y} + O(\Delta y)^{2}
+\end{equation}
+将上两式代入式\eqref{EqBD_2PM2A}，可得
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial x\partial y}
+  \right)_{i,j}
+  =
+  \frac{u_{i+1,j+1}-u_{i+1,j-1}-u_{i-1,j+1}+u_{i-1,j-1}}{4\Delta x\Delta y}
+  +
+  O[(\Delta x)^{2},(\Delta y)^{2}]
+\end{equation}
+
+本节所列出的差分格式只是所有差分格式的一小部分。同一个导数可以有许多不同的差分
+格式，特别是更高精度的差分格式。高精度的差分格式通常需要引入更多网格点的信息。例
+如，下式给出的$\partial^{2} u/\partial x^{2}$的四阶精度中心差分格式：
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  =
+  \frac{-u_{i+2,j}+16u_{i+1,j}-30u_{i,j}+16u_{i-2,j}-u_{i-2,j}}{12(\Delta x)^{2}}
+  +
+  O(\Delta x)^{4}
+\end{equation}
+
+高阶格式
 
 \section{差分方程}
 \section{相容性、稳定性和收敛性}
