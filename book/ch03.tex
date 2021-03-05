@@ -422,8 +422,250 @@ u/\partial y)_{i-1,j}$。利用上一小节所得到一阶偏导数的中心差�
   O(\Delta x)^{4}
 \end{equation}
 
-高阶格式
+\subsection{待定系数法}
+高阶格式的推导可用待定系数法得出。以上述的四阶精度中心差分格式推导为例。
+假定，我们需要利用这几个节点来构造出四阶精度的差分格式，即
+\begin{equation}
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  =
+  Au_{i+2,j}+Bu_{i+1,j}+Cu_{i,j}+Du_{i-2,j}+Eu_{i-2,j}
+  +
+  O(\Delta x)^{4}
+\end{equation}
+其中，系数$A, B, C, D, E$分别为待定系数。
 
+首先，利用泰勒级数展开
+将这$u_{i-2,j}, u_{i-1,j}, u_{i+1,j}, u_{i+2,j}$在$(i,j)$上展开，得：
+\begin{equation}
+  \begin{aligned}
+    &\begin{aligned}
+      u_{i-2,j}  =
+      u_{i,j} &+
+      \left(
+        \frac{\partial u}{\partial x}
+      \right)_{i,j}
+      (-2\Delta x)
+      +
+      \left(
+        \frac{\partial^{2} u}{\partial x^{2}}
+      \right)_{i,j}
+      \frac{(-2\Delta x)^{2}}{2}
+      +
+      \left(
+        \frac{\partial^{3} u}{\partial x^{3}}
+      \right)_{i,j}
+      \frac{(-2\Delta x)^{3}}{3!}
+      \\
+              & 
+              +
+              \left(
+                \frac{\partial^{4} u}{\partial x^{4}}
+              \right)_{i,j}
+              \frac{(-2\Delta x)^{4}}{4!}
+              +
+              \left(
+                \frac{\partial^{5} u}{\partial x^{5}}
+              \right)_{i,j}
+              \frac{(-2\Delta x)^{5}}{5!}
+              +
+              \left(
+                \frac{\partial^{6} u}{\partial x^{6}}
+              \right)_{i,j}
+              \frac{(-2\Delta x)^{6}}{6!}
+              +
+              \cdots
+    \end{aligned}
+    \\
+    &\begin{aligned}
+      u_{i-1,j}  =
+      u_{i,j} &+
+      \left(
+        \frac{\partial u}{\partial x}
+      \right)_{i,j}
+      (-\Delta x)
+      +
+      \left(
+        \frac{\partial^{2} u}{\partial x^{2}}
+      \right)_{i,j}
+      \frac{(-\Delta x)^{2}}{2}
+      +
+      \left(
+        \frac{\partial^{3} u}{\partial x^{3}}
+      \right)_{i,j}
+      \frac{(-\Delta x)^{3}}{3!}
+      \\
+              & 
+              +
+              \left(
+                \frac{\partial^{4} u}{\partial x^{4}}
+              \right)_{i,j}
+              \frac{(-\Delta x)^{4}}{4!}
+              +
+              \left(
+                \frac{\partial^{5} u}{\partial x^{5}}
+              \right)_{i,j}
+              \frac{(-\Delta x)^{5}}{5!}
+              +
+              \left(
+                \frac{\partial^{6} u}{\partial x^{6}}
+              \right)_{i,j}
+              \frac{(-\Delta x)^{6}}{6!}
+              +
+              \cdots
+    \end{aligned}
+    \\
+    &u_{i,j} = u_{i, j}
+    \\
+    &\begin{aligned}
+      u_{i+1,j}  =
+      u_{i,j} &+
+      \left(
+        \frac{\partial u}{\partial x}
+      \right)_{i,j}
+      (\Delta x)
+      +
+      \left(
+        \frac{\partial^{2} u}{\partial x^{2}}
+      \right)_{i,j}
+      \frac{(\Delta x)^{2}}{2}
+      +
+      \left(
+        \frac{\partial^{3} u}{\partial x^{3}}
+      \right)_{i,j}
+      \frac{(\Delta x)^{3}}{3!}
+      \\
+              & 
+              +
+              \left(
+                \frac{\partial^{4} u}{\partial x^{4}}
+              \right)_{i,j}
+              \frac{(\Delta x)^{4}}{4!}
+              +
+              \left(
+                \frac{\partial^{5} u}{\partial x^{5}}
+              \right)_{i,j}
+              \frac{(\Delta x)^{5}}{5!}
+              +
+              \left(
+                \frac{\partial^{6} u}{\partial x^{6}}
+              \right)_{i,j}
+              \frac{(\Delta x)^{6}}{6!}
+              +
+              \cdots
+    \end{aligned}
+    \\
+    &\begin{aligned}
+      u_{i+2,j}  =
+      u_{i,j} &+
+      \left(
+        \frac{\partial u}{\partial x}
+      \right)_{i,j}
+      (2\Delta x)
+      +
+      \left(
+        \frac{\partial^{2} u}{\partial x^{2}}
+      \right)_{i,j}
+      \frac{(2\Delta x)^{2}}{2}
+      +
+      \left(
+        \frac{\partial^{3} u}{\partial x^{3}}
+      \right)_{i,j}
+      \frac{(2\Delta x)^{3}}{3!}
+      \\
+              & 
+              +
+              \left(
+                \frac{\partial^{4} u}{\partial x^{4}}
+              \right)_{i,j}
+              \frac{(2\Delta x)^{4}}{4!}
+              +
+              \left(
+                \frac{\partial^{5} u}{\partial x^{5}}
+              \right)_{i,j}
+              \frac{(2\Delta x)^{5}}{5!}
+              +
+              \left(
+                \frac{\partial^{6} u}{\partial x^{6}}
+              \right)_{i,j}
+              \frac{(2\Delta x)^{6}}{6!}
+              +
+              \cdots
+    \end{aligned}
+  \end{aligned}
+\end{equation}
+
+对上式各式分别乘以系数$A,B,C,D,E$得：
+\begin{equation}
+\begin{aligned}
+  &Au_{i-2,j}+Bu_{i-1,j}+Cu_{i,j}+Du_{i+1,j}+Eu_{i+2,j} 
+  \\
+  =
+  &(A+B+C+D+E)u_{i,j}
+  +
+  \\
+  &
+  (-2A-B+D+2E)
+  \left(
+    \frac{\partial u}{\partial x}
+  \right)_{i,j}
+  \Delta x
+  +
+  \\
+  &
+  \left(2A+\frac{B}{2}+\frac{D}{2}+2E\right)
+  \left(
+    \frac{\partial^{2} u}{\partial x^{2}}
+  \right)_{i,j}
+  (\Delta x)^{2}
+  +
+  \\
+  &
+  \left(-\frac{4}{3}A-\frac{B}{6}+\frac{D}{6}+\frac{4}{3}E\right)
+  \left(
+    \frac{\partial^{3} u}{\partial x^{3}}
+  \right)_{i,j}
+  (\Delta x)^{3}
+  +
+  \\
+  &
+  \left(\frac{2}{3}A+\frac{B}{24}+\frac{D}{24}+\frac{2}{3}E\right)
+  \left(
+    \frac{\partial^{4} u}{\partial x^{4}}
+  \right)_{i,j}
+  (\Delta x)^{4}
+  +
+  \\
+  &
+  \left(-\frac{4}{15}A-\frac{B}{60}+\frac{D}{60}+\frac{4}{15}E\right)
+  \left(
+    \frac{\partial^{5} u}{\partial x^{5}}
+  \right)_{i,j}
+  (\Delta x)^{5}
+  +
+  \\
+  &
+  \left(\frac{4}{45}A+\frac{B}{120}+\frac{D}{120}+\frac{4}{45}E\right)
+  \left(
+    \frac{\partial^{6} u}{\partial x^{6}}
+  \right)_{i,j}
+  (\Delta x)^{6}
+  +
+  \cdots
+\end{aligned}
+\end{equation}
+根据精度要求，可得
+\begin{equation}
+  \begin{aligned}
+    A+B+C+D+E = 0 \\
+    -2A-B+D+2E = 0 \\
+    \left(2A+\frac{B}{2} + \frac{B}{2} + 2E\right)(\Delta x)^{2} = 1 \\
+    -\frac{4}{3}A-\frac{B}{6}+\frac{4}{3}D+\frac{E}{6} = 0 \\
+    \frac{2}{3}A+\frac{B}{24}+\frac{D}{24}+\frac{2}{3}E = 0 \\
+    -\frac{4}{15}A-\frac{B}{60}+\frac{D}{60}+\frac{4}{15}E = 0 \\
+  \end{aligned}
+\end{equation}
 \section{差分方程}
 \section{相容性、稳定性和收敛性}
 
