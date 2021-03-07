@@ -806,5 +806,84 @@ $u_{1},u_{2},u_{3}$的精度均为$O(\Delta y)^{3}$。在式
 \end{equation}
 
 \section{差分方程}
+上节中我们讨论了如何用各类代数差分来替代一个偏导数。上一章所推导各类偏微分方程组
+中通常涉及到大量的偏导数项。当给定的偏微分方程中所有的偏导数项都被差分替代后，最
+终得到的代数方程为差分方程，是原偏微分方程的线性替代。本节，我们将讨论有关差分方
+程的基础概念。
+
+为了简化，我们选用热传导系数为常数的一维热传导方程，
+\begin{equation}
+\frac{\partial T}{\partial t}
+=
+\alpha
+\frac{\partial^{2} T}{\partial x^{2}}
+\label{EqBD_1dhce}
+\end{equation}
+选用该方程主要是出于方便的考虑。目前，我们主要是希望讲解差分方程的基础概念，若直接
+处理复杂的流动控制方程是没有好处的。
+
+式\eqref{EqBD_1dhce}中包含了两个自变量，$x$和$t$。
+
+\begin{equation}
+  \left(
+    \frac{\partial T}{\partial t}
+  \right)_{i}^{n}
+  =
+  \frac{T_{i}^{n+1}-T_{i}^{n}}{\Delta t}
+  -
+  \left(
+    \frac{\partial^{2} T}{\partial t^{2}}
+  \right)_{i}^{n}
+  \frac{\Delta t}{2}
+  +
+  \cdots
+\end{equation}
+
+\begin{equation}
+  \left(
+    \frac{\partial^{2} T}{\partial x^{2}}
+  \right)_{i}^{n}
+  =
+  \frac{T_{i+1}^{n}-2T_{i}^{n}+T_{i-1}^{n}}{(\Delta x)^2}
+  -
+  \left(
+    \frac{\partial^{4} T}{\partial x^{4}}
+  \right)_{i}^{n}
+  \frac{(\Delta x)^{2}}{12}
+  +
+  \cdots
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    \frac{\partial T}{\partial t}
+    -
+    \alpha
+    \frac{\partial T}{\partial x^{2}}
+    =
+    0
+    =
+    \frac{T_{i}^{n+1}-T_{i}^{n}}{\Delta t}
+    &-
+    \frac{T_{i+1}^{n}-2T_{i}^{n}+T_{i-1}^{n}}{(\Delta x)^2}
+    \\
+    &+
+    \left[
+      -
+      \left(
+        \frac{\partial^{2} T}{\partial t^{2}}
+      \right)_{i}^{n}
+      \frac{\Delta t}{2}
+      +
+      \left(
+        \frac{\partial^{4} T}{\partial x^{4}}
+      \right)_{i}^{n}
+      \frac{(\Delta x)^{2}}{12}
+      +
+      \cdots
+    \right]
+  \end{aligned}
+\end{equation}
+
 \section{相容性、稳定性和收敛性}
 
