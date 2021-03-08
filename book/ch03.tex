@@ -817,12 +817,12 @@ $u_{1},u_{2},u_{3}$的精度均为$O(\Delta y)^{3}$。在式
 =
 \alpha
 \frac{\partial^{2} T}{\partial x^{2}}
-\label{EqBD_1dhce}
+\label{EqBD_1dht}
 \end{equation}
 选用该方程主要是出于方便的考虑。目前，我们主要是希望讲解差分方程的基础概念，若直接
 处理复杂的流动控制方程是没有好处的。
 
-式\eqref{EqBD_1dhce}中包含了两个自变量，$x$和$t$。
+式\eqref{EqBD_1dht}中包含了两个自变量，$x$和$t$。
 
 \begin{equation}
   \left(
@@ -883,7 +883,29 @@ $u_{1},u_{2},u_{3}$的精度均为$O(\Delta y)^{3}$。在式
       \cdots
     \right]
   \end{aligned}
+  \label{EqBD_1dht_pede}
 \end{equation}
+
+\begin{equation}
+    \frac{T_{i}^{n+1}-T_{i}^{n}}{\Delta t}
+    =
+    \frac{T_{i+1}^{n}-2T_{i}^{n}+T_{i-1}^{n}}{(\Delta x)^2}
+    \label{EqBD_1dht_de}
+\end{equation}
+式\eqref{EqBD_1dht_de}即为式\eqref{EqBD_1dht}中偏微分方程的差分方程。需要注意的是，式
+\eqref{EqBD_1dht_de}只是式\eqref{EqBD_1dht}的近似，式\eqref{EqBD_1dht_de}中每一个差商都有
+一个截断误差，因此式\eqref{EqBD_1dht_de}所表达的差分方程综合了每一个差商的截断误
+差。从式\eqref{}可以看出，式\eqref{EqBD_1dht_de}的截断误差为$O[\Delta t, (\Delta
+x)^{2}]$。
+
+更重要的是，差分方程和原始对偏微分方程是完全不同的。差分方程是一个代数方程。网格
+中，每一个网格节点都上可以列出一个差分方程，最后组成一个线性方程组。然后，通过求
+解该线性方程组得出每个网格节点上下一个时刻的温度。这里我们需要注意一个问题，求解
+该线性方程组所得的解是否就是偏微分方程的解？仔细观察式\eqref{EqBD_1dht_pe_de}，
+我们可以认为，当$\Delta x \rightarrow 0$和$\Delta t \rightarrow 0$时，截断误差趋
+近于0，差分方程就会退化成原先的偏微分方程，差分方程的解确实是偏微分方程的解。这
+种情况下，偏微分方程的有限差分表达式被认为是\textbf{相容的}。但
+是对于有限间隔的网格系统来说，有限差分
 
 \section{相容性、稳定性和收敛性}
 
