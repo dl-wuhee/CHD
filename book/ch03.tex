@@ -935,8 +935,184 @@ x)^{2}]$。
   \right)
 \end{equation}
 
-接下来，我们利用上式来求解一个简化的一维非稳态热传导问题。假定一根圆柱形的金属棒
-，
+接下来，我们利用上式来求解一个简化的一维非稳态热传导问题。假定一根水平放置的圆柱形金属棒
+，左端坐标为$x=0$，长度$l=5\mathrm{m}$，导热系数$\alpha=0.5\mathrm{m^{2}/s}$。在
+初始时刻，整根棒的温度$T(x,0)=0\mathrm{^{\circ}\!C}$。棒左端温度
+$T(0,t)=50\mathrm{^{\circ}\!C}$，右端温度$T(5,t)=0\mathrm{^{\circ}\!C}$。棒上网
+格节点间距$\Delta x=1\mathrm{m}$，共有6个网格节点，时间节点间距或时间步长$\Delta
+t=1\mathrm{s}$，总计算时间$t=10\mathrm{s}$。系数$\alpha\Delta t/(\Delta
+x)^{2}=0.5$。计算网格系统如图\ref{FgBD_1dht_grid}
+所示。由于网格节点1和6都是位于边界上的节点，所以这两个节点在各时间层上的温度值均
+为已知值。
+\begin{figure}[h]
+  \centering
+  \includegraphics{BD1dht.pdf}
+  \caption{求解网格系统}
+  \label{FgBD_1dht_grid}
+\end{figure}
+
+初始时刻对应第一个时间层，在该层中所有网格节点上的温度值$T_{i}^{1}$均为已知量，第二个时间层
+各网格节点上的差分方程如下：
+\begin{equation}
+\begin{aligned}
+  T_{2}^{2} = 
+  T_{2}^{1} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{3}^{1}-2T_{2}^{1}+T_{1}^{1})
+  \\
+  T_{3}^{2} = 
+  T_{3}^{1} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{4}^{1}-2T_{3}^{1}+T_{2}^{1})
+\\
+  T_{4}^{2} = 
+  T_{4}^{1} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{5}^{1}-2T_{4}^{1}+T_{3}^{1})
+  \\
+  T_{5}^{2} = 
+  T_{5}^{1} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{6}^{1}-2T_{5}^{1}+T_{4}^{1})
+\end{aligned}
+\end{equation}
+
+当第$n$层时间所有网格节点上的温度值$T_{i}^{n}$均为已知量时，下一个时间层，即
+$n+1$层，各网格节点上的差分方程如下：
+\begin{equation}
+\begin{aligned}
+  T_{2}^{n+1} = 
+  T_{2}^{n} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{3}^{n}-2T_{2}^{n}+T_{1}^{n})
+  \\
+  T_{3}^{n+1} = 
+  T_{3}^{n} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{4}^{n}-2T_{3}^{n}+T_{2}^{n})
+\\
+  T_{4}^{n+1} = 
+  T_{4}^{n} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{5}^{n}-2T_{4}^{n}+T_{3}^{n})
+  \\
+  T_{5}^{n+1} = 
+  T_{5}^{n} 
+  +
+  \alpha\frac{\Delta t}{(\Delta x)^{2}}
+  (T_{6}^{n}-2T_{5}^{n}+T_{4}^{n})
+\end{aligned}
+\end{equation}
+依此类推，即可求出各时间层上各网格节点上的温度值。表\ref{TbBD_1dht_result1}列出
+了详细的计算结果。
+\begin{table}[h!]
+  \begin{center}
+  \caption{一维非稳态热传导方程计算结果($\Delta t=1\mathrm{s}$)}
+  \label{TbBD_1dht_result1}
+  \begin{tabular}{|c|r|r|r|r|r|r|r|r|r|r|r|}
+    \hline
+ & t=0 & t=1s & t=2s & t=3s & t=4s & t=5s & t=6s & t=7s & t=8s & t=9s & t=10s
+ \\
+  \hline
+x=0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\\
+    \hline
+x=1m & 0 & 0.00  & 0.00  & 0.00  & 3.13  & 3.13  & 5.47  & 5.47  & 7.03  & 7.03
+     & 8.06  
+     \\
+    \hline
+x=2m & 0 & 0.00  & 0.00  & 6.25  & 6.25  & 10.94  & 10.94  & 14.06  & 14.06  &
+16.11  & 16.11  
+\\
+    \hline
+x=3m & 0 & 0.00  & 12.50  & 12.50  & 18.75  & 18.75  & 22.66  & 22.66  & 25.20
+     & 25.20  & 26.86 
+     \\
+    \hline
+x=4m & 0 & 25.00  & 25.00  & 31.25  & 31.25  & 34.38  & 34.38  & 36.33  & 36.33
+     & 37.60  & 37.60 
+     \\
+    \hline
+x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
+\\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+当改变时间步长$\Delta t=0.1\mathrm{s}$时，系数$\alpha\Delta t/(\Delta
+x)^{2}=0.05$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result2}所示。
+\begin{table}[h!]
+  \begin{center}
+    \caption{一维非稳态热传导方程计算结果($\Delta t=0.1\mathrm{s}$)}
+  \label{TbBD_1dht_result2}
+  \begin{tabular}{|c|r|r|r|r|r|r|r|r|r|r|r|}
+    \hline
+ & t=0 & t=1s & t=2s & t=3s & t=4s & t=5s & t=6s & t=7s & t=8s & t=9s & t=10s
+ \\
+  \hline
+x=0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0
+\\
+\hline
+x=1m & 0 & 0.04  & 0.44  & 1.29  & 2.36  & 3.46  & 4.49  & 5.40  & 6.17  & 6.83  & 7.38 
+\\
+\hline
+x=2m & 0 & 0.45  & 2.23  & 4.59  & 6.94  & 9.07  & 10.91  & 12.46  & 13.77  & 14.85  & 15.75 
+\\
+\hline
+x=3m & 0 & 3.38  & 8.48  & 12.71  & 16.02  & 18.62  & 20.69  & 22.36  & 23.72  & 24.83  & 25.74 
+\\
+\hline
+x=4m & 0 & 16.73  & 24.12  & 28.22  & 30.86  & 32.73  & 34.13  & 35.22  & 36.09  & 36.79  & 37.36 
+\\
+\hline
+x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
+\\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+若改变时间步长$\Delta t=2.5\mathrm{s}$时，系数$\alpha\Delta t/(\Delta
+x)^{2}=1.25$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result3}所示
+。
+\begin{table}[h!]
+  \begin{center}
+    \caption{一维非稳态热传导方程计算结果($\Delta t=2.5\mathrm{s}$)}
+  \label{TbBD_1dht_result3}
+  \begin{tabular}{|c|r|r|r|r|r|}
+    \hline
+ & t=0 & t=2.5s & t=5s & t=7.5s & t=10s
+ \\
+  \hline
+x=0 & 0 & 0 & 0 & 0 & 0
+\\
+\hline
+x=1m & 0 & 0.00  & 0.00  & 0.00  & 122.07 
+\\
+\hline
+x=2m & 0 & 0.00  & 0.00  & 97.66  & -341.80 
+\\
+\hline
+x=3m & 0 & 0.00  & 78.13  & -156.25  & 615.23 
+\\
+\hline
+x=4m & 0 & 62.50  & -31.25  & 207.03  & -443.36 
+\\
+\hline
+x=5m & 50 & 50 & 50 & 50 & 50 
+\\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
 
 
 \section{相容性、稳定性和收敛性}
