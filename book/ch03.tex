@@ -1047,7 +1047,7 @@ x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
   \end{center}
 \end{table}
 
-当改变时间步长$\Delta t=0.1\mathrm{s}$时，系数$\alpha\Delta t/(\Delta
+改变时间步长$\Delta t=0.1\mathrm{s}$，系数$\alpha\Delta t/(\Delta
 x)^{2}=0.05$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result2}所示。
 \begin{table}[h!]
   \begin{center}
@@ -1080,10 +1080,9 @@ x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
   \end{center}
 \end{table}
 
-若改变时间步长$\Delta t=2.5\mathrm{s}$时，系数$\alpha\Delta t/(\Delta
+改变时间步长$\Delta t=2.5\mathrm{s}$，系数$\alpha\Delta t/(\Delta
 x)^{2}=1.25$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result3}所示
-。
-\begin{table}[h!]
+。\begin{table}[h!]
   \begin{center}
     \caption{一维非稳态热传导方程计算结果($\Delta t=2.5\mathrm{s}$)}
   \label{TbBD_1dht_result3}
@@ -1113,6 +1112,9 @@ x=5m & 50 & 50 & 50 & 50 & 50
   \end{tabular}
   \end{center}
 \end{table}
+
+对比前两次的计算结果，表\ref{TbBD_1dht_result3}中数据表明，当系数$\alpha\Delta t/(\Delta
+x)^{2}$过大时，计算结果不符合物理定律。
 
 
 \section{相容性、稳定性和收敛性}
