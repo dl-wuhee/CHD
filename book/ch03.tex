@@ -922,7 +922,7 @@ x)^{2}]$。
 根据显式方法的定义，每个网格节点所列出的差分方程中仅包含一个未知量，因而可直接求解
 得出未知量。
 
-上一节中的式\eqref{EqBD_1dht_de}给出的差分方程即为显示方法的一种。对式
+上一节中的式\eqref{EqBD_1dht_de}给出的差分方程即为显式方法的一种。对式
 \eqref{EqBD_1dht_de}进行移项，将未知量放在等号左侧，已知量放在等号右侧，可得
 \begin{equation}
   T_{i}^{n+1}
@@ -1014,7 +1014,7 @@ $n+1$层，各网格节点上的差分方程如下：
 了详细的计算结果。
 \begin{table}[h!]
   \begin{center}
-  \caption{一维非稳态热传导方程计算结果($\Delta t=1\mathrm{s}$)}
+  \caption{一维非稳态热传导方程计算结果(显式方法$\Delta t=1\mathrm{s}$)}
   \label{TbBD_1dht_result1}
   \begin{tabular}{|c|r|r|r|r|r|r|r|r|r|r|r|}
     \hline
@@ -1051,7 +1051,7 @@ x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
 x)^{2}=0.05$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result2}所示。
 \begin{table}[h!]
   \begin{center}
-    \caption{一维非稳态热传导方程计算结果($\Delta t=0.1\mathrm{s}$)}
+    \caption{一维非稳态热传导方程计算结果(显式方法$\Delta t=0.1\mathrm{s}$)}
   \label{TbBD_1dht_result2}
   \begin{tabular}{|c|r|r|r|r|r|r|r|r|r|r|r|}
     \hline
@@ -1084,7 +1084,7 @@ x=5m & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50 & 50
 x)^{2}=1.25$。重复上述过程，重新求解结果如表\ref{TbBD_1dht_result3}所示
 。\begin{table}[h!]
   \begin{center}
-    \caption{一维非稳态热传导方程计算结果($\Delta t=2.5\mathrm{s}$)}
+    \caption{一维非稳态热传导方程计算结果(显式方法$\Delta t=2.5\mathrm{s}$)}
   \label{TbBD_1dht_result3}
   \begin{tabular}{|c|r|r|r|r|r|}
     \hline
@@ -1114,8 +1114,174 @@ x=5m & 50 & 50 & 50 & 50 & 50
 \end{table}
 
 对比前两次的计算结果，表\ref{TbBD_1dht_result3}中数据表明，当系数$\alpha\Delta t/(\Delta
-x)^{2}$过大时，计算结果不符合物理定律。
+x)^{2}$选取不当时，计算结果中会出现不符合物理定律的数值，比如
+$-241.80^{\circ}\!\mathrm{C}$。系数$\alpha\Delta t/(\Delta x)^{2}$如何选取将在下
+一节中详细展开。
 
+\subsection{隐式方法}
+根据上一节差分格式的知识，式\eqref{EqBD_1dht_de}显然并不是唯一的差分方程。为了解
+释隐式方法，我们将$\partial^{2}T/\partial x^{2}$的中心差分格式中分子每一项用第$n$
+和$n+1$个时间层的平均值来代替，即
+\begin{equation}
+  \frac{T_{i}^{n+1}-T_{i}^{n}}{\Delta t}
+  =
+  \alpha
+  \frac{
+    \frac{1}{2}(T_{i+1}^{n+1}+T_{i+1}^{n}) +
+    \frac{1}{2}(-T_{i+1}^{n+1}-T_{i}^{n}) +
+    \frac{1}{2}(T_{i-1}^{n+1}+T_{i-1}^{n}) 
+  }{(\Delta x)^{2}}
+\end{equation}
+这个差分格式被称为Crank-Nicolson格式。对上式进行整理，将下一个层的未知量放在等式
+左边，已知量放在等式右边，可得
+\begin{equation}
+  \frac{\alpha\Delta t}{2(\Delta x)^{2}}
+  T_{i-1}^{n+1} 
+  -
+  \left[1+\frac{\alpha\Delta t}{(\Delta x)^{2}}\right]
+  T_{i}^{n+1} 
+  +
+  \frac{\alpha\Delta t}{2(\Delta x)^{2}}
+  T_{i+1}^{n+1} 
+  =
+  -T_{i}^{n}
+  -
+  \frac{\alpha\Delta t}{2(\Delta x)^{2}}
+  (T_{i+1}^{n} - 2T_{i}^{n} + T_{i-1}^{n})
+  \label{EqBD_1dht_cr_2}
+\end{equation}
+
+为了后续推导的便利，令
+\begin{equation}
+\begin{aligned}
+  &A = \frac{\alpha\Delta t}{2(\Delta x)^{2}} \\
+  &B = 1 + \frac{\alpha\Delta t}{(\Delta x)^{2}} \\
+  &K_{i} = 
+  -T_{i}^{n}
+  -
+  A(T_{i+1}^{n} - 2T_{i}^{n} + T_{i-1}^{n})
+\end{aligned}
+\end{equation}
+式\eqref{EqBD_1dht_cr_2}可写成
+\begin{equation}
+  AT_{i-1}^{n+1} - BT_{i}^{n+1} + AT_{i+1}^{n+1} = K_{i}
+\end{equation}
+沿用显式格式使用的网格系统，在第2个时间层节点2，3，4和5上的差分方程将形成如下的线性方程组：
+\begin{equation}
+\begin{aligned}
+  AT_{1}^{2}-BT_{2}^{2}+AT_{3}^{2} = K_{2} \\
+  AT_{2}^{2}-BT_{3}^{2}+AT_{4}^{2} = K_{3} \\
+  AT_{3}^{2}-BT_{4}^{2}+AT_{5}^{2} = K_{4} \\
+  AT_{4}^{2}-BT_{5}^{2}+AT_{6}^{2} = K_{5} \\
+\end{aligned}
+\end{equation}
+注意节点2差分方程中$T_{1}^{2}$和节点5差分方程中$T_{6}^{2}$位于边界节点上，因此这
+两个值为已知量，可以移到等式的右边。并令$K_{2}^{\prime}=K_{2} - AT_{1}^{2}$，$K_{5}^{\prime}=K_{5} - AT_{6}^{2}$ 则，上式可写成
+\begin{equation}
+\begin{aligned}
+  -BT_{2}^{2}+AT_{3}^{2} = K_{2}^{\prime}\\
+  AT_{2}^{2}-BT_{3}^{2}+AT_{4}^{2} = K_{3} \\
+  AT_{3}^{2}-BT_{4}^{2}+AT_{5}^{2} = K_{4} \\
+  AT_{4}^{2}-BT_{5}^{2} = K_{5}^{\prime}\\
+\end{aligned}
+\end{equation}
+写成矩阵形式为
+\begin{equation}
+  \begin{bmatrix}
+    -B & A & 0 & 0 \\
+    A & -B & A & 0 \\
+    0 & A & -B & A \\
+    0 & 0 & A & -B \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    T_{2}^{2} \\
+    T_{3}^{2} \\
+    T_{4}^{2} \\
+    T_{5}^{2} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    K_{2}^{\prime} \\
+    K_{3} \\
+    K_{4} \\
+    K_{5}^{\prime} \\
+  \end{bmatrix}
+\end{equation}
+
+当$\Delta t=1\mathrm{s}$时，$A=\frac{\alpha\Delta t}{2(\Delta
+x)^{2}}=\frac{0.5\times1}{2\times1^{2}}=0.25$，$B=1.5$，各节点差分方程右侧
+$K_{i}$为
+\begin{equation}
+\begin{aligned}
+    &K_{2}^{\prime} =
+    K_{2} - AT_{1}^{2}
+    =
+  -T_{2}^{1}
+  -
+  A(T_{3}^{1} - 2T_{2}^{1} + T_{1}^{1})
+  - AT_{1}^{2}
+  =
+  0
+    \\
+    &K_{3} 
+    =
+  -T_{3}^{1}
+  -
+  A(T_{4}^{1} - 2T_{3}^{1} + T_{2}^{1})
+  =
+  0
+    \\
+    &K_{4}
+    =
+  -T_{4}^{1}
+  -
+  A(T_{5}^{1} - 2T_{4}^{1} + T_{3}^{1})
+  =
+  0
+    \\
+    &K_{5}^{\prime} 
+    K_{5} - AT_{6}^{2}
+    =
+  -T_{5}^{1}
+  -
+  A(T_{6}^{1} - 2T_{5}^{1} + T_{4}^{1})
+  - AT_{6}^{2}
+  =
+  -25.0
+    \\
+\end{aligned}
+\end{equation}
+代入
+\begin{equation}
+  \begin{bmatrix}
+    -1.5 & 0.25 & 0 & 0 \\
+    0.25 & -1.5 & 0.25 & 0 \\
+    0 & 0.25 & -1.5 & 0.25 \\
+    0 & 0 & 0.25 & -1.5 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    T_{2}^{2} \\
+    T_{3}^{2} \\
+    T_{4}^{2} \\
+    T_{5}^{2} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0 \\
+    0 \\
+    0 \\
+    -25.0 \\
+  \end{bmatrix}
+\end{equation}
+从上式可以解出
+\begin{equation}
+  T_{2} = 0.08, \quad
+  T_{3} = 0.50, \quad
+  T_{4} = 2.94, \quad
+  T_{5} = 17.16
+\end{equation}
+重复这一过程，即可求出各时间层上各网格节点上的温度值。表\ref{}列出了详细的计算结
+果。
 
 \section{相容性、稳定性和收敛性}
 
