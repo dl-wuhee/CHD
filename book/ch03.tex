@@ -896,7 +896,7 @@ $u_{1},u_{2},u_{3}$的精度均为$O(\Delta y)^{3}$。在式
 式\eqref{EqBD_1dht_de}即为式\eqref{EqBD_1dht}中偏微分方程的差分方程。需要注意的是，式
 \eqref{EqBD_1dht_de}只是式\eqref{EqBD_1dht}的近似，式\eqref{EqBD_1dht_de}中每一个差商都有
 一个截断误差，因此式\eqref{EqBD_1dht_de}所表达的差分方程综合了每一个差商的截断误
-差。从式\eqref{}可以看出，式\eqref{EqBD_1dht_de}的截断误差为$O[\Delta t, (\Delta
+差。从式\eqref{EqBD_1dht_pe_de}可以看出，式\eqref{EqBD_1dht_de}的截断误差为$O[\Delta t, (\Delta
 x)^{2}]$。
 
 更重要的是，差分方程和原始对偏微分方程是完全不同的。差分方程是一个代数方程。网格
@@ -1380,9 +1380,228 @@ x=5m & 50 & 50 & 50 & 50 & 50
 误差不会趋近于0。截断误差的存在将会影响差分方程精确解的精度。此外，无论采用何种
 计算手段，受计算精度的影响，差分方程的求解都会引入计算误差。计算误差在计算过程中
 会不断步进。如果随着计算过程，计算误差逐渐累积，导致误差过大，使计算结果偏离差分
-方程的精确解，这种差分方程就是不稳定的。相反的，若计算误差在计算过程中能被控
+方程的精确解，这种差分方程就是不稳定的。反之，若计算误差在计算过程中能被控
 制在一个可接受的程度，计算结果与精确解的差值符合精度要求，这种差分方程就是稳定的
 。本节将重点介绍判定差分方程稳定性的黎曼稳定性分析方法。
 
+离散误差和舍入误差是影响偏微分方程数值解的主要两个误差来源。离散误差是指原偏微分
+方程精确解与相应的差分方程的精确解之间存在的误差，也就是差分方程的截断误差，外加
+边界条件数值化处理引入的误差。舍入误差是指，在求解差分方程时大量浮点运算过程中，计算
+机总是将浮点数按照一定有效位数进行舍入而引入的误差。
+
+令$A$为偏微分方程的精确解，$D$为差分方程的精确解，$N$为真实的计算机求解
+差分方程得到的数值解。那么，
+\begin{equation}
+  \begin{aligned}
+  &\mbox{离散误差} = A - D
+  \\
+  &\mbox{舍入误差} = \epsilon = N - D
+  \quad
+  \mbox{或}
+  \quad
+  N = D + \epsilon
+  \end{aligned}
+  \label{EqBD_Errors}
+\end{equation}
+
+为了简化讨论，我们延用一维非稳态热传导方程，以及上节中显示方法使用的差分方程，
+\begin{equation}
+  \frac{T_{i}^{n+1}-T_{i}^{n}}{\Delta t}
+  =
+  \frac{\alpha(T_{i+1}^{n}-2T_{i}^{n}+T_{i-1}^{n})}{(\Delta x)^{2}}
+  \tag{\ref{EqBD_1dht_de}}
+\end{equation}
+
+显然，式\eqref{EqBD_1dht_de}的数值解$N$必定满足该式，即
+\begin{equation}
+  \frac{N_{i}^{n+1}-N_{i}^{n}}{\Delta t}
+  =
+  \frac{\alpha(N_{i+1}^{n}-2N_{i}^{n}+N_{i-1}^{n})}{(\Delta x)^{2}}
+  \label{EqBD_1dht_de_N}
+\end{equation}
+
+将式\eqref{EqBD_Errors}带入上式，有
+\begin{equation}
+  \frac{D_{i}^{n+1}+\epsilon_{i}^{n} - D_{i}^{n} - \epsilon_{i}^{n}}{\alpha \Delta t}
+  =
+  \frac{D_{i+1}^{n}+\epsilon_{i+1}^{n} - 2D_{i}^{n}-2\epsilon_{i}^{n}+D_{i-1}^{n}+\epsilon_{i-1}^{n}}{(\Delta x)^{2}}
+  \label{EqBD_1dht_error_n}
+\end{equation}
+
+根据定义，$D$为差分方程的精确解，因此它一定是满足差分方程的，即
+\begin{equation}
+  \frac{D_{i}^{n+1}-D_{i}^{n}}{\alpha\Delta t}
+  =
+  \frac{D_{i+1}^{n}-2D_{i}^{n}+D_{i-1}^{n}}{(\Delta x)^{2}}
+  \label{EqBD_1dht_error_d}
+\end{equation}
+
+从式\eqref{EqBD_1dht_error_n}中减去式\eqref{EqBD_1dht_error_d}得：
+\begin{equation}
+  \frac{\epsilon_{i}^{n+1}-\epsilon_{i}^{n}}{\alpha\Delta t}
+  =
+  \frac{\epsilon_{i+1}^{n}-2\epsilon_{i}^{n}+\epsilon_{i-1}^{n}}{(\Delta x)^{2}}
+  \label{EqBD_1dht_error_e}
+\end{equation}
+可见，舍入误差$\epsilon$同样也满足差分方程。假定$\epsilon_{i}$是计算过程中某一
+阶段的误差。那么，随着求解过程从第$n$层步进到第$n+1$层，误差$\epsilon_{i}$收缩或
+尽可能保持一致时，解就是稳定的。反之，如果$\epsilon_{i}$随着求解过程变大，
+解就是不稳定的。因此，对于一个稳定解，有
+\begin{equation}
+\left|
+\frac{\epsilon_{i}^{n+1}}{\epsilon_{i}^{n}}
+\right|
+\le
+1
+\label{EqBD_Stability}
+\end{equation}
 
 
+根据傅里叶级数理论，舍入误差$\epsilon(x,t)$可以表示为：
+\begin{equation}
+  \epsilon(x,t) = \sum_{m=-\infty}^{\infty}A_{m}(t)e^{ik_{m}x}
+\end{equation}
+然而，由于实际问题中空间离散后网格尺寸不能为零。例如，上节使用的网格划分，假定网
+格节点数为$N$，那么上式中$m$的取值只能是1到$N/2$，即
+\begin{equation}
+  \epsilon(x,t) = \sum_{m=1}^{N/2}A_{m}(t)e^{ik_{m}x}
+\end{equation}
+另外，假定$A_{m}(t)=e^{at}$，其中$a$是一个常数。上式可写成
+\begin{equation}
+  \epsilon(x,t) = \sum_{m=1}^{N/2}e^{at}e^{ik_{m}x}
+  \label{EqBD_errors_expression}
+\end{equation}
+
+值得注意的是，差分方程本身是一个线性方程，而且误差$\epsilon$满足差分方程。因此，
+将误差表达式带入差分方程后，式\eqref{EqBD_errors_expression}中每一项都应该满足差
+分方程。因此，我们仅需讨论任一项就可以了。下面以舍入误差的第$m$项展开讨论。
+\begin{equation}
+  \epsilon_{m}(x,t) = e^{at}e^{ik_{m}x}
+  \label{EqBD_errors_m_term}
+\end{equation}
+将式\eqref{EqBD_errors_m_term}带入式\eqref{EqBD_1dht_error_e}，得
+\begin{equation}
+  \frac{e^{a(t+\Delta t)}e^{ik_{m}x}-e^{at}e^{ik_{m}x}}{\alpha\Delta t}
+  =
+  \frac{e^{at}e^{ik_{m}(x+\Delta x)}-2e^{at}e^{ik_{m}x}+e^{at}e^{ik_{m}(x-\Delta
+  x)}}{(\Delta x)^{2}}
+  \label{EqBD_1dht_error_e_fs}
+\end{equation}
+等式两边同除$e^{at}e^{ik_{m}x}$，可得
+\begin{equation}
+  \frac{e^{a\Delta t}-1}{\alpha\Delta t}
+  =
+  \frac{e^{ik_{m}\Delta x}-2+e^{-ik_{m}\Delta x}}{(\Delta x)^{2}}
+\end{equation}
+移项整理可得
+\begin{equation}
+e^{a\Delta t} =
+1
++
+\frac{\alpha \Delta t}{(\Delta x)^{2}}
+(e^{ik_{m}\Delta x}+e^{-ik_{m}\Delta x}-2)
+\label{EqBD_1dht_e_fs_1}
+\end{equation}
+根据欧拉公式，有
+\begin{equation}
+  \cos(k_{m}\Delta x) = 
+  \frac{e^{ik_{m}\Delta x}+e^{-ik_{m}\Delta x}}
+  {2}
+\end{equation}
+式\eqref{EqBD_1dht_e_fs_1}可写成
+\begin{equation}
+e^{a\Delta t} =
+1
++
+\frac{2\alpha \Delta t}{(\Delta x)^{2}}
+(\cos(k_{m}\Delta x)-1)
+\label{EqBD_1dht_e_fs_2}
+\end{equation}
+根据三角函数关系，有
+\begin{equation}
+  \sin^{2}\frac{k_{m}\Delta x}{2}
+  =
+  \frac{1-\cos(k_{m}\Delta x)}{2}
+\end{equation}
+式\eqref{EqBD_1dht_e_fs_2}可写成
+\begin{equation}
+e^{a\Delta t} =
+1
+-
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\label{EqBD_1dht_e_fs_3}
+\end{equation}
+
+根据式\eqref{EqBD_Stability}
+\begin{equation}
+\left|
+  \frac{\epsilon_{i}^{n+1}}{\epsilon_{i}^{n}}
+\right|
+  =
+  \left|
+  \frac{e^{a(t+\Delta t)}e^{ik_{m}x}}{e^{at}e^{ik_{m}x}}
+  \right|
+=
+\left|e^{a\Delta t}\right|
+=
+\left|
+1
+-
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\right|
+\le 
+1
+\end{equation}
+
+根据上式，可以定义放大因子$G$。
+求解$G\le 1$不等式，可以得到满足稳定性的条件。
+\begin{equation}
+\left|
+1
+-
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\right|
+=
+G
+\end{equation}
+
+第一个条件，
+\begin{equation}
+1
+-
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\le 1
+\end{equation}
+化简得，
+\begin{equation}
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\ge
+0
+\end{equation}
+由于，$4\alpha\Delta t/(\Delta x)^{2}$中各项始终为正，因此该不等式是无条件满足的
+。
+
+第二个条件，
+\begin{equation}
+1
+-
+\frac{4\alpha \Delta t}{(\Delta x)^{2}}
+\sin^{2}\frac{k_{m}\Delta x}{2}
+\ge -1
+\end{equation}
+从上式可以得到，要满足稳定性条件，系数$\alpha\Delta t/(\Delta x)^{2}$必须满足的
+条件为：
+\begin{equation}
+\frac{\alpha \Delta t}{(\Delta x)^{2}}
+\le
+\frac{1}{2}
+\end{equation}
+
+差分方程的相容性、收敛性和稳定性对数值解影响显著。根据数学理论，当差分方程的相容
+性满足后，当差分方程是稳定性的，那么收敛性自动满足。因此，在推导差分方程过程中，
+我们的重点放在相容性和稳定性上。
