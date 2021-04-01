@@ -1,5 +1,92 @@
 \chapter{代数方程组的求解方法}
 \section{三对角矩阵直接求解方法}
+为方便讨论，将方程组\eqref{EqBD_1dht_ia}改写为
+  \begin{equation}
+    A_{i}T_{i} = B_{i}T_{i-1} + C_{i}T_{i+1} + D_{i}
+    \label{EqLA_TDMA_array}
+  \end{equation}
+  假设共有$N$个方程，即$i=1,2,\cdots,N$。当$i=1$时，$B_{i}=0$；当$i=N$时，
+  $C_{i}=0$。
+
+  这个方程组的求解过程分为消元和回代两个步骤。消元过程从系数矩阵的第二行开始。设
+  消元过程完成后的方程表示为：
+  \begin{equation}
+    T_{i} = P_{i}T_{i+1}+Q_{i}
+    \label{EqLA_xiaoyuan_1}
+  \end{equation}
+  或
+  \begin{equation}
+    T_{i-1} = P_{i-1}T_{i} + Q_{i-1}
+    \label{EqLA_xiaoyuan_2}
+  \end{equation}
+  将式\eqref{EqLA_xiaoyuan_2}乘以$B_{i}$后，与式\eqref{EqLA_TDMA_array}相加，可
+  得
+ \begin{equation}
+   A_{i}T_{i} + B_{i}T_{i-1} = B_{i}T_{i-1}+C_{i}T_{i+1}+D_{i} +
+   B_{i}P_{i-1}T_{i} + B_{i}Q_{i-1}
+ \end{equation} 
+整理的
+\begin{equation}
+  T_{i} = 
+  \frac{C_{i}}{A_{i}-B_{i}P_{i-1}}T_{i+1} +
+  \frac{D_{i}+B_{i}Q_{i-1}}{A_{i}-B_{i}P_{i-1}}
+\end{equation}
+将上式与式\eqref{EqLA_xiaoyuan_1}对比，可得
+\begin{equation}
+\begin{aligned}
+  P_{i} 
+  &=
+\frac{C_{i}}{A_{i}-B_{i}P_{i-1}} \\
+Q_{i}
+  &=
+  \frac{D_{i}+B_{i}Q_{i-1}}{A_{i}-B_{i}P_{i-1}}
+\end{aligned}
+\end{equation}
+这是一个递推关系式，需要确定$P_{1}$和$Q_{1}$。
+
+当$i=1$时，式\eqref{EqLA_TDMA_array}为
+\begin{equation}
+  A_{1}T_{1} = B_{1}T_{0} + C_{1}T_{2} + D_{1}
+\end{equation}
+其中，$B_{1}=0$。对比式\eqref{EqLA_xiaoyuan_1}，可得
+\begin{equation}
+  P_{1} = \frac{C_{1}}{A_{1}},\quad
+  Q_{1} = \frac{D_{1}}{A_{1}}
+\end{equation}
+在$P_{i}$和$Q_{i}$序列的另一端，消元进入最后一行时，由式\eqref{EqLA_xiaoyuan_1}
+得
+\begin{equation}
+  T_{N} = P_{N}T_{N+1}+Q_{N}
+\end{equation}
+且$P_{N}=0$，得
+\begin{equation}
+  T_{N} = Q_{N}
+\end{equation}
+到此消元过程结束，然后按照式\eqref{EqLA_xiaoyuan_2}进行回代。
+
+下面给出TDMA方法的计算步骤：
+\begin{enumerate}
+  \item 计算系数$P_{i}$和$Q_{i}$
+    \begin{equation*}
+      P_{1} = \frac{C_{1}}{A_{1}}, \quad Q_{1} = \frac{D_{1}}{A_{1}}
+    \end{equation*}
+  \item 对$i=1,2,\cdots,N$用递推关系式求系数$P_{i}$和$Q_{i}$
+    \begin{equation*}
+      P_{i} 
+      =
+      \frac{C_{i}}{A_{i}-B_{i}P_{i-1}}
+      ,\quad
+      Q_{i}
+      =
+      \frac{D_{i}+B_{i}Q_{i-1}}{A_{i}-B_{i}P_{i-1}}
+    \end{equation*}
+  \item 令$T_{N}=Q_{N}$
+  \item 对$i=N-1,N-2,\cdots,2,1$应用回代得$T_{N-1},T_{N-2},\cdots,T_{2},T_{1}$
+    \begin{equation*}
+      T_{i-1}=P_{i-1}T_{i} + Q_{i-1}
+    \end{equation*}
+\end{enumerate}
+
 \section{代数方程组迭代求解方法}
 \subsection{雅可比迭代法}
 \subsection{高斯赛德尔迭代}
