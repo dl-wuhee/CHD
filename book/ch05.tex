@@ -88,6 +88,25 @@ Q_{i}
 \end{enumerate}
 
 \section{代数方程组迭代求解方法}
+本书仅一一个简单的例子来介绍代数方程组迭代求解方法中点迭代方法。
+考虑一个简单的三元方程组为例，
+\begin{equation}
+  \sysdelim..
+  \systeme{
+    2x_{1} + x_{2} + x_{3} = 7,
+    -x_{1} + 3x_{2} -x_{3} = 2,
+    x_{1} - x_{2} + 2x_{3} = 5
+  }
+\end{equation}
+首先，对第一个方程进行移项，使等号左边仅保留$x_{1}$，第二个方程的等号左边仅保留
+$x_{2}$，依次类推。可得
+\begin{equation}
+\begin{aligned}
+    x_{1} =(7-x_{2}-x_{3})/2 \\
+    x_{2} =(2 +x_{1} +x_{3} )/ 3 \\
+    x_{3} =(5- x_{1} + x_{2} )/ 2
+\end{aligned}
+\end{equation}
 \subsection{雅可比迭代法}
 \subsection{高斯赛德尔迭代}
 \subsection{松弛迭代}
