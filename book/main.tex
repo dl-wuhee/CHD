@@ -1,20 +1,24 @@
 %!TEX program=xelatex
-\documentclass[utf8]{book}
-\usepackage[heading,UTF8]{ctex}
+\documentclass[a4paper,12pt,utf8]{ctexbook}
 \usepackage{titletoc}
 \usepackage{titlesec}
 \usepackage[a4paper,text={125mm,195mm},centering,left=1in,right=1in,top=1in,bottom=1in]{geometry}
 \usepackage{imakeidx}
 \usepackage{multicol}
-\usepackage[colorlinks,linkcolor=red]{hyperref}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
 \usepackage{amsmath, amssymb, amsfonts, mathrsfs}
 \usepackage{mathtools}
-\usepackage{systeme}
 
 \DeclareFontFamily{U}{mathx}{\hyphenchar\font45}
 \DeclareFontShape{U}{mathx}{m}{n}{<-> mathx10}{}
 \DeclareSymbolFont{mathx}{U}{mathx}{m}{n}
 \DeclareMathAccent{\widebar}{0}{mathx}{"73}
+
+\usepackage{systeme}
+\usepackage{draftwatermark, everypage}
+\SetWatermarkText{Version 0.1}
+\SetWatermarkLightness{0.95}
+\SetWatermarkScale{0.9}
 
 \usepackage{graphicx}
 \usepackage{subfig}
@@ -37,20 +41,70 @@
 
 
 \graphicspath{{img/}}
+
+\titlecontents{chapter}[4em]{\bf \large \vspace{10pt}}{\contentslabel[\color{blue}\thecontentslabel]{4em}}{\hspace*{-4em}}{}
+
+\makeatletter
+\renewcommand{\cleardoublepage}{\relax
+  \clearpage
+  \if@twoside \ifodd\c@page\relax\else
+  \thispagestyle{empty}%
+  \tikz[remember picture, overlay] \node  at (current page.center)
+{\zihao{2} 本\ 页\ 刻\ 意\ 留\ 白};\newpage\fi\fi}
+\makeatother
+
+
 \begin{document}
+\title{\bf \zihao{0} 计\ 算\ 水\ 力\ 学}
+\author{李\ 丹}
+\date{二〇二一年三月}
+\frontmatter
+\maketitle
+\thispagestyle{empty}
 
+\include{preface}
+\clearpage
 
+\pagenumbering{roman}
+\pagestyle{plain}
+%%\setcounter{page}{1}
+\tableofcontents
+\newpage
+
+\mainmatter
+
+\pagenumbering{arabic}
+\pagestyle{headings}
+
+\setlength{\lineskip}{0.5em}
+\setlength{\parskip}{0.5em}
 \include{ch01}
+\cleardoublepage
 
 \include{ch02}
+\cleardoublepage
 
 \include{ch03}
+\cleardoublepage
 
 %\include{ch04}
+%\cleardoublepage
 
 \include{ch05}
+\cleardoublepage
 
 %\include{ch06}
+%\cleardoublepage
+
+\begin{thebibliography}{1}
+  \bibitem{ref1} 汪德爟. 计算水力学理论与应用. 北京：科学出版社, 2011
+  \bibitem{ref2} H K Versteeg, W Malalasekera. An Introduction to Computational
+  Fluid Dynamics The Finite Volume Method. 北京：世界图书出版公司北京公司, 2010
+  \bibitem{ref3} 陶文铨. 数值传热学. 西安：西安交通大学出版社, 2001
+  \bibitem{ref4} 郑邦民, 赵昕. 计算水动力学. 武汉：武汉大学出版社, 2001
+\end{thebibliography}
+\cleardoublepage
+
 
 \end{document}
 
