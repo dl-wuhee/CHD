@@ -19,7 +19,122 @@
 与物理边界重叠。
 
 首先，我们建立有限体积法网格系统的符号系统。图\ref{}给出了计算域中网格系统的示意
-图。图中$P$为网格系统中的任意节点，与它相邻的
+图。图中$P$为网格系统中的任意节点，与它相邻的西侧和东侧节点分别为$W$和$E$。节点
+$P$所在控制体西边的边界面为$w$，东边的边界面为$e$。$W$节点与$P$节点的距离为
+$\delta x_{WP}$，$P$节点与$E$节点的距离为$\delta x_{PE}$。控制体边界面$w$到$P$节
+点的距离为$\delta x_{wP}$，$P$节点到边界面$e$的距离为$\delta x_{Pe}$，边界面$w$
+到边界面$e$的距离为$\delta x_{we}$。
+
+\subsection{步骤二：离散}
+有限体积法的关键步骤是在控制体上对控制方程积分来得到控制体节点$P$上的离散方程。
+对上面建立的网格系统，
+\begin{equation}
+  \int_{\Delta V}\!
+  \frac{\mathrm{d} }{\mathrm{d} x}
+  \left(
+    \Gamma \frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)
+  \mathrm{d}V
+  +
+  \int_{\Delta V}\!
+  S
+  \mathrm{d}V
+  =
+  \left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{e}
+  -
+  \left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{w}
+  +
+  \overline{S}\Delta V
+  =
+  0
+  \label{EqFV_Diffusion_Discretisation}
+\end{equation}
+式中，$A$为控制体边界面的面积，$\Delta V$为控制体体积，$\overline{S}$为控制体上
+$S$的平均值。有限体积法的一个非常吸引人的特性是离散方程具有明确的物理意义。式
+\eqref{EqFV_Diffusion_Discretisation}表明：流出东边交界面的$\phi$的扩散通量减去流
+入西边交界面的$\phi$的扩散通量等于$\phi$的减少量。
+
+为了推导出可用的离散方程，式\eqref{EqFV_Diffusion_Discretisation}中控制体交界面上的
+$\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
+\begin{subequations}
+  \begin{align}
+  \Gamma_{w} 
+  &=
+  \frac{\Gamma_{W}+\Gamma_{P}}{2}
+  \\
+  \Gamma_{e} 
+  &=
+  \frac{\Gamma_{P}+\Gamma_{E}}{2}
+  \end{align}
+\end{subequations}
+\begin{subequations}
+  \begin{align}
+  &\left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{e}
+  =
+  \Gamma_{e}A_{e}
+  \left(
+    \frac{\phi_{E}-\phi_{P}}{\delta x_{PE}}
+  \right)
+    \\
+  &\left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{w}
+  =
+  \Gamma_{w}A_{w}
+  \left(
+    \frac{\phi_{P}-\phi_{W}}{\delta x_{WP}}
+  \right)
+  \end{align}
+\end{subequations}
+\begin{equation}
+  \overline{S}\Delta V = S_{u} + S_{P}\phi_{P}
+\end{equation}
+\begin{equation}
+  \Gamma_{e}A_{e}
+  \left(
+    \frac{\phi_{E}-\phi_{P}}{\delta x_{PE}}
+  \right)
+  -
+  \Gamma_{w}A_{w}
+  \left(
+    \frac{\phi_{P}-\phi_{W}}{\delta x_{WP}}
+  \right)
+  +
+  (S_{u} + S_{P}\phi_{P})
+  =
+  0
+\end{equation}
+\begin{equation}
+  \left(
+    \frac{\Gamma}{\delta x_{PE}}A_{e}
+    +
+    \frac{\Gamma}{\delta x_{WP}}A_{w}
+    -
+    S_{p}
+  \right)
+  \phi_{P}
+  =
+  \left(
+    \frac{\Gamma_{w}}{\delta x_{WP}}A_{w}
+  \right)\phi_{W}
+  +
+  \left(
+    \frac{\Gamma_{e}}{\delta x_{PE}}A_{e}
+  \right)\phi_{E}
+  +
+  S_{u}
+\end{equation}
+\begin{equation}
+  a_{P}\phi_{P} = a_{W}\phi_{W} + a_{E}\phi_{E}+S_{u}
+\end{equation}
+
+
 \section{稳态对热扩散方程的有限体积法}
 
 \section{非稳态方程的有限体积法}
