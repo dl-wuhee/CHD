@@ -1,7 +1,7 @@
 \chapter{有限体积法}
 有限体积法的基本思想是：把计算域分成许多互不重叠的控制体或控制容积，然后在每一个
 控制容积上将微分方程进行积分，用表示网格节点之间的分段分布关系来计算所要求的积分
-，进而来到一个仅包含网格节点处$\phi$值表示的离散化线性方程组。
+，进而得到一个仅包含网格节点处$\phi$值表示的离散化线性方程组。
 
 \section{稳态传导方程的有限体积法}
 以某一运动要素$\phi$的一维稳态传导问题为例：
@@ -132,8 +132,316 @@ $\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
 \end{equation}
 \begin{equation}
   a_{P}\phi_{P} = a_{W}\phi_{W} + a_{E}\phi_{E}+S_{u}
+  \label{EqFV_1dsd_fvm}
+\end{equation}
+其中
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{\Gamma_{w}}{\delta x_{WP}}A_{w}$
+  }
+            &
+    $\displaystyle \frac{\Gamma_{e}}{\delta x_{PE}}A_{e}$
+            &
+    $a_{W} + a_{E} - S_{P}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{步骤三、求解}
+式\eqref{EqFV_1dsd_fvm}必须在所有控制体的节点上都列出才能求解。对于毗邻计算域边
+界的控制体，式\eqref{EqFV_1dsd_fvm}必须经过适当修正以包含边界条件。最后形成的线
+性代数方程组可以通过上一章的求解方法来进行求解得到$\phi$的分布。
+
+\section{示例：一维稳态热传导问题求解}
+\subsection{例1：无源一维稳态热传导问题}
+如图\ref{FgFV_1dsd_ex1}考虑一根等直径的绝热金属棒，两端温度分布保持在
+$100^{\circ}\mathrm{C}$和$500^{\circ}\mathrm{C}$。该金属棒的导热系数为常数$k$，
+截面面积为$A$。该问题的控制方程为：
+\begin{equation}
+\frac{\mathrm{d} }{\mathrm{d} x}
+\left(
+k\frac{\mathrm{d} T}{\mathrm{d} x}
+\right)
+=
+0
+\label{EqFV_1dsd_ex1_gov}
 \end{equation}
 
+首先将该金属棒分成5个体积相等的控制体，如图\ref{FgFV_1dsd_ex1_grid}所示。网格间
+距$\delta x=0.1\mathrm{m}$。整个网格系统包括5个节点。对节点2，3和4，
+\begin{equation}
+  \left(
+    \frac{k}{\delta x_{PE}}A_{e}
+    +
+    \frac{k}{\delta x_{WP}}A_{w}
+  \right)
+  T_{P}
+  =
+  \left(
+    \frac{k}{\delta x_{WP}}A_{w}
+  \right)
+  T_{W}
+  +
+  \left(
+    \frac{k}{\delta x_{PE}}A_{e}
+  \right)
+  T_{E}
+\end{equation}
+由于导热系数，截面面积和网格间距为常数，因此上式可以写出：
+\begin{equation}
+  a_{P}T_{P} = a_{W}T_{W} + a_{E}T_{E}
+\end{equation}
+其中
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient_ex1_n234}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{k}{\delta x}A$
+  }
+            &
+    $\displaystyle \frac{k}{\delta x}A$
+            &
+    $a_{W} + a_{E}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+对节点1，将式\eqref{EqFV_1dsd_ex1_gov}在包围节点1的控制体上
+积分，可得
+\begin{equation}
+kA
+\left(
+  \frac{T_{E}-T_{P}}{\delta x}
+\right)
+-
+kA
+\left(
+  \frac{T_{P}-T_{A}}{\delta x/2}
+\right)
+=
+0
+\end{equation}
+对上式进行移项，可得
+\begin{equation}
+  \left(
+    \frac{k}{\delta x}A
+    +
+    \frac{2k}{\delta x}A
+  \right)
+  T_{P}
+  =
+  0\cdot T_{W}
+  +
+  \left(
+    \frac{k}{\delta x}A
+  \right)
+  T_{E}
+  +
+  \left(
+    \frac{2k}{\delta x}A
+  \right)
+  T_{A}
+\end{equation}
+写成离散形式：
+\begin{equation}
+  a_{P}T_{P}
+  =
+  a_{W}T_{W}
+  +
+  a_{E}T_{E}
+  +
+  S_{u}
+\end{equation}
+其中
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient_ex1_n1}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    0
+            &
+    \makecell*[c]{
+    $\displaystyle \frac{kA}{\delta x}$
+  }
+            &
+          $a_{W}+a_{E}-S_{p}$
+            &
+    \makecell*[c]{
+    $\displaystyle -\frac{2kA}{\delta x}$
+  }
+  &
+    \makecell*[c]{
+      $\displaystyle \frac{2kA}{\delta x}T_{A}$
+  }
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+
+对节点5，将式\eqref{EqFV_1dsd_ex1_gov}在包围节点5的控制体上
+积分，可得
+\begin{equation}
+kA
+\left(
+  \frac{T_{B}-T_{P}}{\delta x/2}
+\right)
+-
+kA
+\left(
+  \frac{T_{P}-T_{W}}{\delta x}
+\right)
+=
+0
+\end{equation}
+对上式进行移项，可得
+\begin{equation}
+  \left(
+    \frac{k}{\delta x}A
+    +
+    \frac{2k}{\delta x}A
+  \right)
+  T_{P}
+  =
+  \left(
+    \frac{k}{\delta x}A
+  \right)
+  T_{W}
+  +
+  0\cdot T_{E}
+  +
+  \left(
+    \frac{2k}{\delta x}A
+  \right)
+  T_{B}
+\end{equation}
+写成离散形式：
+\begin{equation}
+  a_{P}T_{P}
+  =
+  a_{W}T_{W}
+  +
+  a_{E}T_{E}
+  +
+  S_{u}
+\end{equation}
+其中
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient_ex1_n1}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{kA}{\delta x}$
+  }
+            &
+    0
+            &
+          $a_{W}+a_{E}-S_{p}$
+            &
+    \makecell*[c]{
+    $\displaystyle -\frac{2kA}{\delta x}$
+  }
+  &
+    \makecell*[c]{
+      $\displaystyle \frac{2kA}{\delta x}T_{B}$
+  }
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+将$kA/\delta x=100$，$T_{A}=100$和$T_{B}=500$代入5个节点的离散方程，可得
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient_ex1_coeff}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{p}$ & $S_{u}$ & $a_{P}$ \\
+    \hline
+    1 & 0 & 100 & -200 & 20000 & 300  \\
+    \hline
+    2 & 100 & 100 & 0 & 0 & 200  \\
+    \hline
+    3 & 100 & 100 & 0 & 0 & 200 \\
+    \hline
+    4 & 100 & 100 & 0 & 0 & 200  \\
+    \hline
+    5 & 100 & 0 & -200 & 100000 & 300 \\ 
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+最后形成的线性方程组为：
+\begin{equation}
+  \begin{bmatrix}
+    300 & -100 & 0 & 0 & 0 \\
+    -100 & 200 & -100 & 0 & 0 \\
+    0 & -100 & 200 & -100 & 0 \\
+    0 & 0 & -100 & 200 & -100  \\
+    0 & 0 & 0 & -100 & 300 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    20000 \\
+    0 \\
+    0 \\
+    0 \\
+    100000 \\
+  \end{bmatrix}
+\end{equation}
+通过上一章介绍的TDMA方法可以求得：
+\begin{equation}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    140 \\
+    220 \\
+    300 \\
+    380 \\
+    460 \\
+  \end{bmatrix}
+\end{equation}
 
 \section{稳态对热扩散方程的有限体积法}
 
