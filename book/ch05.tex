@@ -17,13 +17,20 @@
 系列的节点。每个控制体的边界位于相邻节点的中线处。这样，每个节点都被一个控制体或
 控制单元所包围。在计算域边界处设置控制体是比较常见的做法，这样可以让控制体的边界
 与物理边界重叠。
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmGridNotation.pdf}
+  \caption{有限体积法一维网格系统}
+  \label{FgFV_grid_notation}
+\end{figure}
 
-首先，我们建立有限体积法网格系统的符号系统。图\ref{}给出了计算域中网格系统的示意
+首先，我们建立有限体积法网格系统的符号系统。图\ref{FgFV_grid_notation}给出了计算域中网格系统的示意
 图。图中$P$为网格系统中的任意节点，与它相邻的西侧和东侧节点分别为$W$和$E$。节点
-$P$所在控制体西边的边界面为$w$，东边的边界面为$e$。$W$节点与$P$节点的距离为
+$P$所在控制体（灰色区域）西边的边界面为$w$，东边的边界面为$e$。$W$节点与$P$节点的距离为
 $\delta x_{WP}$，$P$节点与$E$节点的距离为$\delta x_{PE}$。控制体边界面$w$到$P$节
 点的距离为$\delta x_{wP}$，$P$节点到边界面$e$的距离为$\delta x_{Pe}$，边界面$w$
 到边界面$e$的距离为$\delta x_{we}$。
+
 
 \subsection{步骤二：离散}
 有限体积法的关键步骤是在控制体上对控制方程积分来得到控制体节点$P$上的离散方程。
@@ -162,9 +169,16 @@ $\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
 界的控制体，式\eqref{EqFV_1dsd_fvm}必须经过适当修正以包含边界条件。最后形成的线
 性代数方程组可以通过上一章的求解方法来进行求解得到$\phi$的分布。
 
-\section{示例：一维稳态热传导问题求解}
-\subsection{例1：无源一维稳态热传导问题}
-如图\ref{FgFV_1dsd_ex1}考虑一根等直径的绝热金属棒，两端温度分布保持在
+\section{一维稳态热传导问题求解}
+\subsection{无源一维稳态热传导问题}
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmEx1.pdf}
+  \caption{一维金属棒热传导问题}
+  \label{FgFV_ex1}
+\end{figure}
+
+如图\ref{FgFV_ex1}考虑一根等直径的绝热金属棒，两端温度分布保持在
 $100^{\circ}\mathrm{C}$和$500^{\circ}\mathrm{C}$。该金属棒的导热系数为常数$k$，
 截面面积为$A$。该问题的控制方程为：
 \begin{equation}
@@ -177,8 +191,16 @@ k\frac{\mathrm{d} T}{\mathrm{d} x}
 \label{EqFV_1dsd_ex1_gov}
 \end{equation}
 
-首先将该金属棒分成5个体积相等的控制体，如图\ref{FgFV_1dsd_ex1_grid}所示。网格间
-距$\delta x=0.1\mathrm{m}$。整个网格系统包括5个节点。对节点2，3和4，
+首先将该金属棒分成5个体积相等的控制体，如图\ref{FgFV_ex1_grid}所示。网格间
+距$\delta x=0.1\mathrm{m}$。整个网格系统包括5个节点。
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmEx1Mesh.pdf}
+  \caption{一维金属棒网格系统}
+  \label{FgFV_ex1_grid}
+\end{figure}
+
+对节点2，3和4，
 \begin{equation}
   \left(
     \frac{k}{\delta x_{PE}}A_{e}
@@ -442,6 +464,349 @@ kA
     460 \\
   \end{bmatrix}
 \end{equation}
+该问题的解析解为$T=800x+100$。与解析解对比，可以看出数值解与解析解吻合程度很好。
+
+\subsection{含源一维稳态热传导问题}
+图\ref{FgFV_ex2}中显示的是一块厚度$L=2cm$的大平板，整块板内导热系数为常数
+$k=0.5\mathrm{W/m\cdot K}$，板内存在均匀的内热源$q=1000\mathrm{kW/m^{3}}$。平板
+$A$面和$B$面上的温度分别为$100^{\circ}\mathrm{C}$和$200^{\circ}\mathrm{C}$。假定
+平板在$y$和$z$方向上大到只有$x$方向存在显著的温度梯度。试求稳态温度分布。
+
+该问题的控制方程为：
+\begin{equation}
+\frac{\mathrm{d} }{\mathrm{d} x}
+\left(
+  k
+  \frac{\mathrm{d} T}{\mathrm{d} x}
+\right)
++
+q
+=
+0
+\end{equation}
+网格系统继续采用图\ref{FgFV_ex1_grid}中所示的网格。在一个控制体上对控制方程积分
+，
+\begin{equation}
+  \int_{\Delta V}\!
+\frac{\mathrm{d} }{\mathrm{d} x}
+\left(
+  k
+  \frac{\mathrm{d} T}{\mathrm{d} x}
+\right)
+\mathrm{d}V
++
+  \int_{\Delta V}\!
+  q
+\mathrm{d}V
+=
+0
+\end{equation}
+上式的第一项处理方式与第一个例子中一样，第二项积分为$q\Delta V$。最终，上式可以
+写成：
+\begin{equation}
+  \left[
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{e}
+    -
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{w}
+  \right]
+  +
+  q\Delta V
+  =
+  0
+\end{equation}
+\begin{equation}
+  \left[
+    k_{e}A
+    \left(
+      \frac{T_{E}-T_{P}}{\delta x}
+    \right)_{e}
+    -
+    k_{w}A
+    \left(
+      \frac{T_{P}-T_{W}}{\delta x}
+    \right)_{w}
+  \right]
+  +
+  qA\delta x
+  =
+  0
+\end{equation}
+对上式移项，得
+\begin{equation}
+  \left(
+    \frac{k_{e}A}{\delta x}
+    +
+    \frac{k_{w}A}{\delta x}
+  \right)
+  T_{P}
+  =
+  \left(
+    \frac{k_{w}A}{\delta x}
+  \right)
+  T_{W}
+  +
+  \left(
+    \frac{k_{e}A}{\delta x}
+  \right)
+  T_{E}
+  +
+  qA\delta x
+\end{equation}
+将上式写成离散方程通用形式：
+\begin{equation}
+  a_{P}T_{P} = a_{W}T_{W}+a_{E}T_{E}+S_{u}
+  \label{EqFV_ex2_coeff}
+\end{equation}
+其中：
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_ex2_coef}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{kA}{\delta x}$
+  }
+            &
+    $\displaystyle \frac{kA}{\delta x}$
+            &
+    $a_{W} + a_{E} - S_{P}$
+            &
+            0
+            &
+            $qA\delta x$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+式\eqref{EqFV_ex2_coeff}对网格中内部节点2，3，4都是通用的。
+
+对边界节点1，控制方程在包含节点1的控制体内积分，
+\begin{equation}
+  \left[
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{e}
+    -
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{w}
+  \right]
+  +
+  q\Delta V
+  =
+  0
+\end{equation}
+\begin{equation}
+  \left[
+    k_{e}A
+    \left(
+      \frac{T_{E}-T_{P}}{\delta x}
+    \right)
+    -
+    k_{A}A
+    \left(
+      \frac{T_{P}-T_{A}}{\delta x/2}
+    \right)
+  \right]
+  +
+  qA\delta x
+  =
+  0
+\end{equation}
+对上式移项，得
+\begin{equation}
+  \left(
+    \frac{k_{e}A}{\delta x}
+    +
+    \frac{2k_{A}A}{\delta x}
+  \right)
+  T_{P}
+  =
+  0\cdot
+  T_{W}
+  +
+  \left(
+    \frac{k_{e}A}{\delta x}
+  \right)
+  T_{E}
+  +
+  \frac{2k_{A}A}{\delta x}T_{A}
+  +
+  qA\delta x
+\end{equation}
+将上式写成离散方程通用形式，且将导热系数为常数$k$代入：
+\begin{equation}
+  a_{P}T_{P} = a_{W}T_{W}+a_{E}T_{E}+S_{u}
+  \label{EqFV_ex2_coeff}
+\end{equation}
+其中：
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_ex2_coef}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    0
+            &
+    \makecell*[c]{
+    $\displaystyle \frac{kA}{\delta x}$
+  }
+            &
+    $a_{W} + a_{E} - S_{P}$
+            &
+           $\displaystyle -\frac{2kA}{\delta x} $
+            &
+            $\displaystyle qA\delta x+\frac{2kA}{\delta x}T_{A}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+对边界节点5，控制方程在包含节点5的控制体内积分，
+\begin{equation}
+  \left[
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{e}
+    -
+    \left(
+      kA\frac{\mathrm{d} T}{\mathrm{d} x}
+    \right)_{w}
+  \right]
+  +
+  q\Delta V
+  =
+  0
+\end{equation}
+\begin{equation}
+  \left[
+    k_{B}A
+    \left(
+      \frac{T_{B}-T_{P}}{\delta x/2}
+    \right)
+    -
+    k_{w}A
+    \left(
+      \frac{T_{P}-T_{W}}{\delta x}
+    \right)
+  \right]
+  +
+  qA\delta x
+  =
+  0
+\end{equation}
+对上式移项，得
+\begin{equation}
+  \left(
+    \frac{k_{w}A}{\delta x}
+    +
+    \frac{2k_{B}A}{\delta x}
+  \right)
+  T_{P}
+  =
+  \left(
+    \frac{k_{w}A}{\delta x}
+  \right)
+  T_{W}
+  +
+  0\cdot
+  T_{E}
+  +
+  \frac{2k_{B}A}{\delta x}T_{B}
+  +
+  qA\delta x
+\end{equation}
+将上式写成离散方程通用形式，且将导热系数为常数$k$代入：
+\begin{equation}
+  a_{P}T_{P} = a_{W}T_{W}+a_{E}T_{E}+S_{u}
+  \label{EqFV_ex2_coeff}
+\end{equation}
+其中：
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_ex2_coef}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{kA}{\delta x}$
+  }
+            &
+            0
+            &
+    $a_{W} + a_{E} - S_{P}$
+            &
+           $\displaystyle -\frac{2kA}{\delta x} $
+            &
+            $\displaystyle qA\delta x+\frac{2kA}{\delta x}T_{B}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+将$A=1$，$k=0.5\mathrm{W/m\cdot K}$，$q=1000\mathrm{kW/m^{3}}$和$\delta
+x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中所有系数的值，如表所示
+。
+最终形成的线性方程组为
+\begin{equation}
+  \begin{bmatrix}
+    375 & -125 & 0 & 0 & 0 \\
+    -125 & 250 & -125 & 0 & 0  \\
+    0 & -125 & 250 & -125 & 0   \\
+    0 & 0 & -125 & 250 & -125  \\
+    0 & 0 & 0 & -125 & 375 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    29000 \\
+    4000 \\
+    4000 \\
+    4000 \\
+    54000 \\
+  \end{bmatrix}
+\end{equation}
+最终解得，
+\begin{equation}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+=
+  \begin{bmatrix}
+    150 \\
+    218 \\
+    254 \\
+    258 \\
+    230 \\
+  \end{bmatrix}
+\end{equation}
+
 
 \section{稳态对热扩散方程的有限体积法}
 
