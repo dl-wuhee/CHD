@@ -807,6 +807,299 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   \end{bmatrix}
 \end{equation}
 
+这个问题的解析解可以通过对控制方程进行两次积分，然后带入边界条件后得出，
+\begin{equation}
+  T 
+  =
+  \left[
+    \frac{T_{B}-T_{A}}{L}
+    +
+    \frac{q}{2k}(L-x)
+  \right]x
+  +
+  T_{A}
+\end{equation}
+数值解与解析解的详细对比见表\ref{TbFV_ex2_compare}，可以看出数值解与解析解的误差
+很小，最大相对误差不超过百分之三。
+\begin{table}[H]
+  \begin{center}
+  \caption{数值解与解析解的对比数据}
+  \label{TbFV_ex2_compare}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点编号 & 1 & 2 & 3 & 4 & 5 \\
+    \hline
+    $x(\mathrm{m})$ & 0.002 & 0.006 & 0.01 & 0.014 & 0.018 \\
+    \hline
+    $T_{FVM}(^{\circ}\mathrm{C})$ & 150 & 218 & 254 & 258 & 230 \\
+    \hline
+    $T_{exact}(^{\circ}\mathrm{C})$ & 146 & 214 & 250 & 254 & 226 \\
+    \hline
+    相对误差(\%) & 2.73 & 1.86 & 1.60 & 1.57 & 1.76 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{一维金属杆对流散热问题}
+
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d}x}
+  \left(
+    kA\frac{\mathrm{d}T}{\mathrm{d}x}
+  \right)
+  -
+  hP(T-T_{\infty})
+  =
+  0
+\end{equation}
+其中，$h$为对流换热系数，$P$为金属杆截面的周长，$k$为杆的导热系数，$T_{\infty}$
+为杆周围流体的温度。该问题的解析解为
+\begin{equation}
+  \frac{T-T_{\infty}}{T_{B}-T_{\infty}}
+  =
+  \frac{\cosh{[n(L-x)]}}{\cosh{(nL)}}
+\end{equation}
+其中，$n^{2}=hP/(kA)=25/{\mathrm{m^{2}}}$
+
+\begin{equation}
+  \frac{\mathrm{d}}{\mathrm{d}x}
+  \left(
+  \frac{\mathrm{d}T}{\mathrm{d}x}
+  \right)
+  -
+  n^{2}(T-T_{\infty})
+  =
+  0
+\end{equation}
+
+\begin{equation}
+  \int_{\Delta V}\!
+  \frac{\mathrm{d}}{\mathrm{d}x}
+  \left(
+  \frac{\mathrm{d}T}{\mathrm{d}x}
+  \right)
+  \mathrm{d}V
+  -
+  \int_{\Delta V}\!
+  n^{2}(T-T_{\infty})
+  \mathrm{d}V
+  =
+  0
+\end{equation}
+
+\begin{equation}
+  \left[
+    \left(
+    A
+      \frac{\mathrm{d}T}{\mathrm{d}x}
+    \right)_{e}
+    -
+    \left(
+    A
+      \frac{\mathrm{d}T}{\mathrm{d}x}
+    \right)_{w}
+  \right]
+  -
+  n^{2}(T_{P}-T_{\infty})A\delta x
+  =
+  0
+\end{equation}
+
+\begin{equation}
+  \left[
+    \left(
+      \frac{T_{E}-T_{P}}{\delta x}
+    \right)
+    -
+    \left(
+      \frac{T_{P}-T_{W}}{\delta x}
+    \right)
+  \right]
+  -
+  n^{2}(T_{P}-T_{\infty})\delta x
+  =
+  0
+\end{equation}
+
+\begin{equation}
+  \left(
+    \frac{1}{\delta x}
+    +
+    \frac{1}{\delta x}
+  \right)T_{P}
+  =
+  \left(
+    \frac{1}{\delta x}
+  \right)T_{W}
+  +
+  \left(
+    \frac{1}{\delta x}
+  \right)T_{E}
+  +
+  n^{2}\delta xT_{\infty}
+  -
+  n^{2}\delta xT_{P}
+\end{equation}
+
+\begin{equation}
+  a_{P}T_{P}
+  =
+  a_{W}T_{W}
+  +
+  a_{E}T_{E}
+  +
+  S_{u}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  \label{TbFV_ex3_coeff}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{1}{\delta x}$
+  }
+            &
+    $\displaystyle \frac{1}{\delta x}$
+            &
+          $a_{W}+a_{E}-S_{p}$
+            &
+            $-n^{2}\delta x$
+  &
+  $n^{2}\delta xT_{\infty}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+
+\begin{equation}
+  \left[
+    \left(
+      \frac{T_{E}-T_{P}}{\delta x}
+    \right)
+    -
+    \left(
+      \frac{T_{P}-T_{B}}{\delta x/2}
+    \right)
+  \right]
+  -
+  n^{2}(T_{P}-T_{\infty})\delta x
+  =
+  0
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  \label{TbFV_ex3_coeff}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    0
+            &
+    \makecell*[c]{
+    $\displaystyle \frac{1}{\delta x}$
+  }
+            &
+          $a_{W}+a_{E}-S_{p}$
+            &
+            $\displaystyle -n^{2}\delta x - \frac{1}{\delta x}$
+  &
+  $\displaystyle n^{2}\delta xT_{\infty}+\frac{2}{\delta x}T_{B}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+
+\begin{equation}
+  \left[
+    0
+    -
+    \left(
+      \frac{T_{P}-T_{W}}{\delta x}
+    \right)
+  \right]
+  -
+  n^{2}(T_{P}-T_{\infty})\delta x
+  =
+  0
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  \label{TbFV_ex3_coeff}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$ & $S_{p}$ & $S_{u}$
+    \\
+    \hline
+    \makecell*[c]{
+    $\displaystyle \frac{1}{\delta x}$
+  }
+            &
+    0
+            &
+          $a_{W}+a_{E}-S_{p}$
+            &
+            $-n^{2}\delta x$
+  &
+  $n^{2}\delta xT_{\infty}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{equation}
+  \begin{bmatrix}
+    20 & -5 & 0 & 0 & 0 \\
+    -5 & 15 & -5 & 0 & 0 \\
+    0 & -5 & 15 & -5 & 0  \\
+    0 & 0 & -5 & 15 & -5   \\
+    0 & 0 & 0 & -5 & 10 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    1100 \\
+    100 \\ 
+    100 \\ 
+    100 \\ 
+    100 \\ 
+  \end{bmatrix}
+\end{equation}
+\begin{equation}
+  \begin{bmatrix}
+    T_{1} \\
+    T_{2} \\
+    T_{3} \\
+    T_{4} \\
+    T_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    64.22 \\
+    36.91 \\ 
+    26.50 \\ 
+    22.60 \\ 
+    21.30 \\ 
+  \end{bmatrix}
+\end{equation}
 
 \section{稳态对热扩散方程的有限体积法}
 
