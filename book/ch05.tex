@@ -1101,7 +1101,256 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   \end{bmatrix}
 \end{equation}
 
-\section{稳态对热扩散方程的有限体积法}
+\begin{table}[H]
+  \begin{center}
+  \caption{例三数值解与解析解的对比数据}
+  \label{TbFV_ex3_compare}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $x(\mathrm{m})$ & $T_{FVM}$ & $T_{exact}$ & 误差 & 相对误差(\%) \\
+    \hline
+    1 & 0.1 & 64.22 & 68.52 & 4.30 & 6.27 \\
+    \hline
+    2 & 0.3 & 36.91 & 37.86 & 0.95 & 2.51 \\
+    \hline
+    3 & 0.5 & 26.50 & 26.61 & 0.11 & 0.41 \\
+    \hline
+    4 & 0.7 & 22.60 & 22.53 & -0.07 & -0.31 \\
+    \hline
+    5 & 0.9 & 21.30 & 21.21 & -0.09 & -0.42 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{二维扩散问题的有限体积法}
+\begin{equation}
+\frac{\partial }{\partial x}
+\left(
+\Gamma \frac{\partial \phi}{\partial x}
+\right)
++
+\frac{\partial }{\partial y}
+\left(
+\Gamma \frac{\partial \phi}{\partial y}
+\right)
++
+S_{\phi}
+=
+0
+\end{equation}
+
+\begin{equation}
+  \int_{\Delta V}\!
+\frac{\partial }{\partial x}
+\left(
+\Gamma \frac{\partial \phi}{\partial x}
+\right)
+\mathrm{d}x\mathrm{d}y
++
+  \int_{\Delta V}\!
+\frac{\partial }{\partial y}
+\left(
+\Gamma \frac{\partial \phi}{\partial y}
+\right)
+\mathrm{d}x\mathrm{d}y
++
+  \int_{\Delta V}\!
+S_{\phi}
+\mathrm{d}V
+=
+0
+\end{equation}
+\begin{equation}
+  \left[
+    \Gamma_{e} A_{e}
+    \left(
+      \frac{\partial \phi}{\partial x}
+    \right)_{e}
+    -
+    \Gamma_{w} A_{w}
+    \left(
+      \frac{\partial \phi}{\partial x}
+    \right)_{w}
+  \right]
+  +
+  \left[
+    \Gamma_{n} A_{n}
+    \left(
+      \frac{\partial \phi}{\partial y}
+    \right)_{n}
+    -
+    \Gamma_{s} A_{s}
+    \left(
+      \frac{\partial \phi}{\partial y}
+    \right)_{s}
+  \right]
+  +
+  \overline{S}\Delta V
+  =
+  0
+\end{equation}
+\begin{equation}
+  \left.\frac{\partial \phi}{\partial x}\right|_{e}=\frac{\phi_{E}-\phi_{P}}{\delta x_{PE}} 
+    \quad
+  \left.\frac{\partial \phi}{\partial x}\right|_{w}=\frac{\phi_{P}-\phi_{W}}{\delta x_{WP}} 
+    \quad
+  \left.\frac{\partial \phi}{\partial y}\right|_{n}=\frac{\phi_{N}-\phi_{P}}{\delta y_{PN}} 
+    \quad
+  \left.\frac{\partial \phi}{\partial y}\right|_{s}=\frac{\phi_{P}-\phi_{S}}{\delta y_{SP}} 
+\end{equation}
+
+\begin{equation}
+  \Gamma_{e}A_{e}
+  \frac{\phi_{E}-\phi_{P}}{\delta x_{PE}} 
+  -
+  \Gamma_{w}A_{w}
+  \frac{\phi_{P}-\phi_{W}}{\delta x_{WP}} 
+  +
+  \Gamma_{n}A_{n}
+  \frac{\phi_{N}-\phi_{P}}{\delta y_{PN}} 
+  -
+  \Gamma_{s}A_{s}
+  \frac{\phi_{P}-\phi_{S}}{\delta y_{SP}} 
+  +
+  \overline{S}\Delta V
+  =
+  0
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+  \left(
+    \frac{\Gamma_{w}A_{w}}{\delta x_{WP}}
+    \right.
+    +
+   & \frac{\Gamma_{e}A_{e}}{\delta x_{PE}}
+    +
+    \frac{\Gamma_{s}A_{s}}{\delta y_{SP}}
+    +
+    \left.
+    \frac{\Gamma_{n}A_{n}}{\delta y_{PN}}
+    -
+    S_{p}
+  \right)
+  \phi_{P}
+  = \\
+  &\left(
+    \frac{\Gamma_{w}A_{w}}{\delta x_{WP}}
+  \right)
+  \phi_{W}
+  +
+  \left(
+    \frac{\Gamma_{e}A_{e}}{\delta x_{PE}}
+  \right)
+  \phi_{E}
+  +
+  \left(
+    \frac{\Gamma_{s}A_{s}}{\delta y_{SP}}
+  \right)
+  \phi_{S}
+  +
+  \left(
+    \frac{\Gamma_{n}A_{n}}{\delta y_{PN}}
+  \right)
+  \phi_{N}
+  +
+  S_{u}
+  \end{aligned}
+\end{equation}
+\begin{equation}
+  a_{P}\phi_{P} 
+  =
+  a_{W}\phi_{W} 
+  +
+  a_{E}\phi_{E} 
+  +
+  a_{S}\phi_{S} 
+  +
+  a_{N}\phi_{N} 
+  +
+  S_{u}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_diffusion_coefficient_2d}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{S}$ & $a_{N}$ & $a_{P}$
+    \\
+    \hline
+    \makecell*[c]{
+      $\displaystyle \frac{\Gamma_{w}A_{w}}{\delta x_{WP}}$
+  }
+            &
+      $\displaystyle \frac{\Gamma_{e}A_{e}}{\delta x_{PE}}$
+            &
+      $\displaystyle \frac{\Gamma_{s}A_{s}}{\delta y_{SP}}$
+            &
+            $\displaystyle \frac{\Gamma_{n}A_{n}}{\delta y_{PN}}$
+            &
+            $a_{W} + a_{E} + a_{S} + a_{N} - S_{P}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+
+\section{稳态对流扩散方程的有限体积法}
+\begin{equation}
+  \frac{\mathrm{d} }{\mathrm{d} x}(\rho u\phi)
+  =
+  \frac{\mathrm{d} }{\mathrm{d} x}
+  \left(
+    \Gamma \frac{\mathrm{d} \phi}{\mathrm{d} x}
+    \right)
+\end{equation}
+\begin{equation}
+  \frac{\mathrm{d} (\rho u)}{\mathrm{d} x}
+  =
+  0
+\end{equation}
+\begin{equation}
+  (\rho uA\phi)_{e}
+  -
+  (\rho uA\phi)_{w}
+  =
+  \left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{e}
+  -
+  \left(
+    \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
+  \right)_{w}
+\end{equation}
+\begin{equation}
+  (\rho uA)_{e} 
+  -
+  (\rho uA)_{w}
+  =
+  0
+\end{equation}
+\begin{equation}
+F = \rho u , \quad D = \frac{\Gamma}{\delta x}
+\end{equation}
+\begin{equation}
+  F_{e}\phi_{e} - F_{w}\phi_{w}
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
+\begin{equation}
+  F_{e} - F_{w} = 0
+\end{equation}
+
+\subsection{中心差分各式}
+\begin{equation}
+  \phi_{e} = 
+\end{equation}
 
 \section{非稳态方程的有限体积法}
 
