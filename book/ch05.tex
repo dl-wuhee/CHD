@@ -1349,8 +1349,96 @@ F = \rho u , \quad D = \frac{\Gamma}{\delta x}
 
 \subsection{中心差分各式}
 \begin{equation}
-  \phi_{e} = 
+  \phi_{e} = (\phi_{P}+\phi_{E})/2
+  \quad
+  \phi_{w} = (\phi_{W}+\phi_{P})/2
 \end{equation}
+
+\begin{equation}
+  \frac{F_{e}}{2}(\phi_{P}+\phi_{E})
+ -
+ \frac{F_{w}}{2}(\phi_{W}+\phi_{P})
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
+\begin{equation}
+  \left[
+    \left(
+      D_{w} - \frac{F_{w}}{2}
+    \right)
+    +
+    \left(
+      D_{e} + \frac{F_{e}}{2}
+    \right)
+  \right]
+  \phi_{P}
+  =
+    \left(
+      D_{w} + \frac{F_{w}}{2}
+    \right)
+    \phi_{W}
+    +
+    \left(
+      D_{e} - \frac{F_{e}}{2}
+    \right)
+    \phi_{E}
+\end{equation}
+
+\begin{equation}
+  \left[
+    \left(
+      D_{w} + \frac{F_{w}}{2}
+    \right)
+    +
+    \left(
+      D_{e} - \frac{F_{e}}{2}
+    \right)
+    +
+    (F_{e}- F_{w})
+  \right]
+  \phi_{P}
+  =
+    \left(
+      D_{w} + \frac{F_{w}}{2}
+    \right)
+    \phi_{W}
+    +
+    \left(
+      D_{e} - \frac{F_{e}}{2}
+    \right)
+    \phi_{E}
+\end{equation}
+\begin{equation}
+  a_{P}\phi_{P}
+  =
+  a_{W}\phi_{W}
+  +
+  a_{E}\phi_{E}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_cd_cd_coefficient}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $a_{W}$ & $a_{E}$ & $a_{P}$
+    \\
+    \hline
+    \makecell*[c]{
+      $\displaystyle D_{w}+\frac{F_{w}}{2}$
+  }
+            &
+            $\displaystyle D_{e}-\frac{F_{e}}{2}$
+            &
+            $a_{W} + a_{E} + (F_{e} - F_{w})$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
 
 \section{非稳态方程的有限体积法}
 
