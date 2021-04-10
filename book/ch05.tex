@@ -1439,6 +1439,197 @@ F = \rho u , \quad D = \frac{\Gamma}{\delta x}
   \end{tabular}
   \end{center}
 \end{table}
+\begin{equation}
+  \frac{F_{e}}{2}(\phi_{P}+\phi_{E})
+  -
+  F_{A}\phi_{A}
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{A}(\phi_{P}-\phi_{A})
+\end{equation}
+\begin{equation}
+  F_{B}\phi_{B}
+  -
+  \frac{F_{w}}{2}(\phi_{P}+\phi_{W})
+  =
+  D_{B}(\phi_{B}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
 
+\begin{equation}
+  a_{P}\phi_{P}
+  =
+  a_{W}\phi_{W}
+  +
+  a_{E}\phi_{E}
+  +
+  S_{u}
+\end{equation}
+\begin{equation}
+  a_{P} = a_{W} + a_{E} + (F_{e}-F_{w})-S_{p}
+\end{equation}
+
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_coeff}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{p}$ & $a_{P}$ & $S_{u}$ \\
+    \hline
+    1 & 0 & $D-F/2$ & $-(2D+F)$ &   $3(D-F/2)$   & $(2D+F)\phi_{A}$ \\
+    \hline
+    2,3,4 & $D+F/2$ & $D-F/2$ & 0 & $2D$ & 0 \\
+    \hline
+    5 & $D+F/2$ & 0 & $-(2D-F)$ & $3D-F/2$ &  $(2D-F)\phi_{B}$ \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_coeff_value}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{p}$ & $a_{P}$ & $S_{u}$ \\
+    \hline
+    1 & 0 & 0.45 & -1.1 &   1.55   & 1.1 \\
+    \hline
+    2,3,4 & 0.55 & 0.45 & 0 & 1.0 & 0 \\
+    \hline
+    5 & 0.55 & 0 & -0.9 & 1.45 &  0 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+\begin{equation}
+  \begin{bmatrix}
+    1.55 & -0.45 & 0 & 0 & 0 \\
+    -0.55 & 1.0 & -0.45 & 0 & 0 \\
+    0 & -0.55 & 1.0 & -0.45 & 0 \\
+    0 & 0 & -0.55 & 1.0 & -0.45 \\
+    0 & 0 & 0 & -0.55 & 1.45 \\
+  \end{bmatrix}
+  \begin{bmatrix}
+    \phi_{1} \\
+    \phi_{2} \\
+    \phi_{3} \\
+    \phi_{4} \\
+    \phi_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    1.1\\
+    0 \\
+    0 \\
+    0 \\
+    0 \\
+  \end{bmatrix}
+\end{equation}
+\begin{equation}
+  \begin{bmatrix}
+    \phi_{1} \\
+    \phi_{2} \\
+    \phi_{3} \\
+    \phi_{4} \\
+    \phi_{5} \\
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    0.9421\\
+    0.8006 \\
+    0.6276 \\
+    0.4163 \\
+    0.1579 \\
+  \end{bmatrix}
+\end{equation}
+\begin{equation}
+  \phi_{x}
+  =
+  \frac{2.7183-e^{x}}{1.7183}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_compare}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & 距离 & $\phi_{FVM}$ & $\phi_{exact}$ & 差值 & 相对误差(\%) \\
+    \hline
+    1 & 0.1 & 0.9421 & 0.9287 & -0.003  & -0.36 \\
+    2 & 0.2 & 0.8006 & 0.7963 & -0.004  & -0.53 \\
+    3 & 0.3 & 0.6276 & 0.6224 & -0.005  & -0.83 \\
+    4 & 0.4 & 0.4163 & 0.4100 & -0.006  & -1.53 \\
+    5 & 0.5 & 0.1579 & 0.1505 & -0.007  & -4.91 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_coeff_value2}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{p}$ & $a_{P}$ & $S_{u}$ \\
+    \hline
+    1 & 0 & -0.75 & -3.5 &   2.75   &  3.5\\
+    \hline
+    2,3,4 & 1.75 & -0.75 & 0 & 1.0 & 0 \\
+    \hline
+    5 & 1.75 & 0 & 1.5 & 0.25 &  0 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{equation}
+  \phi(x) 
+  =
+  1 + \frac{1-e^{25x}}{7.20\times 10^{10}}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_compare}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & 距离 & $\phi_{FVM}$ & $\phi_{exact}$ & 差值 & 相对误差(\%) \\
+    \hline
+    1 & 0.1 & 1.0356 & 1.0000 & -0.035  & -3.56 \\
+    2 & 0.2 & 0.8694 & 0.9999 & 0.131  & 13.05 \\
+    3 & 0.3 & 1.2573 & 0.9999 & -0.257  & -25.74 \\
+    4 & 0.4 & 0.3521 & 0.9999 & 0.647  & 64.70 \\
+    5 & 0.5 & 2.4644 & 0.9179 & -1.546  & -168.48 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{例三数值解与解析解的对比数据}
+  \label{TbFV_cd_cd_coeff_value2}
+  \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{p}$ & $a_{P}$ & $S_{u}$ \\
+    \hline
+    1 & 0 & 0.75 & -6.5 &   7.25   &  6.5\\
+    \hline
+    2-19 & 3.25 & 0.75 & 0 & 4.0 & 0 \\
+    \hline
+    5 & 3.25 & 0 & -1.5 & 4.75 &  0 \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
 \section{非稳态方程的有限体积法}
 
