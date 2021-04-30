@@ -480,6 +480,7 @@ $(\tau_{yx}+\frac{\partial \tau_{yx}}{\partial y}\frac{\mathrm{d}y}{2})\mathrm{d
     \frac{\partial^{2} u}{\partial z^{2}}
     \right)
     +
+    \mu
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial u}{\partial x} +
@@ -497,6 +498,7 @@ $(\tau_{yx}+\frac{\partial \tau_{yx}}{\partial y}\frac{\mathrm{d}y}{2})\mathrm{d
     \frac{\partial^{2} u}{\partial z^{2}}
     \right)
     +
+    \mu
     \frac{\partial}{\partial x}
     \left(
     \nabla\cdot\mathbf{u}
@@ -625,11 +627,11 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
     \\
     & \overline{\overline{\phi}f} = \overline{\phi}\overline{f}
     \quad\quad
-    \overline{\overline{\phi}\overline{f}} = \overline{\phi}\overline{f}
+    \overline{\widebar{\phi}\widebar{f}} = \overline{\phi}\overline{f}
     \quad\quad
     \overline{\overline{\phi}f^{\prime}} = 0
     \quad\quad
-    \overline{\phi f} = \overline{\phi}\overline{f} +
+    \overline{\phi f} = \widebar{\phi}\widebar{f} +
     \overline{\phi^{\prime}f^{\prime}}
     \\
     & \overline{\frac{\partial\phi}{\partial x_{i}}} = \frac{\partial \overline{\phi}}{\partial x_{i}}
@@ -1163,7 +1165,7 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
   \frac{1}{H}
   \int_{z_{b}}^{ z_{s}}\!\overline{v}\mathrm{d}z
 \end{equation}
-式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
+%式中，下标$i$取1，2和3分别对应$x$，$y$和$z$方向的速度分量。
 
 （3）莱布尼兹公式
 \begin{equation}
@@ -1364,12 +1366,12 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
 \begin{equation}
   \begin{aligned}
     &
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial \overline{u}}{\partial t}
     \mathrm{d}z
     =
     \frac{\partial}{\partial t}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \overline{u}
     \mathrm{d}z
     -
@@ -1407,12 +1409,12 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
 
 对流项中第一项的积分
 \begin{equation}
-  \int_{z_0}^{ z_{s}}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u}\widebar{u}}{\partial x}
   \mathrm{d}z
   =
   \frac{\partial}{\partial x}
-  \int_{z_0}^{ z_{s}}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \widebar{u}\widebar{u}
   \mathrm{d}z
   -
@@ -1424,23 +1426,23 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
 式中
 \begin{equation*}
   \begin{aligned}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \widebar{u}\widebar{u}
     \mathrm{d}z
     &=
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     (u+\Delta\overline{u})(u+\Delta\overline{u})
     \mathrm{d}z
     \\
     &=
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     (uu+2u\Delta\overline{u}+\Delta\overline{u}\Delta\overline{u})
     \mathrm{d}z
     \\
     &=
     HUU
     +
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \Delta\overline{u}\Delta\overline{u}
     \mathrm{d}z
     \\
@@ -1455,7 +1457,7 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
   1 +
   \frac
   {
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \Delta\overline{U}\Delta\overline{U}
     \mathrm{d}z
   }
@@ -1464,7 +1466,7 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
 是由于流速沿垂线分布不均匀而引入的修正系数，类似于水力学中的动量修正系数。
 $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \begin{equation}
-  \int_{z_0}^{ z_{s}}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u}\widebar{u}}{\partial x}
   \mathrm{d}z
   =
@@ -1477,7 +1479,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 
 同理，对流项的第二项可写为
 \begin{equation}
-  \int_{z_0}^{ z_{s}}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u}\widebar{v}}{\partial y}
   \mathrm{d}z
   =
@@ -1489,7 +1491,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \end{equation}
 对流项的第三项
 \begin{equation}
-  \int_{z_0}^{ z_{s}}\!
+  \int_{z_{b}}^{ z_{s}}\!
   \frac{\partial \widebar{u}\widebar{w}}{\partial z}
   \mathrm{d}z
   =
@@ -1524,7 +1526,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \mathrm{d}z
     &=
     \frac{\partial}{\partial x}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \overline{p}
     \mathrm{d}z
     -
@@ -1534,7 +1536,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \\
     &=
     \frac{\partial}{\partial x}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \rho g( z_{s}-z)
     \mathrm{d}z
     -
@@ -1564,7 +1566,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \mathrm{d}z
     =
     \frac{\partial}{\partial x}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \frac{\partial \overline{u}}{\partial x}
     \mathrm{d}z
     -
@@ -1576,7 +1578,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \frac{\partial}{\partial x}
     \left(
     \frac{\partial}{\partial x}
-    \int_{z_0}^{ z_{s}}\!
+    \int_{z_{b}}^{ z_{s}}\!
     \overline{u}
     \mathrm{d}z
     -
@@ -1628,7 +1630,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 \end{equation}
 \begin{equation}
   \int_{z_{b}}^{ z_{s}}\!
-  \frac{\partial^{2} \overline{u}}{\partial y^{2}}
+  \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \mathrm{d}z
   =
   \left.\frac{\partial \overline{u}}{\partial z}\right|_{z_{s}}
@@ -1710,7 +1712,7 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
   C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
   \label{EqCGe_Shear}
 \end{equation}
-式中，$C_{w}$为无因此风应力系数，$\rho_{a}$为空气密度，$\omega$为风速，$\beta$为
+式中，$C_{w}$为无因次风应力系数，$\rho_{a}$为空气密度，$\omega$为风速，$\beta$为
 风向与$x$方向的夹角。最后，$x$方向的运动方程为
 \begin{equation}
   \begin{aligned}

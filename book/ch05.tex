@@ -464,9 +464,21 @@ kA
     460 \\
   \end{bmatrix}
 \end{equation}
-该问题的解析解为$T=800x+100$。与解析解对比，可以看出数值解与解析解吻合程度很好。
+该问题的解析解为$T=800x+100$。从图\ref{FgFV_1dht_ex1_compare}与解析解对比，可以看出数值解与解析解吻合程度很好。
+\begin{figure}[H]
+  \centering
+  \includegraphics{FgFV_1dht_ex1_compare.pdf}
+  \caption{例一数值解与解析解对比图}
+  \label{FgFV_1dht_ex1_compare}
+\end{figure}
 
 \subsection{含源一维稳态热传导问题}
+\begin{figure}[H]
+  \centering
+  \includegraphics{FVmEx2.pdf}
+  \caption{含源一维稳态热传导问题示意图}
+  \label{FgFV_ex2}
+\end{figure}
 图\ref{FgFV_ex2}中显示的是一块厚度$L=2cm$的大平板，整块板内导热系数为常数
 $k=0.5\mathrm{W/m\cdot K}$，板内存在均匀的内热源$q=1000\mathrm{kW/m^{3}}$。平板
 $A$面和$B$面上的温度分别为$100^{\circ}\mathrm{C}$和$200^{\circ}\mathrm{C}$。假定
@@ -819,8 +831,8 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   +
   T_{A}
 \end{equation}
-数值解与解析解的详细对比见表\ref{TbFV_ex2_compare}，可以看出数值解与解析解的误差
-很小，最大相对误差不超过百分之三。
+数值解与解析解的详细对比见表\ref{TbFV_ex2_compare}和图\ref{FgFV_1dht_ex2_compare}可以看出数值解与解析解的误差
+很小，最大相对误差不超过百分之三，说明数值解与解析解的吻合程度很好。
 \begin{table}[H]
   \begin{center}
   \caption{数值解与解析解的对比数据}
@@ -840,9 +852,25 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   \end{tabular}
   \end{center}
 \end{table}
+\begin{figure}[H]
+  \centering
+  \includegraphics{FgFV_1dht_ex2_compare.pdf}
+  \caption{例二数值解与解析解对比图}
+  \label{FgFV_1dht_ex2_compare}
+\end{figure}
 
 \subsection{一维金属杆对流散热问题}
-
+\begin{figure}[h]
+  \centering
+  \includegraphics{FgFV_1dht_ex3.pdf}
+  \caption{一维金属杆对流散热问题示意图}
+  \label{FgFV_1dht_ex3}
+\end{figure}
+最后一个例子讨论的是一根圆形金属棒通过对流冷却问题。对流散热导致控制方程中出现与
+温度相关的源项。图\ref{FgFV_1dht_ex3}中给出了一个等截面积的圆柱形金属棒，截面面
+积为$A$，杆长$L=1\mathrm{m}$。基座
+温度为$100\mathrm{^{\circ}C}$，末端为绝热的。金属棒四周环境温度为
+$20\mathrm{^{\circ}C}$。该问题的控制方程为
 \begin{equation}
   \frac{\mathrm{d}}{\mathrm{d}x}
   \left(
@@ -852,6 +880,7 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   hP(T-T_{\infty})
   =
   0
+  \label{EqFV_1dht_ex3_gov}
 \end{equation}
 其中，$h$为对流换热系数，$P$为金属杆截面的周长，$k$为杆的导热系数，$T_{\infty}$
 为杆周围流体的温度。该问题的解析解为
@@ -860,8 +889,9 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   =
   \frac{\cosh{[n(L-x)]}}{\cosh{(nL)}}
 \end{equation}
-其中，$n^{2}=hP/(kA)=25/{\mathrm{m^{2}}}$
+其中，$n^{2}=hP/(kA)=25/{\mathrm{m^{2}}}$。
 
+考虑到$kA$为常数，控制方程\eqref{EqFV_1dht_ex3_gov}可以改写为：
 \begin{equation}
   \frac{\mathrm{d}}{\mathrm{d}x}
   \left(
@@ -872,6 +902,16 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
   =
   0
 \end{equation}
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmEx3Mesh.pdf}
+  \caption{一维金属杆对流散热问题网格系统}
+  \label{FgFV_1dht_ex3_grid}
+\end{figure}
+求解该问题的网格系统如图\ref{FgFV_1dht_ex3_grid}所示，网格节点均匀分布，网格间距$\delta
+x=0.2\mathrm{m}$。
 对上式在任一控制体内积分，可得
 \begin{equation}
   \int_{\Delta V}\!
@@ -1130,6 +1170,7 @@ x=0.004\mathrm{m}$代入各节点离散方程，可以得出各离散方程中�
 \end{table}
 
 \subsection{二维扩散问题的有限体积法}
+% To Do
 \begin{equation}
 \frac{\partial }{\partial x}
 \left(
@@ -1477,7 +1518,13 @@ F = \rho u , \quad D = \frac{\Gamma}{\delta x}
 \end{table}
 
 \subsubsection{中心差分求解示例}
-图\ref{}中描述了一个运动要素$\phi$以对流扩散的形式在一维区域内输运。这一问题的控
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmCDEx1.pdf}
+  \caption{一维对流扩散示例}
+  \label{FgFV_cd_ex1}
+\end{figure}
+图\ref{FgFV_cd_ex1}中描述了一个运动要素$\phi$以对流扩散的形式在一维区域内输运。这一问题的控
 制方程为\eqref{EqFV_1dcd_gov}。边界条件为：$x=0$处$\phi_{0}=1$，$x=L$处$\phi_{L}=0$
 。网格包含五个均匀划分的单元。控制方程的离散采用中心差分格式。$L=1.0\mathrm{m}$
 ，$\rho=1.0\mathrm{kg/m^{3}}$，$\Gamma=0.1\mathrm{kg/m.s}$。试计算以下三种工况
@@ -1490,10 +1537,15 @@ F = \rho u , \quad D = \frac{\Gamma}{\delta x}
   \frac{\exp(\rho ux/\Gamma)-1}{\exp(\rho uL/\Gamma)-1}
 \end{equation}
 
-该问题所采用的网格系统如图\ref{}所示。整个计算域被等分为五个控制体，即$\delta
+该问题所采用的网格系统如图\ref{FgFV_cd_ex1_grid}所示。整个计算域被等分为五个控制体，即$\delta
 x=0/2\mathrm{m}$。两端边界分别用$A$和$B$来标记。注意$F=\rho u$，$D=\Gamma/\delta
 x$，$F_{e}=F_{w}=F$，以及$D_{e}=D_{w}=D$。
-
+\begin{figure}[h]
+  \centering
+  \includegraphics{FVmCDEx1Mesh.pdf}
+  \caption{一维对流扩散问题网格系统}
+  \label{FgFV_cd_ex1_grid}
+\end{figure}
 离散方程和它的系数可以直接应用到内部节点2,3和4上。然而，由于毗邻计算域边界，控制体的节点1和5需要特
 殊处理。将控制方程\eqref{EqFV_1dcd}在控制体1上积分，并采用中心差分来离散。控制体
 1西侧面的$\phi_{w}=\phi_{A}=1$，因而在该面上不用作任何近似。离散后可得
@@ -1632,7 +1684,7 @@ $u=0.1\mathrm{m/s}$。$F=\rho u=0.1$，$D=\Gamma/\delta x=0.1/0.2=0.5$。该工�
     \hline
     节点 & 距离 & $\phi_{FVM}$ & $\phi_{exact}$ & 差值 & 相对误差(\%) \\
     \hline
-    1 & 0.1 & 0.9421 & 0.9287 & -0.003  & -0.36 \\
+    1 & 0.1 & 0.9421 & 0.9387 & -0.003  & -0.36 \\
     2 & 0.3 & 0.8006 & 0.7963 & -0.004  & -0.53 \\
     3 & 0.5 & 0.6276 & 0.6224 & -0.005  & -0.83 \\
     4 & 0.7 & 0.4163 & 0.4100 & -0.006  & -1.53 \\
@@ -1725,5 +1777,260 @@ u=2.5$，$D=\Gamma/\delta x=0.1/0.05=2.0$。该工况的离散方程系数在表
   \end{tabular}
   \end{center}
 \end{table}
+
+\subsection{离散格式的性质}
+应用中心差分格式求解工况二导致数值解出现振荡问题促使我们必须更加深入地讨论离散格
+式的性质。理论上，当计算节点数量无限大时，无论采用和中差分方法，数值解与解析解之
+间就没有差别了。然而，在实际应用中，我们仅能采用有限个控制单元。因此，仅
+当差分格式具有特定的性质时，数值解才在物理上是合理的。最重要的三个性质是：守恒型
+、有界性和输移性。
+\subsubsection{守恒性}
+将对流扩散方程在有限数量的控制体上积分可获得一组需要计算穿过控制体界面的$\phi$的
+通量离散守恒方程。为了确保$\phi$在整个计算域内守恒，通过某一侧界面离开控制体的
+$\phi$的通量必须等于通过该界面进入与之毗邻的控制体的$\phi$的通量。为了满足这一要
+求，通过两个毗邻控制体公共界面的通量必须采取相容的表达式，即相同的表达式。
+
+\begin{equation}
+  \begin{aligned}
+  \left[
+    \Gamma_{e_{1}}\frac{\phi_{2}-\phi_{1}}{\delta x} - q_{A}
+  \right]
+  &+
+  \left[
+    \Gamma_{e_{2}}\frac{\phi_{3}-\phi_{2}}{\delta x}  
+    -
+    \Gamma_{w_{2}}\frac{\phi_{2}-\phi_{1}}{\delta x}  
+  \right]
+  \\
+  &+
+  \left[
+    \Gamma_{e_{3}}\frac{\phi_{4}-\phi_{3}}{\delta x}  
+    -
+    \Gamma_{w_{3}}\frac{\phi_{3}-\phi_{2}}{\delta x}  
+  \right]
+  +
+  \left[
+    q_{B} - \Gamma_{w_{4}}\frac{\phi_{4}-\phi_{3}}{\delta x}
+  \right]
+  \\
+  &=
+  q_{B} - q_{A}
+  \end{aligned}
+\end{equation}
+
+\subsubsection{有界性}
+
+\subsubsection{输移性}
+
+\subsection{迎风格式}
+当流动流向正轴方向，$u_{w}>0$，$u_{e}>0$（$F_{w}>0$，$F_{e}>0$），迎风格式让
+\begin{equation}
+  \phi_{w} = \phi_{W}
+  ,\quad
+  \phi_{e} = \phi_{P}
+\end{equation}
+离散方程\eqref{EqFV_1dcd_dec}变为
+\begin{equation}
+  F_{e}\phi_{P} - F_{w}\phi_{W} 
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
+移项后
+\begin{equation}
+  (D_{w}+D_{e}+F_{e})\phi_{P}
+  =
+  (D_{w}+F_{w})\phi_{W}
+  +
+  D_{e}\phi_{E}
+\end{equation}
+进一步处理为
+\begin{equation}
+  [(D_{w}+F_{w})+D_{e}+(F_{e}-F_{w})]\phi_{P}
+  =
+  (D_{w}+F_{w})\phi_{W}
+  +
+  D_{e}\phi_{E}
+\end{equation}
+
+
+当流动流向负轴方向，$u_{w}<0$，$u_{e}<0$（$F_{w}<0$，$F_{e}<0$），迎风格式让
+\begin{equation}
+  \phi_{w} = \phi_{P}
+  ,\quad
+  \phi_{e} = \phi_{E}
+\end{equation}
+离散方程\eqref{EqFV_1dcd_dec}变为
+\begin{equation}
+  F_{e}\phi_{E} - F_{w}\phi_{P} 
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
+移项并
+进一步处理为
+\begin{equation}
+  [D_{w}+(D_{e}-F_{w})+(F_{e}-F_{w})]\phi_{P}
+  =
+  D_{w}\phi_{W}
+  +
+  (D_{e}-F_{e})\phi_{E}
+\end{equation}
+
+\begin{equation}
+  a_{P}\phi_{P}
+  =
+  a_{W}\phi_{W}
+  +
+  a_{E}\phi_{E}
+\end{equation}
+\begin{equation}
+  a_{P} 
+  =
+  a_{W}
+  +
+  a_{E}
+  +
+  (F_{e}-F_{w})
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_up_coefficient}
+  \begin{tabular}{|c|c|c|}
+    \hline
+     & $a_{W}$ & $a_{E}$ 
+    \\
+    \hline
+    $F_{w}>0, F_{e}>0$
+            &
+            $D_{w}+F_{w}$
+            &
+            $D_{e}$
+    \\
+    \hline
+    $F_{w}<0, F_{e}<0$
+            &
+            $D_{w}$
+            &
+            $D_{e}+F_{e}$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_up_ge_coefficient}
+  \begin{tabular}{|c|c|}
+    \hline
+     $a_{W}$ & $a_{E}$ 
+    \\
+    \hline
+    $D_{w}+\max(F_{w},0)$
+            &
+            $D_{e}+\max(0, -F_{e})$
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\subsubsection{示例}
+在节点1，
+\begin{equation}
+  F_{e}\phi_{P}
+  -
+  F_{A}\phi_{A}
+  =
+  D_{e}(\phi_{E}-\phi_{P})
+  -
+  D_{A}(\phi_{P}-\phi_{A})
+\end{equation}
+在节点5，
+\begin{equation}
+  F_{B}\phi_{P}
+  -
+  F_{w}\phi_{W}
+  =
+  D_{B}(\phi_{B}-\phi_{P})
+  -
+  D_{w}(\phi_{P}-\phi_{W})
+\end{equation}
+其中，$D_{A}=D_{B}=2\Gamma/\delta x=2D$，$F_{A}=F_{B}=F$。最后形成的离散方程：
+\begin{equation}
+  a_{P}\phi_{P}
+  =
+  a_{W}\phi_{W}
+  +
+  a_{E}\phi_{E}
+  +
+  S_{u}
+\end{equation}
+其中，
+\begin{equation}
+  a_{P} = a_{W} + a_{E} + (F_{e}-F_{w}) - S_{P}
+\end{equation}
+
+\begin{table}[H]
+  \begin{center}
+  %\caption{雅可比迭代结果}
+  \label{TbFV_up_ex1_coefficient}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    节点 & $a_{W}$ & $a_{E}$ & $S_{P}$ & $S_{u}$
+    \\
+    \hline
+    1 & 0 & $D$ & $-(2D+F)$ & $(2D+F)\phi_{A}$ \\
+    \hline
+    2,3,4 & $D+F$ & $D$ & 0 & 0 \\
+    \hline
+    5 & $D+F$ & 0 & $-2D$ & $2D\phi_{B}$ \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\textbf{工况一}：$u=0.1\mathrm{m/s}$，$F=\rho u=0.1$，$D=\Gamma/\delta
+x=0.1/0.2=0.5$，$Pe=F/D=0.2$。表\ref{TbFV_up_ex1_result}和图
+\ref{FgFV_up_ex1_compare}中分别给出了数值解和解析解得对比数据和对比图形。
+\begin{table}[H]
+  \begin{center}
+    \caption{迎风格式工况一数值解与解析解对比数据表}
+  \label{TbFV_up_ex1_result}
+  \begin{tabular}{|c|r|r|r|r|r|}
+    \hline
+    节点 & $x$ & $\phi_{FVM}$ & $\phi_{exact}$ & 绝对误差 & 相对误差\\
+    \hline
+    1 & 0.1 & 0.9337 & 0.9387 & 0.005 & 0.53
+    \\
+    \hline
+    2 & 0.3 & 0.7879 & 0.7963 & 0.008 & 1.05
+    \\
+    \hline
+    3 & 0.5 & 0.6130 & 0.6224 & 0.009 & 1.51
+    \\
+    \hline
+    4 & 0.7 & 0.4031 & 0.4100 & 0.007 & 1.68
+    \\
+    \hline
+    5 & 0.9 & 0.1512 & 0.1505 & -0.001 & -0.02
+    \\
+    \hline
+  \end{tabular}
+  \end{center}
+\end{table}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics{FgFV_cd_up_compare1.pdf}
+  \caption{工况一数值解与解析解对比图}
+  \label{FgFV_up_ex1_compare}
+\end{figure}
 \section{非稳态方程的有限体积法}
+
 
