@@ -1,63 +1,131 @@
 program main
-   use array
-   use linear_solver
-   implicit none
-   real(kind=8), parameter :: coeff = 0.2, alpha = 0.5, l = 7.0, t_total = 120.0
-   real(kind=8)::dx, dt, ct
-   real(kind=8),dimension(:),allocatable :: a, b, c, d, t, x
-   integer(kind=4) :: nx, nt
-   integer(kind=4) :: i, j
-   
-   read(*,*) dx
-   
-   nx = nint(l / dx) + 1
-   if(nx<3) then
-       print*,"Error! dx is too large"
-       stop
-   end if
-   dx = l / (nx-1)
-   dt = coeff / alpha * dx * dx
-   nt = nint(t_total / dt)
-   dt = t_total / nt
-   !print *, "dx="
-   !print *, dx
-   !print *, "dt="
-   !print *, dt
-   
-   call initial_array(x ,nx, 0.0_8)
-   call initial_array(t ,nx, 0.0_8)
-   call initial_array(a ,nx-2, 0.0_8)
-   call initial_array(b ,nx-2, 0.0_8)
-   call initial_array(c ,nx-2, 0.0_8)
-   call initial_array(d ,nx-2, 0.0_8)
-   
-   do i = 1, nx
-       x(i) = (i-1)*dx
-       t(i) = 0.0
-   end do
-   t(1) = 0.0
-   t(nx) = 50.0
+    use array
+    use implicit_method
+    use explicit_method
+    use residual
+    implicit none
+    real(kind=8), parameter :: alpha = 0.5_8, l = 5.0_8, t_total = 4.0_8
+    real(kind=8) :: coeff, dx, dt, ct
+    real(kind=8), dimension(:), allocatable :: t, to, x
+    real(kind=8), dimension(:), allocatable :: a, b, c, d
+    integer(kind=4) :: nx, nt
+    integer(kind=4) :: i, j
+    character(len=250) :: forstr
+    integer(kind=4) :: imethod
 
-   !print*,(x(i),i=1,nx)
-   do j = 1, nt
-       ct = j * dt
-       do i=1, nx-2
-           a(i) = 0.5*coeff
-           b(i) = -1-coeff
-           c(i) = a(i)
-           d(i)= -t(i+1) - 0.5 * coeff * (t(i+2) - 2 * t(i+1) + t(i))
-       end do
-       d(1) = d(1) - a(1) * t(1)
-       d(nx-2) = d(nx-2) - a(nx-2) * t(nx)
-       
-       call tdma(a, b, c, d, t(2:nx-1), nx-2)
-       write(*,"(9f12.5)")ct, (t(i), i=1, nx)
-   end do
-   
-   call close_array(a)
-   call close_array(b)
-   call close_array(c)
-   call close_array(d)
-   call close_array(t)
-   call close_array(x)
+    ! imethod: 1, 2, 3, 4 
+    ! 1: cranknicolson
+    ! 2: implicit compact pade
+    ! 3: forward time and central space
+    ! 4: third order runge-kutta 
+    read(*, *) dx, imethod
+
+    select case (imethod)
+    case (1, 2)
+        coeff = 2.0_8
+    case (3, 4)
+        coeff = 0.2_8
+    end select
+    nx = nint(l / dx) + 1
+    if (nx < 3) then
+        print *, "Error! dx is too large"
+        stop
+    end if
+    dx = l / (nx-1)
+    dt = coeff / alpha * dx * dx
+    nt = nint(t_total / dt)
+    dt = t_total / nt
+
+    coeff = alpha * dt / (dx * dx)
+    !print *, "l", l, "nx=", nx, "nt=", nt, "t_total=", t_total
+    print *, "dx=", dx, "dt=", dt, "coeff=", coeff
+    select case (imethod)
+    case (1)
+        print *, "Solver method: Crank Nicolson"
+    case (2)
+        print *, "Solver method: Implicit Compact Pade"
+    case (3)
+        print *, "Solver method: Forward time and Central space"
+    case (4)
+        print *, "Solver method: Third order Runge Kutta"
+    case default
+        print *, "Solver method: Error"
+    end select
+
+    ! initialization
+    call initial_array(x ,nx, 0.0_8)
+    call initial_array(t ,nx, 0.0_8)
+    call initial_array(to ,nx, 0.0_8)
+
+    do i = 1, nx
+        x(i) = (i-1)*dx
+        t(i) = 0.0_8
+    end do
+    t(1) = 0.0_8
+    t(nx) = 50.0_8
+    to = t
+
+    !print *, (x(i), i = 1, nx)
+    ! begin time loop
+    select case (imethod)
+    case (1)
+        call initial_array(a ,nx-2, 0.0_8)
+        call initial_array(b ,nx-2, 0.0_8)
+        call initial_array(c ,nx-2, 0.0_8)
+        call initial_array(d ,nx-2, 0.0_8)
+        do j = 1, nt
+            ct = j * dt
+            call cranknicolson(coeff, nx, t, a, b, c, d)
+            if (checkresidual(t, to, nx)) then
+                exit
+            end if
+            to = t
+        end do
+    case (2)
+        call initial_array(a ,nx-2, 0.0_8)
+        call initial_array(b ,nx-2, 0.0_8)
+        call initial_array(c ,nx-2, 0.0_8)
+        call initial_array(d ,nx-2, 0.0_8)
+        do j = 1, nt
+            ct = j * dt
+            call implicitcompactpade(coeff, nx, t, a, b, c, d)
+            if (checkresidual(t, to, nx)) then
+                exit
+            end if
+            to = t
+        end do
+    case (3)
+        do j = 1, nt
+            ct = j * dt
+            call ftcs(coeff, nx, t)
+            if (checkresidual(t, to, nx)) then
+                exit
+            end if
+            to = t
+        end do
+    case (4)
+        do j = 1, nt
+            ct = j * dt
+            call rungekutta3(coeff, nx, t)
+            if (checkresidual(t, to, nx)) then
+                exit
+            end if
+            to = t
+        end do
+    case default
+        print *, "Error: Solver method is not available!!!"
+    end select
+
+    forstr = ""
+    !write(forstr, "(A1, I5, A6)")"(", nx+1, "F10.5)"
+    !write(*, forstr)ct, (t(i), i = 1, nx)
+    write(*, "(2I4, 4F10.5)")nx, nx/2, ct, t(1), t(nx/2), t(nx)
+
+    call close_array(t)
+    call close_array(to)
+    call close_array(x)
+    call close_array(a)
+    call close_array(b)
+    call close_array(c)
+    call close_array(d)
 end program main
