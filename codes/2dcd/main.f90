@@ -84,6 +84,9 @@ program main
     do k = 1, 5
       if (abs(ct - pt(k)) < 1.0e-6) then
         print *, "#", pt(k)
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
         do i = 1, n
           do j = 1, n
