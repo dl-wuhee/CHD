@@ -8,7 +8,7 @@ program main
   real(kind=8) :: u, d
   real(kind=8), dimension(:, :), allocatable :: x, y, f
   real(kind=8), dimension(:), allocatable :: pt
-  integer(kind=4) :: i, j, k
+  integer(kind=4) :: i, j, k, ii
 
   call initial_array(pt, 5_4, 0.0_8)
   do i = 1, 5
@@ -45,7 +45,7 @@ program main
   end do
 
   ct = 0.0
-  do
+  do !k = 1, nt
     dt = dtold
     if (abs(ct - t_total) < 1.0e-6) then
       exit
@@ -76,13 +76,14 @@ program main
 
     !print *, ct, dt
 
-    do k = 1, 5
-      if (abs(ct - pt(k)) < 1.0e-6) then
-        print *, pt(k)
+    do ii = 1, 5
+      if (abs(ct - pt(ii)) < 1.0e-6) then
+        print *, "#", pt(ii)
         do i = 1, n
           do j = 1, n
             write(*, *)x(i, j), y(i, j), f(i,j)
           end do
+          write(*, *)
         end do
       end if
     end do
