@@ -76,9 +76,15 @@ program main
 
     !print *, ct, dt
 
+<<<<<<< Updated upstream
     do ii = 1, 5
       if (abs(ct - pt(ii)) < 1.0e-6) then
         print *, "#", pt(ii)
+=======
+    do k = 1, 5
+      if (abs(ct - pt(k)) < 1.0e-6) then
+        print *, "#", pt(k)
+>>>>>>> Stashed changes
         do i = 1, n
           do j = 1, n
             write(*, *)x(i, j), y(i, j), f(i,j)
