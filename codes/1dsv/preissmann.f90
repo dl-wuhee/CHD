@@ -71,7 +71,6 @@ contains
     real(kind=8), parameter :: k_One = 1.0_8, k_Two = 2.0_8, k_Four = 4.0_8
 
 
-
     dt_dx = deltaT / deltaX
     fourDt_dx = k_Four * dt_dx
     thetaDt_dx = d_theta * dt_dx

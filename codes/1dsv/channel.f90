@@ -35,15 +35,19 @@ contains
     flowModulus = area1**(5.0_8/3.0_8) / (wetPerimeter**(2.0_8/3.0_8) * d_n)
   end function flowModulus
 
-  function dKdZ(zs, zb) result(dKdZ)
+  function calDKDZ(zs, zb) result(dKdZ)
     implicit none
-    real(kind=8), intent(in) :: zs, zb
-    real(kind=8) :: h, area1, wetPerimeter1, hydraulicRadius1, dKdZ
-    h = zs - zb
-    area1 = area(zs, zb)
-    wetPerimeter1 = wetPerimeter(zs, zb)
-    hydraulicRadius1 = area1 / wetPerimeter1
-    dKdZ = d_b0 * hydraulicRadius1 ** (2.0_8/3.0_8) / d_n + &
-      (2.0_8/3.0_8) * area1 / d_n * hydraulicRadius1**(5.0_8/3.0_8) / h**2.0_8
-  end function dKdZ
+  end function calDKDZ
+
+  subroutine geometryPars(d_Z, d_Zb, d_A, d_B, d_K, d_dKdZ, nX)
+    implicit none
+    do i = 1, nX
+      d_A(i) = area(d_Z(i), d_Zb(i))
+      d_B(i) = width(d_Z(i), d_Zb(i))
+      d_K(i) = flowModulus(d_Z(i), d_Zb(i))
+      d_dKdZ(i) = 0.0_8 ! To do
+    end do
+  end subroutine geometryPars
+
+
 end module openchannel

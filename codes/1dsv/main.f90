@@ -1,8 +1,9 @@
 program main
   use array
+  use preissmann
   implicit none
   real(kind=8), dimension(:), allocatable :: &
-    d_X, d_Z, d_Zb, d_h, d_A, d_B, d_K, d_Q!, d_dKdZ
+    d_X, d_Z, d_Zb, d_h, d_A, d_B, d_K, d_Q, d_dKdZ
   real(kind=8) :: currentT
   integer(kind=4) :: nT, nX
   integer(kind=4) :: i, j
@@ -21,32 +22,16 @@ program main
   call initial_array(d_Q, nX, 0.0_8)
 
 
+  call initialCoeffs(nX)
   do j = 1, nt
+    call resetCoeffs(nX)
+
     currentT = j * deltaT
-    ! step 1, calculate coefficients
-    ! A1i, B1i, C1i, D1i, E1i
-    ! A2i, B2i, C2i, D2i, E2i
-    do i = 1, nx
-    end do
 
-    ! step 2, calculate coefficients
-    ! Fi, Gi, Hi, Ii, Ji
-    do i = 1, nx
-    end do
-
-    !do i = 1, nx
-      !! calculate A1i, ..., E2i
-      !! calculate Fi, Gi, Hi, Ii, Ji
-    !end do
-
-    ! step 3, calculate deltaQ and deltaZ
-    do i = nx, 1
-    end do
-
-    ! step 4, update Q and Z
-    do i = 1, nx
-    end do
+    call geometryPars(d_Z, d_Zb, d_A, d_B, d_K, d_dKdZ, nX)
+    call preissmannSolver(d_Z, d_A, d_B, d_K, d_Q, d_dKdZ, nX, currentT)
   end do
+  call delCoeffs()
 
 
 
