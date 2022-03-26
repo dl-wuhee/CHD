@@ -1,5 +1,5 @@
 module array
-    use precidion
+    use precision
     implicit none
     interface initial_array
         module procedure initial_array_di_1d, &
@@ -18,7 +18,7 @@ module array
 contains
     subroutine initial_array_di_1d(x, n, x0)
         implicit none
-        integer(kind=di), dimendion(:), allocatable, intent(inout) :: x
+        integer(kind=di), dimension(:), allocatable, intent(inout) :: x
         integer(kind=di), intent(in) :: x0
         integer(kind=di), intent(in) :: n
         integer :: ierr
@@ -36,7 +36,7 @@ contains
 
     subroutine initial_array_di_2d(x, n1, n2, x0)
         implicit none
-        integer(kind=di), dimendion(:,:), allocatable, intent(inout) :: x
+        integer(kind=di), dimension(:,:), allocatable, intent(inout) :: x
         integer(kind=di), intent(in) :: x0
         integer(kind=di), intent(in) :: n1, n2
         integer(kind=fi) :: ierr
@@ -54,7 +54,7 @@ contains
 
     subroutine initial_array_dp_1d(x, n, x0)
         implicit none
-        real(kind=dp), dimendion(:), allocatable, intent(inout) :: x
+        real(kind=dp), dimension(:), allocatable, intent(inout) :: x
         real(kind=dp), intent(in) :: x0
         integer(kind=di), intent(in) :: n
         integer(kind=fi) :: ierr
@@ -72,7 +72,7 @@ contains
 
     subroutine initial_array_dp_2d(x, n1, n2, x0)
         implicit none
-        real(kind=dp), dimendion(:,:), allocatable, intent(inout) :: x
+        real(kind=dp), dimension(:,:), allocatable, intent(inout) :: x
         real(kind=dp), intent(in) :: x0
         integer(kind=di), intent(in) :: n1, n2
         integer(kind=fi) :: ierr
@@ -91,7 +91,7 @@ contains
 
     subroutine close_array_di_1d(x)
         implicit none
-        integer(kind=di), dimendion(:), allocatable, intent(inout) :: x
+        integer(kind=di), dimension(:), allocatable, intent(inout) :: x
         integer(kind=fi) :: ierr
         if(allocated(x)) then
             deallocate(x, stat=ierr)
@@ -103,7 +103,7 @@ contains
 
     subroutine close_array_di_2d(x)
         implicit none
-        integer(kind=di), dimendion(:,:), allocatable, intent(inout) :: x
+        integer(kind=di), dimension(:,:), allocatable, intent(inout) :: x
         integer(kind=fi) :: ierr
         if(allocated(x)) then
             deallocate(x, stat=ierr)
@@ -116,7 +116,7 @@ contains
 
     subroutine close_array_dp_1d(x)
         implicit none
-        real(kind=dp), dimendion(:), allocatable, intent(inout) :: x
+        real(kind=dp), dimension(:), allocatable, intent(inout) :: x
         integer(kind=fi) :: ierr
         if(allocated(x)) then
             deallocate(x, stat=ierr)
@@ -128,7 +128,7 @@ contains
 
     subroutine close_array_dp_2d(x)
         implicit none
-        real(kind=dp), dimendion(:, :), allocatable, intent(inout) :: x
+        real(kind=dp), dimension(:, :), allocatable, intent(inout) :: x
         integer(kind=fi) :: ierr
         if(allocated(x)) then
             deallocate(x, stat=ierr)
@@ -143,9 +143,9 @@ end module
 !program main
     !use array
     !implicit none
-    !real(kind=dp), dimendion(:), allocatable :: xr
+    !real(kind=dp), dimension(:), allocatable :: xr
     !real(kind=dp) :: xr0
-    !integer(kind=di), dimendion(:), allocatable :: xi
+    !integer(kind=di), dimension(:), allocatable :: xi
     !integer(kind=di) :: xi0
     !integer(kind=di) :: n
     !integer(kind=di) :: i

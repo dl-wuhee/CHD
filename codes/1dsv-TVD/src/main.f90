@@ -10,11 +10,9 @@ program main
     call gen_mesh()
     call set_time()
 
-    call init_solver()
-    call initialize()
     call solve()
 
-    call close_solver()
+    call del_time()
     call del_mesh()
 
 end program main

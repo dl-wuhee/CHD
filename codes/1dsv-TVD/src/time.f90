@@ -1,4 +1,7 @@
 module time
+    use precision
+    use const
+    use array
     implicit none
     ! t_total: the flow will be computed to t_total
     ! t_cur: time of current compute
@@ -21,31 +24,55 @@ module time
     !   3: output according to specified time step, need to specify output_ts
     !   4: output according to specified step, need to specify output_ti
     integer(kind=si) :: output_policy
+    real(kind=dp) :: output_cur_t
     real(kind=dp), allocatable, dimension(:) :: arr_output_t
-    integer(kind=dp), allocatable, dimension(:) :: arr_output_ns
+    integer(kind=di), allocatable, dimension(:) :: arr_output_ns
     integer(kind=di) :: output_cur
     real(kind=dp) :: output_ts
     integer(kind=di) :: output_ti
 contains
     subroutine set_time()
         implicit none
-        t_total = 50.0_dp
+        t_total = 50
         t_cur = zero
-        t_delta = one
+        t_delta = half
         t_delta_specified = t_delta
-        nt = di_0
+        nt = floor(t_total / t_delta) + di_1
         nt_cur = di_0
         output_policy = si_1
+        select case (output_policy)
+        case (si_1)
+            call initial_array(arr_output_t, di_2, zero)
+            arr_output_t = (/five, ten/)
+        case (si_2)
+            call initial_array(arr_output_ns, di_2, di_0)
+            arr_output_ns = (/di_5, di_10/)
+        case (si_3)
+            output_ts = half
+        case (si_4)
+            output_ti = di_10
+        case default
+            output_ti = di_10
+        end select
+
+
         output_cur = di_1
         dt_policy = si_2
     end subroutine
+
+    function adpative_dt(u, dx) result (dt)
+        implicit none
+        real(kind=dp), dimension(*), intent(in) :: u
+        real(kind=dp), intent(in) :: dx
+        real(kind=dp) :: dt
+        dt = t_delta 
+    end function adpative_dt
 
     function calc_t_delta(u, dx) result (dt)
         implicit none
         real(kind=dp), dimension(:), intent(in) :: u
         real(kind=dp) :: dx
         real(kind=dp) :: dt
-        real(kind=dp) :: output_t_cur
         select case (dt_policy)
         case (si_1)
             dt = t_delta_specified
@@ -58,9 +85,9 @@ contains
         end select
         select case (output_policy)
         case (si_1)
-            output_cur_t = arr_output_t[output_cur]
+            output_cur_t = arr_output_t(output_cur)
         case (si_2)
-            output_cur_t = t_delta_specified * arr_output_ns[output_cur]
+            output_cur_t = t_delta_specified * arr_output_ns(output_cur)
         case (si_3)
             output_cur_t = output_cur * output_ts
         case (si_4)
@@ -79,4 +106,9 @@ contains
         end if
     end function calc_t_delta
 
+    subroutine del_time()
+        implicit none
+        call close_array(arr_output_ns)
+        call close_array(arr_output_t)
+    end subroutine del_time
 end module time
