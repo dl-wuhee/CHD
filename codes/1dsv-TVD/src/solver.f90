@@ -28,10 +28,12 @@ module solver
         vec_u, vec_f, vec_g
     real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
         vec_u_1, vec_u_2, vec_u_o
+    real(kind=dp) :: cfl
 contains
     subroutine init_solver()
         implicit none
         !call initial_array(solver_data)
+        cfl = one / ten * half
 
         call initial_array(h, nl+di_1, zero)
         call initial_array(a, nl+di_1, zero)
@@ -168,13 +170,18 @@ contains
         call initialize()
 
         do ti = 1, nt
-            t_delta = calc_t_delta(v, dl)
+            t_delta = calc_t_delta(v, h, dl, cfl)
+            if (t_delta < zero) then
+              print *, "Float Error"
+              exit
+            end if
             t_cur = t_cur + t_delta
             if (t_cur > t_total) then
+              call output(x, h, v, a, q, nl, t_cur-t_delta)
                 print *, "Well Done"
                 exit
             else
-                print *, "Let's go to next time step"
+                write(*, fmt="(A16, F10.3, ',', 3X, A19, F10.3)")"# current time: ", t_cur, "current time step: ", t_delta
             end if
 
             lambda =  t_delta / dl
@@ -221,8 +228,13 @@ contains
 
             call update(vec_u)
 
-            call output(x, h, v, a, q, nl, t_cur)
-        end do
+            if (output_cur <= size(arr_output_t)) then
+              if (t_cur == arr_output_t(output_cur)) then
+              call output(x, h, v, a, q, nl, t_cur)
+              output_cur = output_cur + 1
+            end if
+          end if
+          end do
 
         call close_solver()
     end subroutine

@@ -11,7 +11,7 @@ contains
     subroutine gen_mesh()
         implicit none
         integer(kind=di) :: i
-        dl = five
+        dl = ten * five
         nl = nint(l / dl)
         call initial_array(x, nl+di_1, zero)
         do i = di_1, nl + di_1

@@ -43,7 +43,7 @@ contains
         select case (output_policy)
         case (si_1)
             call initial_array(arr_output_t, di_2, zero)
-            arr_output_t = (/five, ten/)
+            arr_output_t = (/one, five, ten, three * five, four * five/)
         case (si_2)
             call initial_array(arr_output_ns, di_2, di_0)
             arr_output_ns = (/di_5, di_10/)
@@ -60,24 +60,36 @@ contains
         dt_policy = si_2
     end subroutine
 
-    function adpative_dt(u, dx) result (dt)
+    function adpative_dt(u, h, dx, cfl) result (dt)
         implicit none
-        real(kind=dp), dimension(*), intent(in) :: u
-        real(kind=dp), intent(in) :: dx
-        real(kind=dp) :: dt
-        dt = t_delta 
+        real(kind=dp), dimension(:), intent(in) :: u, h
+        real(kind=dp), intent(in) :: dx, cfl
+        real(kind=dp) :: dt, dt_tmp
+        integer(kind=di) :: i, nl
+        dt = -999.0_dp
+        nl = size(u)
+        do i = di_1, nl
+          if (h(i) < zero .or. isnan(h(i))) then
+            dt = -999.0_dp 
+            exit
+          end if
+          dt_tmp = cfl * dx / (u(i) + sqrt(g * h(i)))
+          if (dt_tmp > dt) then
+            dt = dt_tmp
+          end if
+        end do
     end function adpative_dt
 
-    function calc_t_delta(u, dx) result (dt)
+    function calc_t_delta(u, h, dx, cfl) result (dt)
         implicit none
-        real(kind=dp), dimension(:), intent(in) :: u
-        real(kind=dp) :: dx
+        real(kind=dp), dimension(:), intent(in) :: u, h
+        real(kind=dp), intent(in) :: dx, cfl
         real(kind=dp) :: dt
         select case (dt_policy)
         case (si_1)
             dt = t_delta_specified
         case (si_2)
-            dt = adpative_dt(u, dx)
+            dt = adpative_dt(u, h, dx, cfl)
         case default
             print *, "time stepping policy error"
             print *, "time stepping policy is set to 1"
@@ -85,7 +97,11 @@ contains
         end select
         select case (output_policy)
         case (si_1)
+          if (output_cur > size(arr_output_t)) then
+            output_cur_t = zero
+          else
             output_cur_t = arr_output_t(output_cur)
+          end if
         case (si_2)
             output_cur_t = t_delta_specified * arr_output_ns(output_cur)
         case (si_3)
@@ -99,7 +115,6 @@ contains
         end select
         if ( t_cur < output_cur_t .and. (t_cur + dt) > output_cur_t ) then
             dt = output_cur_t - t_cur
-            output_cur = output_cur + 1
         end if
         if ( t_cur < t_total .and. (t_cur + dt) > t_total ) then
             dt = t_total - t_cur
