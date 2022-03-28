@@ -33,7 +33,7 @@ module time
 contains
     subroutine set_time()
         implicit none
-        t_total = 50
+        t_total = ten
         t_cur = zero
         t_delta = half
         t_delta_specified = t_delta
@@ -64,20 +64,25 @@ contains
         implicit none
         real(kind=dp), dimension(:), intent(in) :: u, h
         real(kind=dp), intent(in) :: dx, cfl
-        real(kind=dp) :: dt, dt_tmp
+        real(kind=dp) :: dt, max_speed, speed
         integer(kind=di) :: i, nl
-        dt = -999.0_dp
+        max_speed = -999.0_dp
         nl = size(u)
         do i = di_1, nl
           if (h(i) < zero .or. isnan(h(i))) then
             dt = -999.0_dp 
             exit
           end if
-          dt_tmp = cfl * dx / (u(i) + sqrt(g * h(i)))
-          if (dt_tmp > dt) then
-            dt = dt_tmp
+          speed = abs(u(i) + sqrt(g * h(i)))
+          if (speed > max_speed) then
+            max_speed = speed 
+          end if
+          speed = abs(u(i) - sqrt(g * h(i)))
+          if (speed > max_speed) then
+            max_speed = speed 
           end if
         end do
+        dt = cfl * dx / max_speed
     end function adpative_dt
 
     function calc_t_delta(u, h, dx, cfl) result (dt)

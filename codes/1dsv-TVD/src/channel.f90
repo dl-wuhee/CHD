@@ -4,7 +4,8 @@ module channel
     real(kind=dp) :: l, b, s0, n
 contains
     subroutine gen_channel()
-        l = 2000_dp;
+        !l = 2000_dp;
+        l = 100.0_dp;
         b = 1_dp;
         n = 0;
     end subroutine gen_channel
