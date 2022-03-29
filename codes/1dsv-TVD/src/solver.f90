@@ -1,4 +1,5 @@
 module solver
+  use precision
   use const
   use channel
   use mesh
@@ -8,6 +9,11 @@ module solver
   use fio
   implicit none
 
+  abstract interface
+    subroutine solve_method(lambda)
+      real(kind=8), intent(in) :: lambda
+    end subroutine solve_method
+  end interface
   !type solver
   !procedure(), pointer :: solve_method_ptr => null()
   !integer(kind=fi) :: index_solve_method
@@ -19,7 +25,7 @@ module solver
 
   !type(solver), allocatable, dimension(:) :: solver_data
 
-  procedure(), pointer :: solve_method_ptr => null()
+  procedure(solve_method), pointer :: solve_method_ptr => null()
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
     h, a, xi, r, pf ! pf: hydrostatic pressure force
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
@@ -33,6 +39,8 @@ contains
   subroutine init_solver()
     implicit none
     !call initial_array(solver_data)
+    solve_method_ptr => solver_maccormack
+
     cfl = eight / ten 
 
     call initial_array(h, nl+di_1, zero)
@@ -51,6 +59,7 @@ contains
     call initial_array(vec_u_1, nl+di_1, di_2, zero)
     call initial_array(vec_u_2, nl+di_1, di_2, zero)
     call initial_array(vec_u_o, nl+di_1, di_2, zero)
+
   end subroutine init_solver
 
   subroutine close_solver()
@@ -160,7 +169,6 @@ contains
 
   subroutine solve()
     implicit none
-    integer(kind=di) :: i, j
     integer(kind=di) :: ti
     real(kind=dp) :: lambda
 
@@ -169,21 +177,21 @@ contains
 
     call initialize()
 
-    !do ti = 1, nt
-    do
+    do ti = 1, nt
+      !do
       t_delta = calc_t_delta(v, h, dl, cfl)
       if (t_delta < zero) then
-        write(log_funit, "(A)") "Float Error"
+        write(log_funit, "(A21, F10.3)") "# Float Error at t = ", t_cur
         exit
       end if
       t_cur = t_cur + t_delta
       if (t_cur - t_total > eps) then
-        call output(x, h, v, a, q, nl, t_cur-t_delta, output_funit)
-        write(log_funit, "(A)") "Well Done"
+        !call output(x, h, v, a, q, nl, t_cur-t_delta, output_funit)
+        write(log_funit, "(A)") "# Done"
         exit
       else
         write(log_funit, fmt="(A16, F10.3, ',', 3X, A19, F10.3)") &
-          "# current time: ", t_cur, "current time step: ", t_delta
+          "# Next time: ", t_cur, "current time step: ", t_delta
       end if
 
       lambda =  t_delta / dl
@@ -195,48 +203,144 @@ contains
 
       vec_u_o = vec_u
 
+      call solve_method_ptr(lambda)
+
       !call McCromark_TVD()
 
-      ! predictor step
-       write(log_funit, "(A)") "Start of Predictor Step"
-
-      do i = di_2, nl
-        do j = di_1, di_2
-          vec_u_1(i, j) = vec_u_o(i, j) - lambda * (vec_f(i+di_1, j) - vec_f(i, j)) + t_delta * vec_g(i, j)
-        end do
-      end do
-
-       write(log_funit, "(A)") "End of Predictor Step"
-
-      ! update vec_f and vec_g
-      call update(vec_u_1)
-
-      ! correct step
-       write(log_funit, "(A)")"Start of Correct Step"
-
-      do i = di_2, nl
-        do j = di_1, di_2
-          vec_u_2(i, j) = vec_u_o(i, j) - lambda * (vec_f(i, j) - vec_f(i-di_1, j)) + t_delta * vec_g(i, j)
-        end do
-      end do
-
-       write(log_funit, "(A)")"End of Correct Step"
-
-      do i = di_2, nl
-        do j = di_1, di_2
-          vec_u(i, j) = half * (vec_u_1(i, j) + vec_u_2(i, j)) + half * (zero)
-        end do
-      end do
 
       call update(vec_u)
 
-      if (output_cur <= size(arr_output_t)) then
-        if (t_cur == arr_output_t(output_cur)) then
-          call output(x, h, v, a, q, nl, t_cur, output_funit)
-          output_cur = output_cur + 1
-        end if
+      !if (output_cur <= size(arr_output_t)) then
+      if (t_cur == output_cur_t) then
+        call output(x, h, v, a, q, nl, t_cur, output_funit)
+        output_cur = output_cur + 1
       end if
+      !end if
     end do
     call close_solver()
   end subroutine
+
+  subroutine solver_maccormack(lambda)
+    implicit none
+    real(kind=dp), intent(in) :: lambda
+    integer(kind=di) :: i, j
+    ! predictor step
+    write(log_funit, "(A)") "#    Start of Predictor Step"
+
+    do i = di_2, nl
+      do j = di_1, di_2
+        vec_u_1(i, j) = vec_u_o(i, j) - lambda * (vec_f(i+di_1, j) - vec_f(i, j)) + t_delta * vec_g(i, j)
+      end do
+    end do
+
+    write(log_funit, "(A)") "#    End of Predictor Step"
+
+    ! update vec_f and vec_g
+    call update(vec_u_1)
+
+    ! correct step
+    write(log_funit, "(A)")"#    Start of Correct Step"
+
+    do i = di_2, nl
+      do j = di_1, di_2
+        vec_u_2(i, j) = vec_u_o(i, j) - lambda * (vec_f(i, j) - vec_f(i-di_1, j)) + t_delta * vec_g(i, j)
+      end do
+    end do
+
+    write(log_funit, "(A)")"#    End of Correct Step"
+
+    do i = di_2, nl
+      do j = di_1, di_2
+        vec_u(i, j) = half * (vec_u_1(i, j) + vec_u_2(i, j))
+      end do
+    end do
+  end subroutine solver_maccormack
+
+  subroutine solver_maccormack_TVD(lambda)
+    implicit none
+    real(kind=dp), intent(in) :: lambda
+    integer(kind=di) :: i, j
+
+    call solver_maccormack(lambda)
+
+    do i = di_2, nl
+
+        u_bar = u_mid(i)
+        c_bar = c_mid(i)
+        a_bar_1 = u_bar + c_bar
+        a_bar_2 = u_bar - c_bar
+        abs_a_bar_1 = abs(a_bar_1)
+        abs_a_bar_2 = abs(a_bar_2)
+        e_bar_1(1) = 1
+        e_bar_1(2) = a_bar_1
+        e_bar_2(1) = 1
+        e_bar_2(2) = a_bar_2
+        psi_1 = psi(abs_a_bar_1)
+        psi_2 = psi(abs_a_bar_2)
+        alpha_0_1 = alpha(u_bar, c_bar, one, i)
+        alpha_0_2 = alpha(u_bar, c_bar, minus_one, i)
+
+
+      vec_u(i, 1) = lambda * ()
+      do j = di_1, di_2
+        vec_u(i, j) = vec_u(i, j) + 
+      end do
+    end do
+
+  contains
+    function cal_r_mid(cur_alpha, cur_i) result (r_mid)
+      implicit none
+      integer(kind=di), intent(in) :: cur_i
+      real(kind=dp), intent(in) :: cur_alpha
+      real(kind=dp) :: r_mid 
+    end function cal_r_mid
+
+    function cal_alpha(u_bar, c_bar, signal, cur_i) result (alpha)
+      implicit none
+      integer(kind=di), intent(in) :: cur_i
+      real(kind=dp), intent(in) :: u_bar, c_bar, signal
+      real(kind=dp) :: alpha, new_c_bar
+      new_c_bar = signal * c_bar
+      alpha = half / new_c_bar * & (
+        q(cur_i + di_1) - q(cur_i) + &
+        (-u_bar + new_c_bar) * (a(cur_i + di_1) - a(cur_i)) )
+    end function cal_alpha
+
+    function cal_psi(a_bar) result (psi)
+      implicit none
+      real(kind=dp), intent(in) :: a_bar
+      real(kind=dp) :: delta
+      delta = 0.2
+      if (a_bar >= delta) then
+        psi = a_bar
+      else
+        psi = delta
+      end if
+    end function cal_psi
+
+    function cal_u_mid(cur_i) result (u_mid)
+      integer(kind=di), intent(in) :: cur_i
+      real(kind=dp) :: q_0, q_1, a_0, a_1
+      real(kind=dp) :: u_mid
+      q_0 = q(cur_i)
+      q_1 = q(cur_i + di_1)
+      a_0 = sqrt(a(cur_i))
+      a_1 = sqrt(a(cur_i + di_1))
+      
+      u_mid = (q_1 / a_1 + q_0 / a_0) / (a_1 + a_0)
+    end function cal_u_mid
+
+    function cal_c_mid(cur_i) result (c_mid)
+      integer(kind=di), intent(in) :: cur_i
+      real(kind=dp) :: h_0, h_1
+      real(kind=dp) :: c_mid
+      h_0 = h(cur_i)
+      h_1 = h(cur_i + di_1)
+      
+      c_mid = (sqrt(g * h_0) + sqrt(g * h_1)) ** 2 / four
+    end function cal_c_mid
+
+
+  end subroutine solver_maccormack_TVD
+
 end module solver

@@ -37,27 +37,36 @@ contains
         t_cur = zero
         t_delta = half
         t_delta_specified = t_delta
-        nt = floor(t_total / t_delta) + di_1
+
+        dt_policy = si_2
+        select case (dt_policy)
+        case (si_1)
+            nt = floor(t_total / t_delta) + di_1
+        case (si_2)
+            nt = 9999999_di
+        case default
+            nt = floor(t_total / t_delta) + di_1
+        end select
+
         nt_cur = di_0
-        output_policy = si_1
+
+        output_policy = si_3
         select case (output_policy)
         case (si_1)
             call initial_array(arr_output_t, di_2, zero)
-            arr_output_t = (/one, five, ten, three * five, four * five/)
+            arr_output_t = (/one, five, ten/)
         case (si_2)
             call initial_array(arr_output_ns, di_2, di_0)
             arr_output_ns = (/di_5, di_10/)
         case (si_3)
-            output_ts = half
+            output_ts = one / ten 
         case (si_4)
             output_ti = di_10
         case default
             output_ti = di_10
         end select
 
-
         output_cur = di_1
-        dt_policy = si_2
     end subroutine
 
     function adpative_dt(u, h, dx, cfl) result (dt)
