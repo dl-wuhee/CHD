@@ -24,7 +24,7 @@ program main
   dt = 0.125_8 * h**2.0_8 / d
   dtold = dt
   !dt = 1.0e-2_8
-  
+
   t_total = 0.5_8
   rnt = t_total /dt
   nt = floor(rnt) 
@@ -76,32 +76,32 @@ program main
 
     !print *, ct, dt
 
-<<<<<<< Updated upstream
+    !<<<<<<< Updated upstream
     do ii = 1, 5
       if (abs(ct - pt(ii)) < 1.0e-6) then
         print *, "#", pt(ii)
-=======
-    do k = 1, 5
-      if (abs(ct - pt(k)) < 1.0e-6) then
-        print *, "#", pt(k)
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
-        do i = 1, n
-          do j = 1, n
-            write(*, *)x(i, j), y(i, j), f(i,j)
-          end do
-          write(*, *)
+        !=======
+        do k = 1, 5
+          if (abs(ct - pt(k)) < 1.0e-6) then
+            print *, "#", pt(k)
+            !<<<<<<< Updated upstream
+            !>>>>>>> Stashed changes
+            !=======
+            !>>>>>>> Stashed changes
+            do i = 1, n
+              do j = 1, n
+                write(*, *)x(i, j), y(i, j), f(i,j)
+              end do
+              write(*, *)
+            end do
+          end if
         end do
-      end if
-    end do
-  end do
+      end do
 
 
 
 
-  call close_array(f)
-  call close_array(x)
-  call close_array(y)
-end program main
+      call close_array(f)
+      call close_array(x)
+      call close_array(y)
+    end program main
