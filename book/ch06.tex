@@ -1,6 +1,60 @@
-\chapter{水动力学问题求解}
+\chapter{水动力学问题差分解法}
 \section{一维非恒定流求解}
+\subsection{矩形明渠一维圣维南方程组}
+对矩形断面渠道，一维圣维南方程组的守恒形式为：
+\begin{equation}
+  \frac{\partial \mathbf{U}}{\partial t} +
+  \frac{\partial \mathbf{F}}{\partial x} =
+  \mathbf{S}
+\end{equation}
+其中，$\mathbf{U}$为未知量矢量，$\mathbf{F}$为通量矢量，$\mathbf{S}$为源项矢量，
+分别为：
+\begin{equation}
+  \mathbf{U} = 
+  \begin{bmatrix}
+    h \\
+    v
+  \end{bmatrix}
+  ,
+  \mathbf{F} = 
+  \begin{bmatrix}
+    hv \\
+    hv^{2} + \frac{1}{2}gh^{2}
+  \end{bmatrix}
+  ,
+  \mathbf{S} = 
+  \begin{bmatrix}
+    0 \\
+    ghi - C_{f}v|v|
+  \end{bmatrix}
+\end{equation}
+式中，$v(x,t)$为断面平均流速，$h(x,t)$为断面水深，$i$为底坡，$g$为重力加速度,
+$C_{f}$为阻力系数。
 
+\subsection{初始条件}
+为了计算圣维南方程的瞬态解，必须要先知道所有网格节点上的水深和流速值。这些值不能
+随意给定，而应该按照实际物理情况来给定初始条件，通常来说有两种选择。
+\begin{enumerate}
+  \item 渠道处于静止状态。在该状态下，水面为水平线，所有节点上的速度都为零。干燥区域也可以被包含在计算域中。
+  \item 渠道处于恒定流状态。在该状态下，水深和流速必须通过恒定流水流求解手段来获得。这个求解过程主要是求解渐变流水面曲线方程来获得。如果渠道中存在急变流段，还需要求解水跃跃前跃后水深关系来获得。
+    \begin{equation}
+    \frac{\mathrm{d}h}{\mathrm{d}x}
+    =
+    \frac{i - J }{1 - Fr^{2 }}
+    \end{equation}
+    \begin{equation}
+      \frac{h_{2 }}{h_{1 }}
+      =
+      \frac{1}{2 }
+      [(1+8{Fr}_{1}^{2})^{1/2} - 1]
+    \end{equation}
+\end{enumerate}
+
+\subsection{边界条件}
+
+\section{二维泊松方程求解}
+
+\section{二维输运扩散方程求解}
 %\section{二维浅水方程求解}
 %\subsection{网格基础}
 %\subsection{求解算法}
