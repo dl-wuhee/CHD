@@ -9,6 +9,7 @@
 \end{equation}
 其中，$\mathbf{U}$为未知量矢量，$\mathbf{F}$为通量矢量，$\mathbf{S}$为源项矢量，
 分别为：
+
 \begin{equation}
   \mathbf{U} = 
   \begin{bmatrix}
@@ -51,6 +52,116 @@ $C_{f}$为阻力系数。
 \end{enumerate}
 
 \subsection{边界条件}
+
+\subsection{显式格式}
+
+\subsubsection{FTCS格式}
+\begin{equation}
+  \mathbf{U}_{i}^{k+1} 
+  =
+  \mathbf{U}_{i}^{k} -
+  \frac{\Delta t}{2\Delta x}(\mathbf{F}_{i+1}^{k}-\mathbf{F}_{i}^{k}) + 
+  \mathbf{S}_{i}^{k}\Delta t
+\end{equation}
+
+\subsubsection{Lax扩散格式}
+\begin{equation}
+  \mathbf{U}_{i}^{k+1} 
+  =
+  \frac{(\mathbf{U}_{i-1}^{k} + \mathbf{U}_{i+1}^{k})}{2} -
+  \frac{\Delta t}{2\Delta x}(\mathbf{F}_{i+1}^{k}-\mathbf{F}_{i}^{k}) + 
+  \mathbf{S}_{i}^{k}\Delta t
+\end{equation}
+
+%\subsubsection{迎风格式}
+
+\subsubsection{MacCormack预测校正格式}
+MacCormack格式是一种两步（预测步和校正步）有限差分格式，具备激波捕捉能力。在预测
+步，通量$\mathbf{F}$采用向前差分格式，用$k$时间层信息来计算。
+\begin{equation}
+  \mathbf{U}^{\mathrm{yc}} =
+  \mathbf{U}^{k} -
+  \frac{\Delta t }{\Delta x }
+  (\mathbf{F}_{i}^{k} - \mathbf{F}_{i}^{k}) +
+  \mathbf{S}_{i}^{k}\Delta t
+\end{equation}
+预测步给出了$k+1$时间层的流动的近似值，记为预测值。在校正步，通量$\mathbf{F}$采
+用向后差分格式，用$k+1$时间层信息来计算。
+\begin{equation}
+  \mathbf{U}^{\mathrm{jz}} =
+  \mathbf{U}^{k} -
+  \frac{\Delta t }{\Delta x }
+  (\mathbf{F}_{i}^{\mathrm{yc}} - \mathbf{F}_{i}^{\mathrm{yc}}) +
+  \mathbf{S}_{i}^{\mathrm{yc}}\Delta t
+\end{equation}
+$k+1$时间层的最终结果是预测步和校正步得出的结果取平均得到的。
+\begin{equation}
+  \mathbf{U}^{k+1} =
+  \mathbf{U}^{\mathrm{pj}} =
+  \frac{1}{2}
+  (\mathbf{U}^{\mathrm{yc}} +\mathbf{U}^{\mathrm{jz}})
+\end{equation}
+
+MacCormack格式在时间和空间上都是二阶精度，也是条件稳定的，因此受到CFL条件的限制。
+根据Godunov理论，精度高于一阶的格式将在$\mathbf{U}$梯度较高的区域内产生非物理振
+荡，比如在激波附近，例如溃坝波的波头。一阶精度格式虽然不会引入非物理振荡，但是过
+度的扩散抹平了波头。因此，在实际使用中，二阶格式常被采用，控制非物理振荡的策略是
+在局部区域内根据需要引入一定量的数值扩散。
+
+\subsubsection{带人工粘性的MacCormack格式}
+MacCormack格式中非物理振荡可以通过引入人工扩散来降低。在预测和校正步后，人工粘性
+的引入是通过求解下面的附加方程
+\begin{equation}
+  \frac{\partial \mathbf{U}}{\partial t} =
+  \varepsilon
+  \frac{(\Delta x)^{2}}{\Delta t}
+  \frac{{\partial}^{2}\mathbf{U}}{\partial x^{2}}
+\end{equation}
+式中，$\varepsilon$是一个扩散系数，用来控制格式中的耗散量。当$\varepsilon$取常数
+时，上式中扩散项用二阶中心格式离散，可得
+\begin{equation}
+  \mathbf{U}_{i}^{k+1} =
+  \mathbf{U}_{i}^{\mathrm{pj}} +
+  \varepsilon
+  (
+  \mathbf{U}_{i+1}^{\mathrm{pj}} - 
+  2\mathbf{U}_{i}^{\mathrm{pj}} +
+  \mathbf{U}_{i-1}^{\mathrm{pj}}
+  )
+\end{equation}
+基于这一思想，Jameson等人提出一种更容易实现的方法。上式改写为：
+\begin{equation}
+  \mathbf{U}_{i}^{k+1} =
+  \mathbf{U}_{i}^{\mathrm{pj}} +
+  {\varepsilon}_{i+1/2}
+  (
+  \mathbf{U}_{i+1}^{\mathrm{pj}} - 
+  \mathbf{U}_{i}^{\mathrm{pj}}
+  )
+  -
+  {\varepsilon}_{i-1/2}
+  (
+  \mathbf{U}_{i}^{\mathrm{pj}} -
+  \mathbf{U}_{i-1}^{\mathrm{pj}}
+  )
+\end{equation}
+其中，
+\begin{equation}
+  {\varepsilon}_{i+1/2} =
+  K\max({\varepsilon}_{i+1}-{\varepsilon}_{i})
+\end{equation}
+${\varepsilon}_{i}$是基于水深计算得出的参数。
+\begin{equation}
+  {\varepsilon}_{i} =
+  \frac{|h_{i+1}-h_{i}+h_{i-1}|}{|h_{i+1}|-|h_{i}|+|h_{i-1}|}
+\end{equation}
+$K$为人工粘性系数，需要校验，通常取值范围为0.5\textasciitilde 3。这一格式只在振荡发展区域内引入
+数值扩散，而其他区域内的解不受影响。
+
+\subsubsection{TVD MacCormack格式}
+
+\subsection{隐式格式}
+
 
 \section{二维泊松方程求解}
 
