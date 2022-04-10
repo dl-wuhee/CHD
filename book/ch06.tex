@@ -56,6 +56,8 @@ $C_{f}$为阻力系数。
 \subsection{显式格式}
 
 \subsubsection{FTCS格式}
+时间用一阶向前差分，空间上用二阶中心差分格式的FTCS格式可能是最简单的差分格式。可
+是，这一格式是不稳定的，因而这一格式也就被称为不稳定格式。
 \begin{equation}
   \mathbf{U}_{i}^{k+1} 
   =
@@ -63,8 +65,12 @@ $C_{f}$为阻力系数。
   \frac{\Delta t}{2\Delta x}(\mathbf{F}_{i+1}^{k}-\mathbf{F}_{i}^{k}) + 
   \mathbf{S}_{i}^{k}\Delta t
 \end{equation}
+通过设定极低的CFL值，外加引入人工粘性来抑制振荡，该格式可用。然而，这格式没有使
+用价值。
 
 \subsubsection{Lax扩散格式}
+Lax扩散格式是非稳定格式的一个变体，是一个具有激波捕捉能力的单步差分格式，却在数
+值上扩散。该格式如下：
 \begin{equation}
   \mathbf{U}_{i}^{k+1} 
   =
@@ -72,6 +78,23 @@ $C_{f}$为阻力系数。
   \frac{\Delta t}{2\Delta x}(\mathbf{F}_{i+1}^{k}-\mathbf{F}_{i}^{k}) + 
   \mathbf{S}_{i}^{k}\Delta t
 \end{equation}
+采用泰勒级数将上式中各项在$k$时间层和节点$i$上展开，当$\Delta x$和$\Delta
+t\rightarrow 0$时，上式变为
+\begin{equation}
+  \frac{\partial \mathbf{U}}{\partial t} +
+  \frac{\partial \mathbf{F}}{\partial t} =
+  \frac{1}{2}D\frac{{\partial}^{2} \mathbf{U}}{\partial {x}^{2}} +
+  \mathbf{S}
+\end{equation}
+其中，$D$是计算网格上类似的扩散系数，
+\begin{equation}
+D =
+\frac{(\Delta x)^{2}}{\Delta t}
+\end{equation}
+由此可见，Lax扩散格式是不相容的。因此，对给定的$\Delta x$，如果降低CFL值，计算采
+用的$\Delta t$也会降低，$D$会增加，求解过程中会表现出更大的扩散性。因此，该扩散
+古城具有网格相关性。
+
 
 %\subsubsection{迎风格式}
 
@@ -159,9 +182,135 @@ $K$为人工粘性系数，需要校验，通常取值范围为0.5\textasciitild
 数值扩散，而其他区域内的解不受影响。
 
 \subsubsection{TVD MacCormack格式}
+总变分减少（total variation diminishing, TVD)格式是高阶格式，可得到更加尖锐的激
+波解，并引入对解的界来避免出现虚假的振荡。一个函数$f$的总变分(TV)可定义为，
+\begin{equation}
+  TV(f) =
+  \sum_{i=-\infty}^{\infty}
+  |{f}_{i+1} - {f}_{i}|
+\end{equation}
+当差分格式满足下式时，该格式就是TVD的。
+\begin{equation}
+  TV({f}^{k+1}) \le TV({f}^{k})
+\end{equation}
+TVD格式在光滑解区域是二阶精度的，在非连续区域附近侦测到高梯度出现时
+降低到一阶精度，以便压制虚假振荡。
+二阶精度引入的数值弥散可通过在必要时引入数值扩散，切换到一阶精度格式，来抑制。
 
-\subsection{隐式格式}
+MacCormack格式的TVD格式由Garcia-Navarro等于1992年给出。在预测和校正步后，最终解
+通过增加一个耗散项来得出，
+\begin{equation}
+  \mathbf{U}_{i}^{k+1} =
+  \mathbf{U}_{i}^{pj} +
+  \frac{\Delta t}{\Delta x}
+  \left(
+    \mathbf{D}_{i+1/2}^{k} -
+    \mathbf{D}_{i-1/2}^{k}
+  \right)
+\end{equation}
+式中，扩散项$\mathbf{D}_{i+1/2}$由下式给出
+\begin{equation}
+  \mathbf{D}_{i+1/2}^{k} =
+  \frac{1}{2}
+  \sum_{n=1}^{2}
+  \alpha_{i+1/2}^{n}
+  \psi_{i+1/2}^{n}
+  \left(
+    1 - 
+    \frac{\Delta t}{\Delta x}
+    \left|
+    \lambda_{i+1/2}^{n}
+    \right|
+  \right)
+  \left(
+    1-\phi_{i+1/2}^{n}
+  \right)
+  \mathbf{e}_{i+1/2}^{n}
+\end{equation}
+平均速度和波速如下
+\begin{equation}
+  v_{i+1/2} = 
+  \frac
+  {v_{i}\sqrt{h_{i}} + v_{i+1}\sqrt{h_{i+1}}}
+  {\sqrt{h_{i}}+\sqrt{h_{i+1}}}
+  ,\quad
+  c_{i+1/2} =
+  \left(
+    g 
+    \frac{h_{i}+h_{i+1}}{2}
+  \right)^{1/2}
+\end{equation}
+特征值和平均特征值如下
+\begin{equation}
+  \lambda_{i}^{1,2} = v_{i}\pm c_{i}
+  ,\quad
+  \lambda_{i+1/2}^{1,2} = v_{i+1/2}\pm c_{i+1/2}
+\end{equation}
+特征向量定义如下
+\begin{equation}
+  \mathbf{e}_{i+1/2}^{1,2} 
+  =
+  \begin{bmatrix}
+    1 \\
+    \lambda_{i+1/2}^{1,2}
+  \end{bmatrix}
+\end{equation}
+函数$\psi$是一个定熵函数，用来避免非物理跳跃，由下式给出
+\begin{equation}
+  \psi_{i+1/2}^{1,2} =
+  \begin{cases}
+    |\lambda_{i+1/2}^{1,2}| & \mathrm{if} \quad |\lambda_{i+1/2}^{1,2}| \ge \varepsilon_{i+1/2}^{1,2} \\
+    \varepsilon_{i+1/2}^{1,2} & \mathrm{else}
+  \end{cases}
+\end{equation}
+其中，
+\begin{equation}
+\varepsilon_{i+1/2}^{1,2} =
+\max 
+\left(
+  0,
+  \lambda_{i+1/2}^{1,2} - \lambda_{i}^{1,2},
+  \lambda_{i+1}^{1,2} - \lambda_{i+1/2}^{1,2}
+\right)
+\end{equation}
+在节点$i$和$i+1$之间的$\mathbf{U}$在特征向量$\mathbf{e}_{i+1/2}^{1,2}$上的投影为
+\begin{equation}
+\alpha_{i+1/2}^{1,2} = 
+\frac{1}{2c_{i+1/2}^{1,2}}
+\left[
+  \mp\lambda_{i+1/2}^{2,1}(h_{i+1}-h_{i})
+  \pm
+  (hv)_{i+1} - (hv)_{i}
+\right]
+\end{equation}
+函数$\phi$是一个通量限制器，可采用下式计算。
+\begin{equation}
+\phi_{i+1/2}^{1,2} =
+\frac{r_{i+1/2}^{1,2}+(r_{i+1/2}^{1,2})^{2}}{1+(r_{i+1/2}^{1,2})^{2}}
+\end{equation}
+其中，
+\begin{equation}
+r_{i+1/2}^{1,2} =
+\frac{\alpha_{i+1/2-s}^{1,2}}{\alpha_{i+1/2}^{1,2}}
+\end{equation}
+\begin{equation}
+s = 
+\mathrm{sign}
+\left(
+  \lambda_{i+1/2}^{1,2}
+\right)
+\end{equation}
+该格式无需调参，且易于实现，推荐使用。
 
+% ToDo List start
+%\subsubsection{迎风格式}
+
+%\subsection{隐式格式}
+%\subsubsection{FTCN格式}
+%\subsubsection{龙格库塔CN格式}
+%\subsubsection{Pressimann格式}
+
+% ToDo List end
 
 \section{二维泊松方程求解}
 
