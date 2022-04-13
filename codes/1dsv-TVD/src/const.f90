@@ -32,6 +32,7 @@ module const
   real(kind=dp), parameter :: &
     zero = 0.0_dp, &
     one = 1.0_dp, &
+    minus_one = -1.0_dp, &
     two = 2.0_dp, &
     three = 3.0_dp, &
     four = 4.0_dp, &

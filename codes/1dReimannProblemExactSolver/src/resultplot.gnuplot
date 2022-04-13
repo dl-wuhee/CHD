@@ -1,7 +1,7 @@
 
 do for [i=0:10] {
     set term png
-    set output 'result'.i.'png'
+    set output 'result'.i.'.png'
     set xlabel "x"
     set ylabel "h"
     set y2label "u"
