@@ -313,7 +313,44 @@ s =
 % ToDo List end
 
 \section{二维泊松方程求解}
-
+二维泊松方程是水力学中一种常见的方程，如速度势函数、流函数等，方程形式如下：
+\begin{equation}
+  \frac{\partial^{2} f}{\partial x^{2}} +
+  \frac{\partial^{2} f}{\partial y^{2}}
+  =
+  S
+\end{equation}
+采用二阶偏导的二阶中心差分格式离散上式，可得
+\begin{equation}
+  \frac{f_{i+1,j} - 2f_{i, j} + f_{i-1,j}}{(\Delta x)^{2}} +
+  \frac{f_{i,j+1} - 2f_{i, j} + f_{i,j-1}}{(\Delta y)^{2}} 
+  =
+  S_{i,j}
+\end{equation}
+对均匀网格，$\Delta x=\Delta y=h$，上式可写成
+\begin{equation}
+  f_{i+1, j} + f_{i-1,j } - 4f_{i,j} + f_{i, j+1} + f_{i, j-1} = h^{2}S_{i,j}
+\end{equation}
+求解上式可以用第4章的迭代解法。对雅克比迭代，上式的迭代式为
+\begin{equation}
+  f_{i, j}^{k+1} = 
+\frac{1}{4}(f_{i-1,j }^{k} + f_{i, j-1}^{k} + f_{i+1, j}^{k} + f_{i, j+1}^{k}  - h^{2}S_{i,j})
+\end{equation}
+对高斯-赛德尔迭代，迭代式为
+\begin{equation}
+  f_{i, j}^{k+1} = 
+\frac{1}{4}(f_{i-1,j }^{k+1} + f_{i, j-1}^{k+1} + f_{i+1, j}^{k} + f_{i, j+1}^{k}  - h^{2}S_{i,j})
+\end{equation}
+对超松弛迭代，迭代式为
+\begin{equation}
+  f_{i, j}^{k+1} = 
+  (1-\alpha)f_{i, j}^{k}+
+  \frac{\alpha}{4}(f_{i-1,j }^{k+1} + f_{i, j-1}^{k+1} + f_{i+1, j}^{k} + f_{i, j+1}^{k}  - h^{2}S_{i,j})
+\end{equation}
+松弛因子$\alpha$的取值范围为1\textasciitilde 2，一般取1.5。
+\subsection{计算示例}
+在一个正方形区域内，$-1.0 \le x \le 1.0$，$-1.0 \le y \le 1.0$。在$(1,-0.5)$到
+$(-1,0.5)$边界上$f=1.0$，其他边界
 \section{二维输运扩散方程求解}
 %\section{二维浅水方程求解}
 %\subsection{网格基础}
