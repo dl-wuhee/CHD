@@ -12,7 +12,6 @@
 
 FC=gfortran
  
-OPENMPLIBS=-lopenmp
 #HDF5HOME=/path/to/hdf5
 #HDF5INC=$(HDF5HOME)/include
 #HDF5LIB=$(HDF5HOME)/lib
@@ -38,7 +37,7 @@ USERDEFAULTLIBS=
 #USERDEFAULTLIBDIR=$(USEDEFAULTHOME)/lib
 #USERDEFAULTLIBS=-la
 
-FFFLAGS=-std=gnu -Wall -fbounds-check
+FFFLAGS=-std=gnu -Wall -fbounds-check -fopenmp
 #FFFLAGS=-std=gnu -Wall -fbounds-check -I$(HDF5INC)
 #FFFLAGS=-std=gnu -ffree-form -Wall -g -fbounds-check
 LDFLAGS=-L$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS) $(OPENMPLIBS)

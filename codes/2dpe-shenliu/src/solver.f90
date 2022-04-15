@@ -8,6 +8,7 @@ module solver
   use config, only : con_imethod, con_eps, con_omega
   use log
   use output
+  use omp_lib
   implicit none
 
   abstract interface
@@ -17,8 +18,8 @@ module solver
 
   procedure(solve_method), pointer :: solve_method_ptr => null()
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: f, fo
-  !integer(kind=di), ALLOCATABLE, DIMENSION(:, :) :: internal_ij
-  !integer(kind=di) :: n_internal
+  integer(kind=di), ALLOCATABLE, DIMENSION(:, :) :: internal_ij
+  integer(kind=di) :: n_internal
 contains
   subroutine init_solver()
     implicit none
@@ -31,7 +32,8 @@ contains
       solve_method_ptr => ssor_iter
     case (di_4)
       solve_method_ptr => ssor_parallel_iter
-      !call initial_array(internal_ij, nx * ny , 2, di_0)
+      call initial_array(internal_ij, nx * ny , 2, di_0)
+      call set_internal()
     case default
       solve_method_ptr => guass_iter
     end select
@@ -44,6 +46,7 @@ contains
     implicit none
     call close_array(f)
     call close_array(fo)
+    call close_array(internal_ij)
   end subroutine close_solver
 
   
@@ -61,6 +64,22 @@ contains
 
     fo = f
   end subroutine initialize
+
+  subroutine set_internal()
+    implicit none
+    integer(kind=di) :: i, j
+    n_internal = di_0
+
+    do i = 2, nx-1
+      do j = 2, ny-1
+        if (.not. patch(i, j)) then
+          n_internal = n_internal + 1
+          internal_ij(n_internal, 1) = i
+          internal_ij(n_internal, 2) = j
+        end if
+      end do
+    end do
+  end subroutine set_internal
 
   function patch(i, j) result(p)
     implicit none
@@ -119,8 +138,22 @@ contains
     do i = li + 2, nx - 1
         f(i, ny) = 15.0_dp / (nx - li) * (i - li - 1)
     end do
-
   end subroutine set_bc
+
+  subroutine update_bc()
+    implicit none
+    integer(kind=di) :: i
+    integer(kind=di) :: li
+    li = nint(30.0_dp / h)
+    do i = 2, li - 1
+        f(i, ny) = f(i, ny-1)
+    end do
+    li = nint(45.0_dp / h)
+    do i = li + 2, nx - 1
+      f(i, ny) = f(i, ny-1)
+    end do
+
+  end subroutine update_bc
 
   function cal_diff() result (maxdiff)
     implicit none
@@ -171,14 +204,7 @@ contains
 
       call solve_method_ptr()
 
-      !do i = 2, nx-1
-        !do j = 2, ny-1
-          !if (.not. patch(i, j)) then
-            !f(i, j) = (1.0-1.5) * f(i, j) + 1.5_dp * 0.25_8 * (f(i+1,j) + f(i-1,j) + f(i, j+1) + f(i, j-1))
-          !end if
-        !end do
-      !end do
-
+      call update_bc()
     end do
 
     call close_log()
@@ -225,27 +251,34 @@ contains
 
   subroutine ssor_parallel_iter()
     implicit none
-    integer(kind=di) :: i, j
+    integer(kind=di) :: i
 
-    !n_internal = di_0
-
-    !do i = 2, nx-1
-      !do j = 2, ny-1
-        !if (.not. patch(i, j)) then
-          !n_internal = n_internal + 1
-          !internal_ij(n_internal, 1) = i
-          !internal_ij(n_internal, 2) = j
-        !end if
-      !end do
-    !end do
     
-    !#OMP PARALLEL WORKSHARE
-    forall (i = 2:nx-1, j=2:ny-1, .true.)
-        if (.not. patch(i, j)) then
-          f(i, j) = (1.0-con_omega) * f(i, j) + con_omega * 0.25_8 * (f(i+1,j) + f(i-1,j) + f(i, j+1) + f(i, j-1))
-        end if
-    end forall
-    !#OMP END PARALLEL WORKSHARE
+    do i = 1, n_internal
+      !print *, internal_ij(i, 1), internal_ij(i, 2)
+        f(internal_ij(i, 1), internal_ij(i, 2)) = (1.0-con_omega) * &
+          f(internal_ij(i, 1), internal_ij(i, 2)) + &
+          con_omega * 0.25_8 * &
+          ( &
+          f(internal_ij(i, 1)+1,internal_ij(i, 2)) + &
+          f(internal_ij(i, 1)-1,internal_ij(i, 2)) + &
+          f(internal_ij(i, 1),internal_ij(i, 2)+1) + &
+          f(internal_ij(i, 1),internal_ij(i, 2)-1) &
+          )
+    end do
+    !OMP PARALLEL WORKSHARE
+    !forall (i = 1:n_internal, .true.)
+        !f(internal_ij(i, 1), internal_ij(i, 2)) = (1.0-con_omega) * &
+          !f(internal_ij(i, 1), internal_ij(i, 2)) + &
+          !con_omega * 0.25_8 * &
+          !( &
+          !f(internal_ij(i, 1)+1,internal_ij(i, 2)) + &
+          !f(internal_ij(i, 1)-1,internal_ij(i, 2)) + &
+          !f(internal_ij(i, 1),internal_ij(i, 2)+1) + &
+          !f(internal_ij(i, 1),internal_ij(i, 2)-1) &
+          !)
+    !end forall
+    !OMP END PARALLEL WORKSHARE
   end subroutine ssor_parallel_iter
 
 

@@ -22,6 +22,7 @@ set style textbox opaque noborder margins 0.5,0.5
 
 set contour base
 set cntrparam levels incremental 0, 2, 14
+set cntrlabel format start 5 interval -1
 unset surface
 set view map
 
