@@ -62,7 +62,7 @@ contains
 
     call set_bc()
 
-    fo = f
+    fo(1:nx, 1:ny) = f(1:nx, 1:ny)
   end subroutine initialize
 
   subroutine set_internal()
@@ -142,17 +142,12 @@ contains
 
   subroutine update_bc()
     implicit none
-    integer(kind=di) :: i
     integer(kind=di) :: li
     li = nint(30.0_dp / h)
-    do i = 2, li - 1
-        f(i, ny) = f(i, ny-1)
-    end do
-    li = nint(45.0_dp / h)
-    do i = li + 2, nx - 1
-      f(i, ny) = f(i, ny-1)
-    end do
+    f(2:li-1, ny) = f(2:li-1, ny-1)
 
+    li = nint(45.0_dp / h)
+    f(li+2:nx-1, ny) = f(li+2:nx-1, ny-1)
   end subroutine update_bc
 
   function cal_diff() result (maxdiff)
@@ -190,7 +185,7 @@ contains
     do
       maxdiff = cal_diff()
       call write_log(k, maxdiff)
-      print *, k, maxdiff
+      write(unit=*, fmt="(A, I5, A, E15.7)") "Current time step:", k, ", residual:", maxdiff
       if (abs(maxdiff) < con_eps) then 
         call write_result(nx, ny, x, y, f)
         exit
@@ -251,20 +246,21 @@ contains
 
   subroutine ssor_parallel_iter()
     implicit none
-    integer(kind=di) :: i
-
+    integer(kind=di) :: k
     
-    do i = 1, n_internal
+    do k = 1, n_internal
+      associate( i=> internal_ij(k, 1), j =>internal_ij(k, 2) )
       !print *, internal_ij(i, 1), internal_ij(i, 2)
-        f(internal_ij(i, 1), internal_ij(i, 2)) = (1.0-con_omega) * &
-          f(internal_ij(i, 1), internal_ij(i, 2)) + &
+        f(i, j) = (1.0-con_omega) * &
+          f(i, j) + &
           con_omega * 0.25_8 * &
           ( &
-          f(internal_ij(i, 1)+1,internal_ij(i, 2)) + &
-          f(internal_ij(i, 1)-1,internal_ij(i, 2)) + &
-          f(internal_ij(i, 1),internal_ij(i, 2)+1) + &
-          f(internal_ij(i, 1),internal_ij(i, 2)-1) &
+          f(i+1, j) + &
+          f(i-1, j) + &
+          f(i,j+1) + &
+          f(i,j-1) &
           )
+      end associate
     end do
     !OMP PARALLEL WORKSHARE
     !forall (i = 1:n_internal, .true.)

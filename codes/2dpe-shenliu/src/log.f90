@@ -17,7 +17,7 @@ contains
     implicit none
     integer(kind=di), intent(in) :: n
     real(kind=dp), intent(in) :: residual
-    write(unit=log_funit, fmt="(I6, 1x, E17.7)") n, residual
+    write(unit=log_funit, fmt="(I6, 1x, E15.7)") n, residual
   end subroutine write_log
 
   subroutine close_log()
