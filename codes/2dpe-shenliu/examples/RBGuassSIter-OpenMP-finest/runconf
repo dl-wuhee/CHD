@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export MAINPORGRAM=./../../build/bin/main
+export MAINPORGRAM=./../../build/bin/main_release.exe
 export CONFINPUT=./conf
 export LOGFILE=run-$1.log
 export OMP_NUM_THREADS=$1

@@ -88,8 +88,6 @@ if (sources):
             ]
 
     head = [
-            "FC=gfortran",
-            " ",
             "#HDF5HOME=/path/to/hdf5",
             "#HDF5INC=$(HDF5HOME)/include",
             "#HDF5LIB=$(HDF5HOME)/lib",
@@ -98,12 +96,6 @@ if (sources):
             "#LAPACKLIBS=-llapack -L/path/to/lapack",
             "#MPILIBS=-lmpi -L/path/to/mpi",
             " ",
-            "OBJOUTDIR=./",
-            "#OBJOUTDIR=./intermediate/obj",
-            "",
-            "MODOUTDIR=$(OBJOUTDIR)",
-            "#MODOUTDIR=./intermediate/mod",
-            "",
             "USEDEFAULTHOME=./",
             "USERDEFAULTMODDIR=./",
             "USERDEFAULTLIBDIR=./",
@@ -114,11 +106,30 @@ if (sources):
             "#USERDEFAULTLIBDIR=$(USEDEFAULTHOME)/lib",
             "#USERDEFAULTLIBS=-la",
             "",
-            "FFFLAGS=-std=gnu -Wall -fbounds-check",
+            "FC=gfortran",
+            "",
+            "mode=debug",
+            "ifeq ($(mode), debug)",
+            "BUILDDIR=./build/debug",
+            "FFFLAGS=-std=gnu -Wall -fbounds-check -g -Ddebug -fopenmp",
             "#FFFLAGS=-std=gnu -Wall -fbounds-check -I$(HDF5INC)",
             "#FFFLAGS=-std=gnu -ffree-form -Wall -g -fbounds-check",
-            "LDFLAGS=-L$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS)",
-            "#LDFLAGS=$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS) $(BLASLIBS) $(LAPACKLIBS) $(MPILIBS) $(HDF5LIBS)"
+            "LDFLAGS=-fopenmp -L$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS)",
+            "#LDFLAGS=$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS) $(BLASLIBS) $(LAPACKLIBS) $(MPILIBS) $(HDF5LIBS)",
+            "else",
+            "BUILDDIR=./build/release",
+            "FFFLAGS=-std=gnu -Wall -fbounds-check -fopenmp",
+            "#FFFLAGS=-std=gnu -Wall -fbounds-check -I$(HDF5INC)",
+            "#FFFLAGS=-std=gnu -ffree-form -Wall -g -fbounds-check",
+            "LDFLAGS=-fopenmp -O3 -L$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS)",
+            "#LDFLAGS=$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS) $(BLASLIBS) $(LAPACKLIBS) $(MPILIBS) $(HDF5LIBS)",
+            "endif",
+            "OBJOUTDIR=$(BUILDDIR)/obj",
+            "MODOUTDIR=$(BUILDDIR)/mod",
+            "BINOUTDIR=$(BUILDDIR)/bin",
+            "LIBOUTDIR=$(BUILDDIR)/lib",
+            "", 
+            "PROGRAM=main_$(mode)"
             ]
 
     newext = []
@@ -131,9 +142,9 @@ if (sources):
             ".PHONY: clean veryclean",
             "",
             "clean:",
-            "	rm -f $(OBJOUTDIR)/*.o $(MODOUTDIR)/*.mod $(MODOUTDIR)/*.MOD ",
+            "	rm -f $(OBJOUTDIR)/*.o $(MODOUTDIR)/*.mod $(MODOUTDIR)/*.MOD $(LIBOUTDIR)/*.lib",
             "veryclean: clean",
-            "	rm -f $(PROGRAM)"
+            "	rm -f $(BINOUTDIR)/$(PROGRAM)"
             ]
 
 
@@ -144,10 +155,9 @@ if (sources):
     formatoutput(mfp, obj, 7, 2)
 
 
-    mfp.write("PROGRAM=main.out\n")
     mfp.write("\n")
     mfp.write("$(PROGRAM): $(OBJS)\n")
-    mfp.write("\t $(FC) -o $(PROGRAM) $^ $(LDFLAGS)\n\n")
+    mfp.write("\t$(FC) -o $(BINOUTDIR)/$(PROGRAM) $^ $(LDFLAGS)\n\n")
 
 
 
@@ -155,6 +165,11 @@ if (sources):
         mfp.write("$(OBJOUTDIR)/"+inf[0]+": "+inf[1] +' ' +' '.join(deps[inf[0]][1])+"\n")
         mfp.write("\t$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR) " + ' '.join(extincs[inf[0]][1]) + " -o $@\n\n")
 
+    mfp.write("\n")
+    mfp.write("$(OBJS): | $(BUILDDIR)\n")
+    mfp.write("\n")
+    mfp.write("$(BUILDDIR): \n")
+    mfp.write("\tmkdir -p $(BUILDDIR)/{bin,lib,obj,mod}\n\n")
 
     mfp.write("\n".join(tail))
     mfp.close()

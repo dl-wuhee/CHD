@@ -243,7 +243,7 @@ contains
     do
       maxdiff = cal_diff()
       call write_log(k, maxdiff)
-      write(unit=*, fmt="(A, I5, A, E15.7)") "Current iteration step:", k, ", residual:", maxdiff
+      write(unit=*, fmt="(A, I5, A, E14.6)") "Iter. step:", k, ", residual:", maxdiff
       if (abs(maxdiff) < con_eps) then 
         call write_result(nx, ny, x, y, f)
         exit
