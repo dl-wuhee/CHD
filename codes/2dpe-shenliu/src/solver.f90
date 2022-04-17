@@ -8,6 +8,7 @@ module solver
   use config, only : con_imethod, con_eps, con_omega
   use log
   use output
+  use time
   use omp_lib
   implicit none
 
@@ -16,7 +17,6 @@ module solver
     end subroutine solve_method
   end interface
 
-  real(kind=dp) :: start, finish
   procedure(solve_method), pointer :: solve_method_ptr => null()
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: f, fo
   integer(kind=di), ALLOCATABLE, DIMENSION(:, :) :: internal_ij
@@ -31,6 +31,7 @@ contains
     select case (con_imethod)
     case (di_1) ! Jacobean Iteration
       solve_method_ptr => jacob_iter 
+      call initial_array(fo, nx, ny, zero)
     case (di_2) ! Guass Seidel Iteration
       solve_method_ptr => guass_iter
     case (di_3) ! Sucssor Overrelation Iteration
@@ -44,7 +45,7 @@ contains
       call initial_array(red_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
       call initial_array(black_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
       call set_redblack()
-    case (di_6) ! Red Black GS Iteration
+    case (di_6) ! Red Black GS Iteration -- OpenMP
       solve_method_ptr => rbguass_openmp_iter
       call initial_array(red_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
       call initial_array(black_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
@@ -54,7 +55,6 @@ contains
     end select
 
     call initial_array(f, nx, ny, zero)
-    call initial_array(fo, nx, ny, zero)
   end subroutine init_solver
 
   subroutine close_solver()
@@ -79,7 +79,9 @@ contains
 
     call set_bc()
 
-    fo(1:nx, 1:ny) = f(1:nx, 1:ny)
+    if (con_imethod == 1) then
+      fo(1:nx, 1:ny) = f(1:nx, 1:ny)
+    end if
   end subroutine initialize
 
   subroutine set_internal()
@@ -224,6 +226,7 @@ contains
     implicit none
     integer(kind=di) :: k
     real(kind=dp) :: maxdiff
+    real(kind=dp) :: wtime
 
 
     call init_solver()
@@ -235,11 +238,12 @@ contains
 
     k = di_0 
 
-    call cpu_time(start)
+    call timestamp("Start at ")
+    wtime = omp_get_wtime()
     do
       maxdiff = cal_diff()
       call write_log(k, maxdiff)
-      !write(unit=*, fmt="(A, I5, A, E15.7)") "Current iteration step:", k, ", residual:", maxdiff
+      write(unit=*, fmt="(A, I5, A, E15.7)") "Current iteration step:", k, ", residual:", maxdiff
       if (abs(maxdiff) < con_eps) then 
         call write_result(nx, ny, x, y, f)
         exit
@@ -255,8 +259,9 @@ contains
 
       call update_bc()
     end do
-    call cpu_time(finish)
-    print "('Time = ', F10.3, ' seconds.')" , finish - start
+    wtime = omp_get_wtime() - wtime
+    print "('Total time = ', F10.3, ' seconds')", wtime 
+    call timestamp("End at ")
 
     call close_log()
 
@@ -369,10 +374,8 @@ contains
   subroutine rbguass_openmp_iter()
     implicit none
     integer(kind=di) :: k
-    real(kind=dp) :: start, finish
 
-    call cpu_time(start)
-    !$OMP PARALLEL shared(f, red_ij) private(k)
+    !$OMP PARALLEL shared(f, red_ij, black_ij, n_red, n_black) private(k)
     !$omp do
     do k = 1, n_red
       associate( i=> red_ij(k, 1), j =>red_ij(k, 2) )
@@ -388,9 +391,7 @@ contains
       end associate
     end do
     !$omp end do
-    !$OMP END PARALLEL
 
-    !$OMP PARALLEL shared(f, black_ij) private(k)
     !$omp do
     do k = 1, n_black
       associate( i=> black_ij(k, 1), j =>black_ij(k, 2) )
@@ -407,9 +408,6 @@ contains
     end do
     !$omp end do
     !$OMP END PARALLEL
-
-    call cpu_time(finish)
-    print "('Time = ', F9.6, ' seconds.')" , finish - start
   end subroutine rbguass_openmp_iter
 
 end module solver
