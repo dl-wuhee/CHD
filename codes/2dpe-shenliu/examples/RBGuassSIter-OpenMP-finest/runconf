@@ -1,0 +1,10 @@
+#!/bin/sh
+
+export MAINPORGRAM=./../../build/bin/main
+export CONFINPUT=./conf
+export LOGFILE=run-$1.log
+export OMP_NUM_THREADS=$1
+echo "OpenMP Threads Number: $OMP_NUM_THREADS" > $LOGFILE
+
+
+$MAINPORGRAM < $CONFINPUT >> $LOGFILE 

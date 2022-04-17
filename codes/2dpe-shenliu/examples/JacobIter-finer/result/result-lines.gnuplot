@@ -1,5 +1,5 @@
 set term epscairo enhanced crop size 5,4
-set output "guass-finer-contourlines.eps"
+set output "jacob-finer-contourlines.eps"
 
 
 set arrow 1  from 30,50 to 30,46 nohead 
@@ -28,11 +28,11 @@ set view map
 
 set xrange [0:75]
 set yrange [0:50]
-splot "guass-finer-result.dat" w l notitle , \
+splot "jacob-finer-result.dat" w l notitle , \
       "" w labels boxed notitle
 
 set term pngcairo enhanced crop
-set output "guass-finer-contourlines.png"
+set output "jacob-finer-contourlines.png"
 replot
 
 set output 
