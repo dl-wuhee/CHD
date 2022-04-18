@@ -110,14 +110,14 @@ if (sources):
             "",
             "mode=debug",
             "ifeq ($(mode), debug)",
-            "BUILDDIR=./build/debug",
+            "BUILDDIR=./../build/debug",
             "FFFLAGS=-std=gnu -Wall -fbounds-check -g -Ddebug -fopenmp",
             "#FFFLAGS=-std=gnu -Wall -fbounds-check -I$(HDF5INC)",
             "#FFFLAGS=-std=gnu -ffree-form -Wall -g -fbounds-check",
             "LDFLAGS=-fopenmp -L$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS)",
             "#LDFLAGS=$(USERDEFAULTLIBDIR) $(USERDEFAULTLIBS) $(BLASLIBS) $(LAPACKLIBS) $(MPILIBS) $(HDF5LIBS)",
             "else",
-            "BUILDDIR=./build/release",
+            "BUILDDIR=./../build/release",
             "FFFLAGS=-std=gnu -Wall -fbounds-check -fopenmp",
             "#FFFLAGS=-std=gnu -Wall -fbounds-check -I$(HDF5INC)",
             "#FFFLAGS=-std=gnu -ffree-form -Wall -g -fbounds-check",
@@ -129,7 +129,11 @@ if (sources):
             "BINOUTDIR=$(BUILDDIR)/bin",
             "LIBOUTDIR=$(BUILDDIR)/lib",
             "", 
-            "PROGRAM=main_$(mode)"
+            "ifeq ($(OS), Window_NT)",
+            "PROGRAM=main_$(mode).exe",
+            "else",
+            "PROGRAM=main_$(mode)",
+            "endif"
             ]
 
     newext = []

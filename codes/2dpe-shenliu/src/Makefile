@@ -8,7 +8,7 @@
 #Please contact danlee@whu.edu.cn if you have any suggestion
 #
 
-#Generated at 2022-04-17 23:48:59
+#Generated at 2022-04-18 08:47:40
 
 #HDF5HOME=/path/to/hdf5
 #HDF5INC=$(HDF5HOME)/include
@@ -51,55 +51,59 @@ MODOUTDIR=$(BUILDDIR)/mod
 BINOUTDIR=$(BUILDDIR)/bin
 LIBOUTDIR=$(BUILDDIR)/lib
 
+ifeq ($(OS), Window_NT)
+PROGRAM=main_$(mode).exe
+else
 PROGRAM=main_$(mode)
+endif
 
 OMP_LIB_DIR=$(USERDEFAULTMODDIR)
 #OMP_LIB_DIR=$(HDF5INC)
 
-SOURCES=mesh.f90 config.f90 array.f90 solver.f90 output.f90 geometry.f90 log.f90\
-        precision.f90 main.f90 time.f90 const.f90 io.f90
+SOURCES=geometry.f90 const.f90 time.f90 io.f90 main.f90 config.f90 output.f90\
+        array.f90 mesh.f90 solver.f90 precision.f90 log.f90
 
-OBJS=$(OBJOUTDIR)/mesh.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/array.o $(OBJOUTDIR)/solver.o $(OBJOUTDIR)/output.o $(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/log.o\
-     $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/main.o $(OBJOUTDIR)/time.o $(OBJOUTDIR)/const.o $(OBJOUTDIR)/io.o
+OBJS=$(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/const.o $(OBJOUTDIR)/time.o $(OBJOUTDIR)/io.o $(OBJOUTDIR)/main.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/output.o\
+     $(OBJOUTDIR)/array.o $(OBJOUTDIR)/mesh.o $(OBJOUTDIR)/solver.o $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/log.o
 
 
 $(PROGRAM): $(OBJS)
 	$(FC) -o $(BINOUTDIR)/$(PROGRAM) $^ $(LDFLAGS)
 
-$(OBJOUTDIR)/mesh.o: mesh.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/const.o $(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/array.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/config.o: config.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/io.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/array.o: array.f90 $(OBJOUTDIR)/precision.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/solver.o: solver.f90 $(OBJOUTDIR)/log.o $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/mesh.o $(OBJOUTDIR)/const.o $(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/output.o $(OBJOUTDIR)/io.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/array.o $(OBJOUTDIR)/time.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR) -I$(OMP_LIB_DIR) -o $@
-
-$(OBJOUTDIR)/output.o: output.f90 $(OBJOUTDIR)/config.o $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/io.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
 $(OBJOUTDIR)/geometry.o: geometry.f90 $(OBJOUTDIR)/precision.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/log.o: log.f90 $(OBJOUTDIR)/config.o $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/io.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/precision.o: precision.f90 
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/main.o: main.f90 $(OBJOUTDIR)/config.o $(OBJOUTDIR)/solver.o $(OBJOUTDIR)/mesh.o
-	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
-
-$(OBJOUTDIR)/time.o: time.f90 $(OBJOUTDIR)/precision.o
 	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
 
 $(OBJOUTDIR)/const.o: const.f90 $(OBJOUTDIR)/precision.o
 	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
 
+$(OBJOUTDIR)/time.o: time.f90 $(OBJOUTDIR)/precision.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
 $(OBJOUTDIR)/io.o: io.f90 $(OBJOUTDIR)/precision.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/main.o: main.f90 $(OBJOUTDIR)/mesh.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/solver.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/config.o: config.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/io.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/output.o: output.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/io.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/array.o: array.f90 $(OBJOUTDIR)/precision.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/mesh.o: mesh.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/array.o $(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/const.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/solver.o: solver.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/log.o $(OBJOUTDIR)/array.o $(OBJOUTDIR)/time.o $(OBJOUTDIR)/mesh.o $(OBJOUTDIR)/output.o $(OBJOUTDIR)/geometry.o $(OBJOUTDIR)/io.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/const.o
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR) -I$(OMP_LIB_DIR) -o $@
+
+$(OBJOUTDIR)/precision.o: precision.f90 
+	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
+
+$(OBJOUTDIR)/log.o: log.f90 $(OBJOUTDIR)/precision.o $(OBJOUTDIR)/config.o $(OBJOUTDIR)/io.o
 	$(FC) $(FFFLAGS) -c $< -J$(MODOUTDIR)  -o $@
 
 
