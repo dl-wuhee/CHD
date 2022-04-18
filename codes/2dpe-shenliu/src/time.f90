@@ -1,10 +1,11 @@
 module time
   use precision
   implicit none
+  public timestamp
 contains
   subroutine timestamp(descr_str)
     implicit none
-    character(len=*), intent(in) :: descr_str
+    character(len=*), intent(in), optional :: descr_str
     character(len=8) :: date
     character(len=10) :: time
     character(len=5) :: zone
@@ -20,8 +21,13 @@ contains
     second = date_time(7)
     millisecond = date_time(8)
 
-    write(*, "(A, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
-      descr_str, year, month, day, hour, minute, second, millisecond
+    if (present(descr_str)) then
+      write(*, "(A, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
+        descr_str, year, month, day, hour, minute, second, millisecond
+    else
+      write(*, "(1x, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
+        year, month, day, hour, minute, second, millisecond
+    end if
 
   end subroutine timestamp
 end module

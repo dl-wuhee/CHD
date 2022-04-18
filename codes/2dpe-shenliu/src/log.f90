@@ -1,15 +1,18 @@
 module log
   use precision
-  use config, only: con_log_filename
+  use config, only: log_filename => con_log_filename
   use fio, only: open_file_to_write
   implicit none
-  character(len=255) :: log_filename
-  integer(kind=fi) :: log_funit
+
+  public log_funit
+
+  public open_log, write_log, close_log
+
+  integer(kind=si) :: log_funit
 
 contains
   subroutine open_log()
     implicit none
-    log_filename = con_log_filename
     call open_file_to_write(log_filename, log_funit)
   end subroutine open_log
 

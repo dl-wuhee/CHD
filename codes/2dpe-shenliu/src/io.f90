@@ -1,6 +1,10 @@
 module fio
   use precision
+  use const
   implicit none
+  private get_unit
+
+  public open_file_to_read, open_file_to_write
 contains
   subroutine get_unit ( iunit )
     !*****************************************************************************80
@@ -39,16 +43,16 @@ contains
     !    Output, integer IUNIT, the free unit number.
     !
     implicit none
-    integer(kind=fi), intent(inout) :: iunit
-    integer(kind=fi) :: i
-    integer(kind=fi) :: ios
-    logical(kind=fi) :: lopen
+    integer(kind=si), intent(inout) :: iunit
+    integer(kind=si) :: i
+    integer(kind=si) :: ios
+    logical(kind=si) :: lopen
 
-    iunit = 0
-    do i = 1_fi, 99_fi
-      if ( i /= 5_fi .and. i /= 6_fi .and. i /= 9_fi ) then
+    iunit = si_0
+    do i = si_1, si_9 * (si_10 + si_1)
+      if ( i /= si_5 .and. i /= si_6 .and. i /= si_9 ) then
         inquire ( unit = i, opened = lopen, iostat = ios )
-        if ( ios == 0 ) then
+        if ( ios == si_0 ) then
           if ( .not. lopen ) then
             iunit = i
             return
@@ -62,8 +66,8 @@ contains
     subroutine open_file_to_read(filename, unit_f)
       implicit none
       character(len=*), intent(in) :: filename 
-      integer(kind=fi), intent(inout) :: unit_f
-      integer(kind=fi) :: f_status
+      integer(kind=si), intent(inout) :: unit_f
+      integer(kind=si) :: f_status
       call get_unit(unit_f)
       open(unit=unit_f, file=filename, &
         status = "old", action="read", iostat = f_status)
@@ -80,8 +84,8 @@ contains
     subroutine open_file_to_write(filename, unit_f)
       implicit none
       character(len=*), intent(in) :: filename 
-      integer(kind=fi), intent(inout) :: unit_f
-      integer(kind=fi) :: f_status
+      integer(kind=si), intent(inout) :: unit_f
+      integer(kind=si) :: f_status
       call get_unit(unit_f)
       open(unit=unit_f, file=filename, &
         status = "replace", action="write", iostat = f_status)

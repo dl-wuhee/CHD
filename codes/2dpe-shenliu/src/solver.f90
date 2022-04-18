@@ -14,6 +14,10 @@ module solver
   use omp_lib
   implicit none
 
+  private solve_method_ptr, f, fo
+  private internal_ij, n_internal, red_ij, black_ij, n_red, n_black, f1, f2
+  public solve
+
   abstract interface
     subroutine solve_method()
     end subroutine solve_method

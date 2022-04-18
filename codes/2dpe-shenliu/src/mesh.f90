@@ -5,6 +5,11 @@ module mesh
     use array
     use config, only : con_h
     implicit none
+
+    public nx, ny, h, x, y
+
+    public gen_mesh, del_mesh
+
     integer(kind=di) :: nx, ny
     real(kind=dp) :: h
     real(kind=dp), ALLOCATABLE, DIMENSION(:,:) :: x, y

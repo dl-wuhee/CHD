@@ -2,6 +2,11 @@ module config
   use precision
   use fio
   implicit none
+  public con_h, con_omega, con_eps, con_imethod, con_result_filename, &
+    con_log_filename
+
+  public read_from_config
+
   real(kind=dp) :: con_h, con_omega, con_eps
   integer(kind=di) :: con_imethod
   character(len=255) :: &
@@ -12,7 +17,7 @@ module config
 contains
   subroutine read_from_config()
     implicit none
-    integer(kind=fi) :: config_funit
+    integer(kind=si) :: config_funit
 
     read(*, *)config_filename
     call open_file_to_read(config_filename, config_funit)

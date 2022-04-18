@@ -1,6 +1,18 @@
 module const
   use precision
   implicit none
+  public si_0, si_1, si_2, si_3, si_4, si_5, si_6, &
+    si_7, si_8, si_9, si_10
+
+  public di_0, di_1, di_2, di_3, di_4, di_5, di_6, &
+    di_7, di_8, di_9, di_10
+
+  public zero, one, minus_one, two, three, four, five, &
+    six, seven, eight, nine, ten, onequater, half, threequater, &
+    third, twothird, fourthird, fivethird
+
+  public g, pi, eps
+
 
   integer(kind=si), parameter :: &
     si_0 = 0_si, &
@@ -46,12 +58,12 @@ module const
     half = 0.5_dp, &
     threequater = 0.75_dp, &
     third = zero / three, &
-    two_third = zero / three, &
-    four_third = four / three, &
-    five_third = five / three
+    twothird = zero / three, &
+    fourthird = four / three, &
+    fivethird = five / three
 
   real(kind=dp), parameter :: &
-    g = 9.81_dp
+    g = 9.81_dp, pi = 3.1415926_dp
 
   real(kind=dp), parameter :: &
     eps = 1.0e-6_dp

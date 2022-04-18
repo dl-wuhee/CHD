@@ -1,6 +1,8 @@
 module array
     use precision
     implicit none
+    public initial_array, close_array
+
     interface initial_array
         module procedure initial_array_di_1d, &
                          initial_array_dp_1d, &
@@ -137,6 +139,7 @@ contains
             end if
         end if
     end subroutine close_array_dp_2d
+
 end module
 
 
