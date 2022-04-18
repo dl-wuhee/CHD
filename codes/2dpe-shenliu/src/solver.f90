@@ -5,7 +5,9 @@ module solver
   use mesh
   use array
   use fio
-  use config, only : con_imethod, con_eps, con_omega
+  use config, only : imethod => con_imethod, &
+                     user_eps => con_eps, &
+                     omega => con_omega
   use log
   use output
   use time
@@ -25,10 +27,12 @@ module solver
   integer(kind=di), ALLOCATABLE, DIMENSION(:,:) :: black_ij
   integer(kind=di) :: n_red, n_black
 
+  ! for mg_iter and mg_openmp_iter
+  real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: f1, f2
 contains
   subroutine init_solver()
     implicit none
-    select case (con_imethod)
+    select case (imethod)
     case (di_1) ! Jacobean Iteration
       solve_method_ptr => jacob_iter 
       call initial_array(fo, nx, ny, zero)
@@ -36,20 +40,30 @@ contains
       solve_method_ptr => guass_iter
     case (di_3) ! Sucssor Overrelation Iteration
       solve_method_ptr => ssor_iter
-    case (di_4) ! OpenMP SSOR
-      solve_method_ptr => ssor_parallel_iter
-      call initial_array(internal_ij, nx * ny , 2, di_0)
-      call set_internal()
+    case (di_4) ! GMERS
+      solve_method_ptr => gmers_iter
     case (di_5) ! Red Black GS Iteration
       solve_method_ptr => rbguass_iter
-      call initial_array(red_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
-      call initial_array(black_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
+      call initial_array(red_ij, (nx+di_1)*(ny+di_1)/di_2, di_2, di_0)
+      call initial_array(black_ij, (nx+di_1)*(ny+di_1)/di_2, di_2, di_0)
       call set_redblack()
-    case (di_6) ! Red Black GS Iteration -- OpenMP
+    case (di_6) ! MultiGrid
+      solve_method_ptr => mg_iter
+      call initial_array(f1, nx/di_2+di_1, ny/di_2+di_1, zero)
+      call initial_array(f2, nx/di_4+di_1, ny/di_4+di_1, zero)
+    case (di_10 + di_1) ! OpenMP Jacobean
+      solve_method_ptr => ssor_parallel_iter
+      call initial_array(internal_ij, nx * ny , di_2, di_0)
+      call set_internal()
+    case (di_10 + di_2) ! Red Black GS SOR Iteration -- OpenMP
       solve_method_ptr => rbguass_openmp_iter
-      call initial_array(red_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
-      call initial_array(black_ij, (nx+1)*(ny+1)/di_2, 2, di_0)
+      call initial_array(red_ij, (nx+di_1)*(ny+di_1)/di_2, di_2, di_0)
+      call initial_array(black_ij, (nx+di_1)*(ny+di_1)/di_2, di_2, di_0)
       call set_redblack()
+    case (di_10 + di_3) ! GMERS -- OpenMP
+      solve_method_ptr => gmers_openmp_iter
+    case (di_10 + di_4) ! MultiGrid -- OpenMP
+      solve_method_ptr => mg_openmp_iter
     case default
       solve_method_ptr => guass_iter
     end select
@@ -64,6 +78,8 @@ contains
     call close_array(internal_ij)
     call close_array(red_ij)
     call close_array(black_ij)
+    call close_array(f1)
+    call close_array(f2)
   end subroutine close_solver
 
   
@@ -71,16 +87,16 @@ contains
     implicit none
     integer(kind=di) :: i, j
 
-    do i = 1, nx
-      do j = 1, ny
+    do i = di_1, nx
+      do j = di_1, ny
         f(i, j) = zero
       end do 
     end do
 
     call set_bc()
 
-    if (con_imethod == 1) then
-      fo(1:nx, 1:ny) = f(1:nx, 1:ny)
+    if (imethod == di_1) then
+      fo(di_1:nx, di_1:ny) = f(di_1:nx, di_1:ny)
     end if
   end subroutine initialize
 
@@ -89,12 +105,12 @@ contains
     integer(kind=di) :: i, j
     n_internal = di_0
 
-    do i = 2, nx-1
-      do j = 2, ny-1
+    do i = di_2, nx-di_1
+      do j = di_2, ny-di_1
         if (.not. patch(i, j)) then
-          n_internal = n_internal + 1
-          internal_ij(n_internal, 1) = i
-          internal_ij(n_internal, 2) = j
+          n_internal = n_internal + di_1
+          internal_ij(n_internal, di_1) = i
+          internal_ij(n_internal, di_2) = j
         end if
       end do
     end do
@@ -244,7 +260,7 @@ contains
       maxdiff = cal_diff()
       call write_log(k, maxdiff)
       write(unit=*, fmt="(A, I5, A, E14.6)") "Iter. step:", k, ", residual:", maxdiff
-      if (abs(maxdiff) < con_eps) then 
+      if (abs(maxdiff) < user_eps) then 
         call write_result(nx, ny, x, y, f)
         exit
       end if
@@ -299,7 +315,7 @@ contains
     do i = 2, nx-1
       do j = 2, ny-1
         if (.not. patch(i, j)) then
-          f(i, j) = (1.0-con_omega) * f(i, j) + con_omega * 0.25_8 * (f(i+1,j) + f(i-1,j) + f(i, j+1) + f(i, j-1))
+          f(i, j) = (1.0-omega) * f(i, j) + omega * 0.25_8 * (f(i+1,j) + f(i-1,j) + f(i, j+1) + f(i, j-1))
         end if
       end do
     end do
@@ -312,9 +328,9 @@ contains
     do k = 1, n_internal
       associate( i=> internal_ij(k, 1), j =>internal_ij(k, 2) )
       !print *, internal_ij(i, 1), internal_ij(i, 2)
-        f(i, j) = (1.0-con_omega) * &
+        f(i, j) = (1.0-omega) * &
           f(i, j) + &
-          con_omega * 0.25_8 * &
+          omega * 0.25_8 * &
           ( &
           f(i+1, j) + &
           f(i-1, j) + &
@@ -344,9 +360,9 @@ contains
     do k = 1, n_red
       associate( i=> red_ij(k, 1), j =>red_ij(k, 2) )
       !print *, internal_ij(i, 1), internal_ij(i, 2)
-        f(i, j) = (1.0-con_omega) * &
+        f(i, j) = (1.0-omega) * &
           f(i, j) + &
-          con_omega * 0.25_8 * &
+          omega * 0.25_8 * &
           ( &
           f(i+1, j) + &
           f(i-1, j) + &
@@ -358,9 +374,9 @@ contains
     do k = 1, n_black
       associate( i=> black_ij(k, 1), j =>black_ij(k, 2) )
       !print *, internal_ij(i, 1), internal_ij(i, 2)
-        f(i, j) = (1.0-con_omega) * &
+        f(i, j) = (1.0-omega) * &
           f(i, j) + &
-          con_omega * 0.25_8 * &
+          omega * 0.25_8 * &
           ( &
           f(i+1, j) + &
           f(i-1, j) + &
@@ -379,9 +395,9 @@ contains
     !$omp do
     do k = 1, n_red
       associate( i=> red_ij(k, 1), j =>red_ij(k, 2) )
-        f(i, j) = (1.0-con_omega) * &
+        f(i, j) = (1.0-omega) * &
           f(i, j) + &
-          con_omega * 0.25_8 * &
+          omega * 0.25_8 * &
           ( &
           f(i+1, j) + &
           f(i-1, j) + &
@@ -395,9 +411,9 @@ contains
     !$omp do
     do k = 1, n_black
       associate( i=> black_ij(k, 1), j =>black_ij(k, 2) )
-        f(i, j) = (1.0-con_omega) * &
+        f(i, j) = (1.0-omega) * &
           f(i, j) + &
-          con_omega * 0.25_8 * &
+          omega * 0.25_8 * &
           ( &
           f(i+1, j) + &
           f(i-1, j) + &
@@ -409,5 +425,56 @@ contains
     !$omp end do
     !$OMP END PARALLEL
   end subroutine rbguass_openmp_iter
+
+  subroutine gmers_iter()
+    implicit none
+    print *, ""
+  end subroutine gmers_iter
+
+  subroutine gmers_openmp_iter()
+    implicit none
+    print *, ""
+  end subroutine gmers_openmp_iter
+
+  subroutine mg_iter()
+    implicit none
+    integer(kind=di), parameter :: layer = di_3
+
+    ! finest mesh
+    call guass_iter()
+
+
+  contains
+    subroutine update_finer(f_coarse, f_finer)
+      implicit none
+      real(kind=dp), DIMENSION(:, :), intent(in) :: f_coarse
+      real(kind=dp), DIMENSION(:, :), intent(inout) :: f_finer
+      
+    end subroutine update_finer
+
+    subroutine update_coarser(f_finer, f_coarse)
+      implicit none
+      real(kind=dp), DIMENSION(:, :), intent(in) :: f_finer
+      real(kind=dp), DIMENSION(:, :), intent(inout) :: f_coarse
+    end subroutine update_coarser
+  end subroutine mg_iter
+
+  subroutine mg_openmp_iter()
+    implicit none
+
+    print *, ""
+
+  contains
+    subroutine update_openmp_finer()
+      implicit none
+    print *, ""
+    end subroutine update_openmp_finer
+
+    subroutine update_openmp_coarser()
+      implicit none
+    print *, ""
+    end subroutine update_openmp_coarser
+
+  end subroutine mg_openmp_iter
 
 end module solver
