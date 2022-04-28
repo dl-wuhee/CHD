@@ -1,7 +1,7 @@
-set terminal pdfcairo enhanced size 15,5
-set output "iterationcompare.pdf"
-#set terminal pngcairo enhanced size 2160,720
-#set output "iterationcompare.png"
+#set terminal pdfcairo enhanced size 15,5
+#set output "iterationcompare.pdf"
+set terminal pngcairo enhanced size 2160,720
+set output "iterationcompare.png"
 
 set xlabel "Iteration step"
 
@@ -55,6 +55,7 @@ set title "Finer Grid (375x250)"
 jacob_finer_log = "JacobIter-finer/result/jacob-finer-log.dat"
 guass_finer_log = "GuassSIter-finer/result/guass-finer-log.dat"
 rbguass_finer_log = "RBGuassSIter-finer/result/rbguass-finer-log.dat"
+ssor1_9_rbguass_finer_log = "RBGuassSIter-OpenMP-finer/result/rbguass-openmp-finer-log.dat"
 #ssor1_5_finer_log = "SSORIter-finer/result/ssor1_5-finer-log.dat"
 #ssor1_7_finer_log = "SSORIter-finer/result/ssor1_7-finer-log.dat"
 #ssor1_8_finer_log = "SSORIter-finer/result/ssor1_8-finer-log.dat"
@@ -62,6 +63,7 @@ ssor1_9_finer_log = "SSORIter-finer/result/ssor1_9-finer-log.dat"
 plot jacob_finer_log w l ls 1 title "Jacobean Iter", \
      guass_finer_log w l ls 2 title "GuassSidel Iter", \
      rbguass_finer_log w l ls 3 title "Red Black GuassSidel Iter", \
+     ssor1_9_rbguass_finer_log w l ls 4 title "SSOR Red Black GuassSidel Iter Omega=1.9", \
      ssor1_9_finer_log w l ls 6 title "SOR Iter Omega=1.9"
      #ssor1_5_finer_log w l ls 3 title "SOR Iter Omega=1.5", \
      #ssor1_7_finer_log w l ls 4 title "SOR Iter Omega=1.7", \

@@ -39,7 +39,7 @@ contains
   subroutine init_solver()
     implicit none
     !call initial_array(solver_data)
-    solve_method_ptr => solver_maccormack
+    solve_method_ptr => solver_maccormack_tvd
 
     cfl = eight / ten 
 

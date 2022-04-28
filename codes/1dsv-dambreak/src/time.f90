@@ -22,8 +22,8 @@ contains
     millisecond = date_time(8)
 
     if (present(descr_str)) then
-      write(*, "(A, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
-        descr_str, year, month, day, hour, minute, second, millisecond
+      write(*, "(A, 1x, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
+        trim(descr_str), year, month, day, hour, minute, second, millisecond
     else
       write(*, "(1x, i4, '-', i2.2, '-', i2.2, ' ', i2.2, ':', i2.2, ':', i2.2, '.', i3.3)") &
         year, month, day, hour, minute, second, millisecond

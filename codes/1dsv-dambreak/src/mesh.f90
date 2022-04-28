@@ -13,11 +13,11 @@ contains
         integer(kind=di) :: i
         !dl = ten * five
         !nl = nint(l / dl)
-        nl = 500
-        dl = nint(l / nl) + 1
+        dl = 0.1_dp
+        nl = nint(l / nl) + di_1
         call initial_array(x, nl, zero)
         do i = di_1, nl
-            x(i) = zero + (i - 1) * dl
+            x(i) = zero + (i - di_1) * dl
         end do
     end subroutine gen_mesh
 

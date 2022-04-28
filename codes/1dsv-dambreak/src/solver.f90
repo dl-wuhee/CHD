@@ -10,6 +10,7 @@ module solver
   use unsteady
   use boundary
   use fio
+  use output
   implicit none
 
   abstract interface
@@ -30,14 +31,21 @@ module solver
 
   procedure(solve_method), pointer :: solve_method_ptr => null()
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
-    h, a, xi, r ! pf: hydrostatic pressure force
+    h, a, xi, r, c
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
-    q, v, sf
+    vel, q, cel
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
-    vec_u, vec_f, vec_g
+    vec_u, vec_f
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
-    vec_u_1, vec_u_2, vec_u_o
+    vec_d, vec_e_1, vec_e_2
+  real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
+    vec_u_o, vec_u_1, vec_u_2
   real(kind=dp) :: cfl
+  ! used in MacCormack TVD scheme
+  real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
+    v_mid, c_mid
+  real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
+    speed, speed_mid, epsi, psi, alfa, phi, visco_d
 contains
   subroutine init_solver()
     implicit none
@@ -46,23 +54,21 @@ contains
 
     cfl = eight / ten 
 
-    call initial_array(h, nl+di_1, zero)
-    call initial_array(a, nl+di_1, zero)
-    call initial_array(xi, nl+di_1, zero)
-    call initial_array(r, nl+di_1, zero)
-    call initial_array(pf, nl+di_1, zero)
-    call initial_array(q, nl+di_1, zero)
-    call initial_array(v, nl+di_1, zero)
-    call initial_array(sf, nl+di_1, zero)
+    call initial_array(h, nl, zero)
+    call initial_array(a, nl, zero)
+    call initial_array(xi, nl, zero)
+    call initial_array(r, nl, zero)
+    call initial_array(v, nl, zero)
+    call initial_array(q, nl, zero)
+    call initial_array(c, nl, zero)
 
-    call initial_array(vec_u, nl+di_1, di_2, zero)
-    call initial_array(vec_f, nl+di_1, di_2, zero)
-    call initial_array(vec_g, nl+di_1, di_2, zero)
-
-    call initial_array(vec_u_1, nl+di_1, di_2, zero)
-    call initial_array(vec_u_2, nl+di_1, di_2, zero)
-    call initial_array(vec_u_o, nl+di_1, di_2, zero)
-
+    call initial_array(vec_u, nl, di_2, zero)
+    call initial_array(vec_f, nl, di_2, zero)
+    call initial_array(vec_d, nl, di_2, zero)
+    call initial_array(vec_e, nl, di_2, zero)
+    call initial_array(vec_u_o, nl, di_2, zero)
+    call initial_array(vec_u_1, nl, di_2, zero)
+    call initial_array(vec_u_2, nl, di_2, zero)
   end subroutine init_solver
 
   subroutine close_solver()
@@ -72,18 +78,18 @@ contains
     call close_array(a)
     call close_array(xi)
     call close_array(r)
-    call close_array(pf)
     call close_array(q)
     call close_array(v)
-    call close_array(sf)
+    call close_array(c)
 
     call close_array(vec_u)
     call close_array(vec_f)
-    call close_array(vec_g)
-
+    call close_array(vec_d)
+    call close_array(vec_e)
+    call close_array(vec_u_o)
     call close_array(vec_u_1)
     call close_array(vec_u_2)
-    call close_array(vec_u_o)
+
   end subroutine close_solver
 
   subroutine update(vec_u, nodes)
@@ -94,59 +100,40 @@ contains
     if (present(nodes)) then
       n_nodes = size(nodes)
       do i = di_1, n_nodes
-        a(nodes(i)) = vec_u(nodes(i), 1)
-        q(nodes(i)) = vec_u(nodes(i), 2)
-        h(nodes(i)) = a(nodes(i)) / b
-        xi(nodes(i)) = wet_perimeter(h(i))
-        r(nodes(i)) = a(nodes(i)) / xi(nodes(i))
-        pf(nodes(i)) = hydrostatic_pressure_force(a(nodes(i)))
-        v(nodes(i)) = q(nodes(i)) / a(nodes(i))
-        sf(nodes(i)) = friction_slope(q(nodes(i)), r(nodes(i)), a(nodes(i)))
-      end do
-      do i = di_1, n_nodes
-        vec_f(nodes(i), di_1) = q(nodes(i))
-        vec_f(nodes(i), di_2) = flux_f(q(nodes(i)), a(nodes(i)), pf(nodes(i)))
-        vec_g(nodes(i), di_1) = zero
-        vec_g(nodes(i), di_2) = flux_g(a(nodes(i)), sf(nodes(i)))
+        associate (cur_i => nodes(i))
+          h(cur_i) = vec_u(cur_i, 1)
+          a(cur_i) = h(cur_i) * b
+          xi(cur_i) = wet_perimeter(h(cur_i))
+          r(cur_i) = a(cur_i) / xi(cur_i)
+          q(cur_i) = vec_u(cur_i, 2)
+          vel(cur_i) = q(cur_i) / h(cur_i)
+          cel(cur_i) = sqrt(g * h(i))
+
+          vec_f(cur_i, di_1) = q(cur_i)
+          vec_f(cur_i, di_2) = flux_f(h(cur_i), vel(cur_i))
+        end associate
       end do
     else
-      ! bug here 
-      ! caused by the first and last element of vec_u_1 and vec_u_2 
-      ! have not been set correctly
-      ! to solve bug, just set
-      ! do i = di_1, nl + di_1
-      ! to
-      do i = di_2, nl
-        a(i) = vec_u(i, 1)
-        q(i) = vec_u(i, 2)
-        h(i) = a(i) / b
+      do i = di_2, nl - 1
+        h(i) = vec_u(i, 1)
+        a(i) = h(i) / b
         xi(i) = wet_perimeter(h(i))
         r(i) = a(i) / xi(i)
-        pf(i) = hydrostatic_pressure_force(a(i))
-        v(i) = q(i) / a(i)
-        sf(i) = friction_slope(q(i), r(i), a(i))
-      end do
-      do i = di_2, nl
+        q(i) = vel_u(i, 2)
+        vel(i) = q(i) / h(i)
+        cel(i) = sqrt(g * h(i))
+
         vec_f(i, di_1) = q(i)
-        vec_f(i, di_2) = flux_f(q(i), a(i), pf(i))
-        vec_g(i, di_1) = zero
-        vec_g(i, di_2) = flux_g(a(i), sf(i))
+        vec_f(i, di_2) = flux_f(h(i), vel(i))
       end do
     end if
   contains
-    function flux_f(l_q, l_a, l_pf) result (f)
+    function flux_f(cur_h, cur_v) result (f)
       implicit none
-      real(kind=dp), intent(in) :: l_q, l_a, l_pf
+      real(kind=dp), intent(in) :: cur_h, cur_v
       real(kind=dp) :: f
-      f = l_q ** two / l_a + g * l_pf
+      f = cur_h * cur_v**2 + half * g * cur_h**2
     end function flux_f
-
-    function flux_g(l_a, l_sf) result (source_g)
-      implicit none
-      real(kind=dp), intent(in) :: l_a, l_sf
-      real(kind=dp) :: source_g
-      source_g = g * l_a * (s0 - l_sf)
-    end function flux_g
   end subroutine update
 
 
@@ -154,20 +141,19 @@ contains
     implicit none
     integer(kind=di) :: i 
 
-    call set_bc(vec_u(di_1, di_1), vec_u(nl+di_1, di_1), vec_u(di_1, di_2), vec_u(nl+di_1, di_2))
-    call update(vec_u, (/1, nl+di_1 /))
-    do i = di_2, nl
+    call set_bc(vec_u(di_1, di_1), vec_u(nl, di_1), vec_u(di_1, di_2), vec_u(nl, di_2))
+    call update(vec_u, (/1, nl/))
+    do i = di_2, nl - 1
       h(i) = h(1)
       if (x(i) > three * ten) then
-        h(i) = h(nl+di_1)
+        h(i) = h(nl)
       end if
-      a(i) = h(i) * b
-      q(i) = zero
-      vec_u(i, 1) = a(i)
-      vec_u(i, 2) = q(I)
+      vel(i) = zero
+      vec_u(i, 1) = h(i)
+      vec_u(i, 2) = vel(i)
     end do
     call update(vec_u)
-    call output(x, h, v, a, q, nl, t_cur, output_funit)
+    call output(x, h, vel, nl, t_cur, output_funit)
   end subroutine initialize
 
   subroutine solve()
@@ -182,7 +168,7 @@ contains
 
     do ti = 1, nt
       !do
-      t_delta = calc_t_delta(v, h, dl, cfl)
+      t_delta = calc_t_delta(vel, h, dl, cfl)
       if (t_delta < zero) then
         write(log_funit, "(A21, F10.3)") "# Float Error at t = ", t_cur
         exit
@@ -200,22 +186,19 @@ contains
       lambda =  t_delta / dl
 
 
-      call set_bc(vec_u(di_1, di_1), vec_u(nl+di_1, di_1), vec_u(di_1, di_2), vec_u(nl+di_1, di_2))
-      call update(vec_u, (/1, nl+di_1 /))
+      call set_bc(vec_u(di_1, di_1), vec_u(nl, di_1), vec_u(di_1, di_2), vec_u(nl, di_2))
+      call update(vec_u, (/1, nl /))
 
 
       vec_u_o = vec_u
 
       call solve_method_ptr(lambda)
 
-      !call McCromark_TVD()
-
-
       call update(vec_u)
 
       !if (output_cur <= size(arr_output_t)) then
       if (t_cur == output_cur_t) then
-        call output(x, h, v, a, q, nl, t_cur, output_funit)
+        call output(x, h, vel, nl, t_cur, output_funit)
         output_cur = output_cur + 1
       end if
       !end if
@@ -232,7 +215,7 @@ contains
 
     do i = di_2, nl
       do j = di_1, di_2
-        vec_u_1(i, j) = vec_u_o(i, j) - lambda * (vec_f(i+di_1, j) - vec_f(i, j)) + t_delta * vec_g(i, j)
+        vec_u_1(i, j) = vec_u_o(i, j) - lambda * (vec_f(i+di_1, j) - vec_f(i, j))
       end do
     end do
 
@@ -246,13 +229,13 @@ contains
 
     do i = di_2, nl
       do j = di_1, di_2
-        vec_u_2(i, j) = vec_u_o(i, j) - lambda * (vec_f(i, j) - vec_f(i-di_1, j)) + t_delta * vec_g(i, j)
+        vec_u_2(i, j) = vec_u_o(i, j) - lambda * (vec_f(i, j) - vec_f(i-di_1, j))
       end do
     end do
 
     write(log_funit, "(A)")"#    End of Correct Step"
 
-    do i = di_2, nl
+    do i = di_2, nl - di_1
       do j = di_1, di_2
         vec_u(i, j) = half * (vec_u_1(i, j) + vec_u_2(i, j))
       end do
@@ -263,87 +246,95 @@ contains
     implicit none
     real(kind=dp), intent(in) :: lambda
     integer(kind=di) :: i, j
+    integer(kind=di) :: n_mid
 
     call solver_maccormack(lambda)
 
-    do i = di_2, nl
+    write(log_funit, "(A)")"#   Start of TVD" 
+    
+    n_mid = nl - di_1
+    ! base
+    do i = di_1, n_mid
+      v_mid(i) = (vel(i)*sqrt(h(i)) + vel(i+1)*sqrt(h(i+di_1)) ) / (sqrt(h(i)) + sqrt(h(i+di_1)))
+      c_mid(i) = sqrt(half * g * (h(i) + h(i+1)))
+      speed(i, di_1) = vel(i) + cel(i)
+      speed(i, di_2) = vel(i) - cel(i)
+      speed_mid(i, di_1) = v_mid(i) + c_mid(i)
+      speed_mid(i, di_2) = v_mid(i) - c_mid(i)
+    end do 
 
-        u_bar = u_mid(i)
-        c_bar = c_mid(i)
-        a_bar_1 = u_bar + c_bar
-        a_bar_2 = u_bar - c_bar
-        abs_a_bar_1 = abs(a_bar_1)
-        abs_a_bar_2 = abs(a_bar_2)
-        e_bar_1(1) = 1
-        e_bar_1(2) = a_bar_1
-        e_bar_2(1) = 1
-        e_bar_2(2) = a_bar_2
-        psi_1 = psi(abs_a_bar_1)
-        psi_2 = psi(abs_a_bar_2)
-        alpha_0_1 = alpha(u_bar, c_bar, one, i)
-        alpha_0_2 = alpha(u_bar, c_bar, minus_one, i)
-
-
-      vec_u(i, 1) = lambda * ()
+    ! cal epsi
+    do i = di_1, n_mid
       do j = di_1, di_2
-        vec_u(i, j) = vec_u(i, j) + 
+        associate ( &
+            diff1 => speed_mid(i, j) - speed(i, j), &
+            diff2 => speed(i+1, j) - speed_mid(i, j) )
+          epsi(i, j) = zero
+          diff1 = speed_mid(i, j) - speed(i, j)
+          diff2 = speed(i+1, j) - speed_mid(i, j)
+          if (diff1 > epsi(i, j)) then
+            epsi(i, j) = diff1
+          end if 
+          if (diff2 > epsi(i, j)) then
+            epsi(i, j) = diff2
+          end if 
+        end associate
       end do
     end do
 
-  contains
-    function cal_r_mid(cur_alpha, cur_i) result (r_mid)
-      implicit none
-      integer(kind=di), intent(in) :: cur_i
-      real(kind=dp), intent(in) :: cur_alpha
-      real(kind=dp) :: r_mid 
-    end function cal_r_mid
+    ! cal psi
+    do i = di_1, n_mid
+      do j = di_1, di_2
+        if (abs(speed_mid(i, j)) > epsi(i, j)) then
+          psi(i, j) = abs(speed_mid(i, j))
+        else
+          psi(i, j) = epsi(i, j)
+        end if
+      end do 
+    end do
 
-    function cal_alpha(u_bar, c_bar, signal, cur_i) result (alpha)
-      implicit none
-      integer(kind=di), intent(in) :: cur_i
-      real(kind=dp), intent(in) :: u_bar, c_bar, signal
-      real(kind=dp) :: alpha, new_c_bar
-      new_c_bar = signal * c_bar
-      alpha = half / new_c_bar * & (
-        q(cur_i + di_1) - q(cur_i) + &
-        (-u_bar + new_c_bar) * (a(cur_i + di_1) - a(cur_i)) )
-    end function cal_alpha
+    ! cal alpha 
+    do i = di_1, n_mid
+      associate ( &
+          h_diff => vec_u(i+1, 1) - vec_u(i, 1), &
+          q_diff => vec_u(i+1, 2) - vec_u(i, 2), &
+          coeff => half / c_mid(i) )
+        alfa(i, 1) = coeff * ( -speed_mid(i, 1) * h_diff + q_diff)
+        alfa(i, 2) = coeff * ( speed_mid(i, 2) * h_diff - q_diff)
+      end associate
+    end do
 
-    function cal_psi(a_bar) result (psi)
-      implicit none
-      real(kind=dp), intent(in) :: a_bar
-      real(kind=dp) :: delta
-      delta = 0.2
-      if (a_bar >= delta) then
-        psi = a_bar
-      else
-        psi = delta
-      end if
-    end function cal_psi
+    ! cal phi 
+    do i = di_2, n_mid - di_1
+      do j = di_1, di_2
+        associate ( s => nint( speed_mid(i, j) / abs( spped_mid(i, j) ) ) )
+          if (abs(alfa(i, j)) < eps) then
+            r = zero
+          else
+            r = alfa(i-s, j) / alfa(i, j)
+          end if
+        end associate
+        phi(i, j) = r * (one + r) / (one + r**2)
+      end do
+    end do i
 
-    function cal_u_mid(cur_i) result (u_mid)
-      integer(kind=di), intent(in) :: cur_i
-      real(kind=dp) :: q_0, q_1, a_0, a_1
-      real(kind=dp) :: u_mid
-      q_0 = q(cur_i)
-      q_1 = q(cur_i + di_1)
-      a_0 = sqrt(a(cur_i))
-      a_1 = sqrt(a(cur_i + di_1))
-      
-      u_mid = (q_1 / a_1 + q_0 / a_0) / (a_1 + a_0)
-    end function cal_u_mid
+    ! cal viscocity D
+    do i = di_2, n_mid
+      do j = di_1, di_2
+        factor(i, j) = alfa(i, j) * psi(i, j) * (1 - lambda * abs(speed_mid(i, j))) * (1 - phi(i, j))
+      end do
+      visco_d(i, 1) = factor(i, 1) + factor(i, 2)
+      visco_d(i, 2) = factor(i, 1) * speed_mid(i, 1) + factor(i, 2) * speed_mid(i, 2)
+    end do
 
-    function cal_c_mid(cur_i) result (c_mid)
-      integer(kind=di), intent(in) :: cur_i
-      real(kind=dp) :: h_0, h_1
-      real(kind=dp) :: c_mid
-      h_0 = h(cur_i)
-      h_1 = h(cur_i + di_1)
-      
-      c_mid = (sqrt(g * h_0) + sqrt(g * h_1)) ** 2 / four
-    end function cal_c_mid
+    ! TVD 
+    do i = di_2, nl - di_1
+      do j = di_1, di_2
+        vec_u(i, j) = vec_u(i, j) + lambda * (visco_d(i, j) - visco_d(i-1, j))
+      end do
+    end do
 
-
+    write(log_funit, "(A)")"#   End of TVD" 
   end subroutine solver_maccormack_TVD
 
 end module solver
