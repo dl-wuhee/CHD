@@ -35,6 +35,6 @@ contains
         implicit none
         real(kind=dp), intent(in) :: r, q, a
         real(kind=dp) :: sf
-        sf = (q * n / a) ** two / r ** four_third 
+        sf = (q * n / a) ** two / r ** fourthird 
     end function friction_slope
 end module channel 
