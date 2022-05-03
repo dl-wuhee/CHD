@@ -139,5 +139,5 @@ contains
         implicit none
         call close_array(arr_output_ns)
         call close_array(arr_output_t)
-    end subroutine del_time
+    end subroutine del_unsteady
 end module unsteady

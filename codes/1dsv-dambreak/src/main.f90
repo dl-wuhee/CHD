@@ -2,19 +2,17 @@ program main
     use const
     use channel
     use mesh
-    use time
+    use unsteady
     use solver
     use fio
+    use config, only : read_from_config
     implicit none
-    call set_files()
-    call gen_channel()
+    call read_from_config()
+
+    call init_channel()
     call gen_mesh()
-    call set_time()
+    call set_unsteady()
 
     call solve()
-
-    call del_time()
-    call del_mesh()
-    call close_files()
 
 end program main
