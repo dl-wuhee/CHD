@@ -10,7 +10,7 @@ contains
     character(len=5) :: zone
     integer(kind=di), dimension(1:8) :: date_time
     integer(kind=di) year, month, day, hour, minute, second, millisecond
-    character(len=21) :: cur_timestamp
+    character(len=24) :: cur_timestamp
 
     call date_and_time(date, time, zone, date_time)
     year = date_time(1)

@@ -27,7 +27,7 @@ contains
     write(result_funit, "('#', A3, ',', 3(A10, ','), A10)") &
       "i", "t", "x", "h", "v"
     do i = di_1, nl
-      write(result_funit, "(I4, ',', 3(F10.3, ','), F10.3)") &
+      write(result_funit, "(I6, ',', 3(F10.3, ','), F10.3)") &
         i, t_cur, x(i), h(i), v(i)
     end do
     write(result_funit, "(A70)") "#"//repeat("=", 69)

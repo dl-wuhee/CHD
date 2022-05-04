@@ -2,6 +2,7 @@ module unsteady
     use precision
     use const
     use array
+    use config, only : con_dt
     implicit none
     ! t_total: the flow will be computed to t_total
     ! t_cur: time of current compute
@@ -35,7 +36,7 @@ contains
         implicit none
         t_total = ten
         t_cur = zero
-        t_delta = half
+        t_delta = con_dt
         t_delta_specified = t_delta
 
         dt_policy = si_2

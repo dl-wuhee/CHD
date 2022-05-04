@@ -22,7 +22,7 @@ contains
     implicit none
     CHARACTER(len=*), intent(in) :: logs
     logical, intent(in), optional :: log_timestamp
-    character(len=21) :: cur_timestamp
+    character(len=24) :: cur_timestamp
     if (present(log_timestamp)) then
       cur_timestamp = timestamp()
       write(unit=log_funit, fmt="(A, ':', 1x, A21)")trim(logs), cur_timestamp

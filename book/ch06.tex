@@ -176,7 +176,7 @@ MacCormack格式中非物理振荡可以通过引入人工扩散来降低。在�
 ${\varepsilon}_{i}$是基于水深计算得出的参数。
 \begin{equation}
   {\varepsilon}_{i} =
-  \frac{|h_{i+1}-h_{i}+h_{i-1}|}{|h_{i+1}|-|h_{i}|+|h_{i-1}|}
+  \frac{|h_{i+1}-2h_{i}+h_{i-1}|}{|h_{i+1}|+2|h_{i}|+|h_{i-1}|}
 \end{equation}
 $K$为人工粘性系数，需要校验，通常取值范围为0.5\textasciitilde 3。这一格式只在振荡发展区域内引入
 数值扩散，而其他区域内的解不受影响。

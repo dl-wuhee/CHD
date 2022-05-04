@@ -3,6 +3,7 @@ module mesh
     use const
     use channel 
     use array
+    use config, only : con_dx
     implicit none
     integer(kind=di) :: nl
     real(kind=dp) :: dl
@@ -13,8 +14,8 @@ contains
         integer(kind=di) :: i
         !dl = ten * five
         !nl = nint(l / dl)
-        dl = 0.1_dp
-        nl = nint(l / nl) + di_1
+        dl = con_dx
+        nl = nint(l / dl) + di_1
         call initial_array(x, nl, zero)
         do i = di_1, nl
             x(i) = zero + (i - di_1) * dl

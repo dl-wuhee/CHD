@@ -1,0 +1,7 @@
+#!/bin/sh
+
+export MAINPORGRAM=./../../build/debug/bin/main_debug
+export CONFINPUT=./conf
+export LOGFILE=err.logs
+
+time $MAINPORGRAM < $CONFINPUT >> $LOGFILE 

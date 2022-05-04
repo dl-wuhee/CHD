@@ -39,6 +39,10 @@ module solver
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
     vec_u_o, vec_u_1, vec_u_2
   real(kind=dp) :: cfl
+  ! used in MacCormack Artificial Viscosity
+  real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
+    art_epsi
+
   ! used in MacCormack TVD scheme
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
     v_mid, c_mid
@@ -49,19 +53,6 @@ contains
     implicit none
     integer(kind=di) :: i_method
     !call initial_array(solver_data)
-    i_method = di_3
-    select case (i_method)
-    case (di_1)
-      solve_method_ptr => solver_maccormack
-    case (di_2)
-      solve_method_ptr => solver_maccormack_artives
-    case (di_3)
-      solve_method_ptr => solver_maccormack_tvd
-    case default
-      solve_method_ptr => solver_maccormack
-    end select
-
-
     cfl = eight / ten 
 
     call initial_array(h, nl, zero)
@@ -78,10 +69,19 @@ contains
     call initial_array(vec_u_1, nl, di_2, zero)
     call initial_array(vec_u_2, nl, di_2, zero)
 
-    !speed, speed_mid, epsi_mid, psi_mid, alfa_mid, phi_mid, visco_d
-    if (i_method == di_3) then
+    i_method = con_imethod
+    select case (i_method)
+    case (di_1)
+      solve_method_ptr => solver_maccormack
+    case (di_2)
+      solve_method_ptr => solver_maccormack_artives
+      call initial_array(art_epsi, nl, zero)
+    case (di_3)
+      solve_method_ptr => solver_maccormack_tvd
       call initial_array(speed, nl, di_2, zero)
       associate (n_mid => nl - di_1)
+        call initial_array(v_mid, n_mid, zero)
+        call initial_array(c_mid, n_mid, zero)
         call initial_array(speed_mid, n_mid, di_2, zero)
         call initial_array(epsi_mid, n_mid, di_2, zero)
         call initial_array(psi_mid, n_mid, di_2, zero)
@@ -90,7 +90,10 @@ contains
         call initial_array(factor_mid, n_mid, di_2, zero)
         call initial_array(visco_mid, n_mid, di_2, zero)
       end associate
-    end if
+    case default
+      solve_method_ptr => solver_maccormack
+    end select
+
 
     call open_result()
     call open_log()
@@ -114,6 +117,10 @@ contains
     call close_array(vec_u_1)
     call close_array(vec_u_2)
 
+    call close_array(art_epsi)
+
+    call close_array(v_mid)
+    call close_array(c_mid)
     call close_array(speed_mid)
     call close_array(epsi_mid)
     call close_array(psi_mid)
@@ -144,7 +151,7 @@ contains
           r(cur_i) = a(cur_i) / xi(cur_i)
           q(cur_i) = vec_u(cur_i, 2)
           vel(cur_i) = q(cur_i) / h(cur_i)
-          cel(cur_i) = sqrt(g * h(i))
+          cel(cur_i) = sqrt(g * h(cur_i))
 
           vec_f(cur_i, di_1) = q(cur_i)
           vec_f(cur_i, di_2) = flux_f(h(cur_i), vel(cur_i))
@@ -260,7 +267,7 @@ contains
     write(log_info, "(A)") "#    Start of Predictor Step"
     call write_log(trim(log_info))
 
-    do i = di_2, nl
+    do i = di_2, nl - di_1
       do j = di_1, di_2
         vec_u_1(i, j) = vec_u_o(i, j) - lambda * (vec_f(i+di_1, j) - vec_f(i, j))
       end do
@@ -278,7 +285,7 @@ contains
     write(log_info, "(A)")"#    Start of Correct Step"
     call write_log(trim(log_info))
 
-    do i = di_2, nl
+    do i = di_2, nl-di_1
       do j = di_1, di_2
         vec_u_2(i, j) = vec_u_o(i, j) - lambda * (vec_f(i, j) - vec_f(i-di_1, j))
       end do
@@ -299,14 +306,46 @@ contains
     implicit none
     real(kind=dp), intent(in) :: lambda
     integer(kind=di) :: i, j
+    real(kind=dp), parameter :: k = two
+    real(kind=dp) :: z1, z2
+
     call solver_maccormack(lambda)
 
+    log_info = ""
+    write(log_info, "(A)")"#   Start of Calibrated Artificial Viscosity" 
+    call write_log(trim(log_info))
+
+
+    art_epsi(1) = abs(h(2) - two * h(1) + h(2)) / &
+      (abs(h(2)) + two * abs(h(1)) + abs(h(2)))
     do i = di_2, nl - di_1
+      art_epsi(i) = abs(h(i+1) - two * h(i) + h(i-1)) / &
+        (abs(h(i+1)) + two * abs(h(i)) + abs(h(i-1)))
+    end do
+    art_epsi(nl) = abs(h(nl-1) - two * h(nl) + h(nl-1)) / &
+      (abs(h(nl-1)) + two * abs(h(nl)) + abs(h(nl-1)))
+
+    do i = di_2, nl - di_1
+      if (art_epsi(i) > art_epsi(i+1)) then
+        z1 = k * art_epsi(i)
+      else
+        z1 = k * art_epsi(i+1)
+      end if
+      if (art_epsi(i) > art_epsi(i-1)) then
+        z2 = k * art_epsi(i)
+      else
+        z2 = k * art_epsi(i-1)
+      end if
       do j = di_1, di_2
-        vec_u(i, j) = vec_u(i, j) ! + & 
-          !lambda * (visco_mid(i, j) - visco_mid(i-1, j))
+        vec_u(i, j) = vec_u(i, j) + &
+          z1 * (vec_u(i+1, j) - vec_u(i, j)) - &
+          z2 * (vec_u(i, j) - vec_u(i-1, j))
       end do
     end do
+
+    log_info = ""
+    write(log_info, "(A)")"#   End of Calibrated Artificial Viscosity" 
+    call write_log(trim(log_info))
   end subroutine solver_maccormack_artives
 
   subroutine solver_maccormack_TVD(lambda)
@@ -393,14 +432,19 @@ contains
             !r = zero
             alfa_mid(i, j) = eps
           end if
-          r_mid = alfa_mid(i-s, j) / alfa_mid(i, j)
+          if (i-s == 0 .or. i-s == nl) then 
+            print *, i, s
+            r_mid = one
+          else
+            r_mid = alfa_mid(i-s, j) / alfa_mid(i, j)
+          end if
         end associate
         phi_mid(i, j) = r_mid * (one + r_mid) / (one + r_mid**2)
       end do
     end do
 
     ! cal viscocity D
-    do i = di_2, nl - di_1
+    do i = di_1, n_mid
       do j = di_1, di_2
         factor_mid(i, j) = alfa_mid(i, j) * psi_mid(i, j) * &
           (one - lambda * abs(speed_mid(i, j))) * &
