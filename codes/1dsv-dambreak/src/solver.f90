@@ -433,7 +433,6 @@ contains
             alfa_mid(i, j) = eps
           end if
           if (i-s == 0 .or. i-s == nl) then 
-            print *, i, s
             r_mid = one
           else
             r_mid = alfa_mid(i-s, j) / alfa_mid(i, j)
