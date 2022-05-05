@@ -93,7 +93,7 @@ D =
 \end{equation}
 由此可见，Lax扩散格式是不相容的。因此，对给定的$\Delta x$，如果降低CFL值，计算采
 用的$\Delta t$也会降低，$D$会增加，求解过程中会表现出更大的扩散性。因此，该扩散
-古城具有网格相关性。
+格式具有网格相关性。
 
 
 %\subsubsection{迎风格式}
@@ -152,7 +152,7 @@ MacCormack格式中非物理振荡可以通过引入人工扩散来降低。在�
   \mathbf{U}_{i-1}^{\mathrm{pj}}
   )
 \end{equation}
-基于这一思想，Jameson等人提出一种更容易实现的方法。上式改写为：
+基于这一思想，Jameson等人\cite{ref6}提出一种更容易实现的方法。上式改写为：
 \begin{equation}
   \mathbf{U}_{i}^{k+1} =
   \mathbf{U}_{i}^{\mathrm{pj}} +
@@ -197,7 +197,7 @@ TVD格式在光滑解区域是二阶精度的，在非连续区域附近侦测�
 降低到一阶精度，以便压制虚假振荡。
 二阶精度引入的数值弥散可通过在必要时引入数值扩散，切换到一阶精度格式，来抑制。
 
-MacCormack格式的TVD格式由Garcia-Navarro等于1992年给出。在预测和校正步后，最终解
+MacCormack格式的TVD格式由Garcia-Navarro\cite{ref7}等于1992年给出。在预测和校正步后，最终解
 通过增加一个耗散项来得出，
 \begin{equation}
   \mathbf{U}_{i}^{k+1} =
@@ -311,6 +311,33 @@ s =
 %\subsubsection{Pressimann格式}
 
 % ToDo List end
+\subsection{下游有水的缓流溃坝波}
+考虑光滑平底矩形渠道内的溃坝波问题。
+渠道总长$L=100\mathrm{m}$，
+坝面所在位置$x=30\mathrm{m}$，
+上游水深$h_{u}=0.2\mathrm{m}$，
+下游水深$h_{d}=0.1\mathrm{m}$。
+三种MacCormack格式计算结果如图\ref{FgEx_ori_result_t_5}、\ref{FgEx_art_result_t_5}和\ref{FgEx_tvd_result_t_5}所示。
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=8cm]{FgEx_ori_result_t_5.pdf}
+  \caption{MacCormack格式计算结果}
+  \label{FgEx_ori_result_t_5}
+\end{figure}
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=8cm]{FgEx_art_result_t_5.pdf}
+  \caption{MacCormack人工粘性格式计算结果}
+  \label{FgEx_art_result_t_5}
+\end{figure}
+\begin{figure}[!htb]
+  \centering
+  \includegraphics[width=8cm]{FgEx_tvd_result_t_5.pdf}
+  \caption{MacCormack TVD格式计算结果}
+  \label{FgEx_tvd_result_t_5}
+\end{figure}
+
+
 
 \section{二维泊松方程求解}
 二维泊松方程是水力学中一种常见的方程，如速度势函数、流函数等，方程形式如下：
@@ -349,9 +376,72 @@ s =
 \end{equation}
 松弛因子$\alpha$的取值范围为1\textasciitilde 2，一般取1.5。
 \subsection{计算示例}
-在一个正方形区域内，$-1.0 \le x \le 1.0$，$-1.0 \le y \le 1.0$。在$(1,-0.5)$到
-$(-1,0.5)$边界上$f=1.0$，其他边界
-\section{二维输运扩散方程求解}
+速度流函数满足
+\begin{equation}
+  \frac{\partial^{2}\psi }{\partial x^{2}} +
+  \frac{\partial^{2}\psi }{\partial y^{2}} =
+  0
+\end{equation}
+在一个长方形区域内，$0 \le x \le 75$，$0 \le y \le 50$。不透水地基多边形由下列点
+形成(30,50)--(30,46) -- (31,46)
+--(31,40) -- (32,40) -- (32,46) --(33,46) -- (33,48) -- (44,48) -- (44,46) --
+(45,46) -- (45,50) -- (30,50)。 
+
+在(0,50) -- (0,0) -- (75,0) -- (75,50)边界上流函
+数$\psi=15$。
+在(30,50)--(30,46)
+--(31,40) -- (32,40) -- (32,46) --(33,46) -- (33,48) -- (44,48) -- (44,46) --
+(45,46) -- (45,50)边界上$\psi=0$。
+在(0,50)--(30,50)，(45,50)--(75,50)这两条边界上$\frac{\partial\psi }{\partial n}
+=0$。网格尺寸$\Delta x=\Delta y=0.5$。渗流计算区域和网格如图
+\ref{fig_2dshenliu_region}所示。
+\begin{figure}[htb]
+  \centering
+  \begin{tikzpicture}
+    \draw (0,5.0) -- (0,0) -- (7.5,0) -- (7.5,5.0) -- cycle;
+    \draw[fill=black] (3.0,5.0)--(3.0,4.6) -- (3.1,4.6)
+      --(3.1,4.0) -- (3.2,4.0) -- (3.2,4.6) --(3.3,4.6) -- (3.3,4.8) -- (4.4,4.8) --
+      (4.4,4.6) --
+      (4.5,4.6) -- (4.5,5.0) -- cycle; 
+    \draw[red, thick] (0,5.0) -- (0,0) -- (7.5,0) -- (7.5,5.0);
+    \draw[blue, thick] (3.0,5.0)--(3.0,4.6) -- (3.1,4.6)
+      --(3.1,4.0) -- (3.2,4.0) -- (3.2,4.6) --(3.3,4.6) -- (3.3,4.8) -- (4.4,4.8) --
+      (4.4,4.6) --
+      (4.5,4.6) -- (4.5,5.0); 
+    \draw[brown, thick] (0,5.0) -- (3.0,5.0);
+    \draw[brown, thick] (4.5,5.0) -- (7.5,5.0);
+    \foreach \y in {0,1,...,50}
+    \draw[thin] (0, 0.1*\y) -- (7.5,0.1*\y);
+    \foreach \x in {0,1,...,75}
+    \draw[thin] (0.1*\x,0) -- (0.1*\x, 5.0);
+
+  \end{tikzpicture}
+  \caption{二维渗流流函数计算区域}
+  \label{fig_2dshenliu_region}
+\end{figure}
+
+采用迭代法计算结果如图\ref{FgEx_2dshenliu_flood}和\ref{FgEx_2dshenliu_lines}所示。
+不同迭代法的到达收敛所需迭代步数对比见图\ref{FgEx_2dshenliu_iteration}所示。
+\begin{figure}[htb]
+  \centering
+  \includegraphics{FgEx_2dshenliu_flood.eps}
+  \caption{二维渗流流函数分布云图}
+  \label{FgEx_2dshenliu_flood}
+\end{figure}
+\begin{figure}[htb]
+  \centering
+  \includegraphics{FgEx_2dshenliu_lines.eps}
+  \caption{二维渗流流函数等值线图}
+  \label{FgEx_2dshenliu_lines}
+\end{figure}
+\begin{figure}[htb]
+  \centering
+  \includegraphics{FgEx_2dshenliu_iteration.pdf}
+  \caption{不同迭代法收敛过程对比图}
+  \label{FgEx_2dshenliu_iteration}
+\end{figure}
+
+%\section{二维输运扩散方程求解}
 %\section{二维浅水方程求解}
 %\subsection{网格基础}
 %\subsection{求解算法}
