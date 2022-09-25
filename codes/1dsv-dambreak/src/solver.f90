@@ -47,7 +47,8 @@ module solver
   real(kind=dp), ALLOCATABLE, DIMENSION(:) :: &
     v_mid, c_mid
   real(kind=dp), ALLOCATABLE, DIMENSION(:, :) :: &
-    speed, speed_mid, epsi_mid, psi_mid, alfa_mid, phi_mid, factor_mid, visco_mid
+    speed, speed_mid, epsi_mid, psi_mid, alfa_mid, &
+    phi_mid, factor_mid, visco_mid
 contains
   subroutine init_solver()
     implicit none
@@ -93,7 +94,6 @@ contains
     case default
       solve_method_ptr => solver_maccormack
     end select
-
 
     call open_result()
     call open_log()
@@ -179,7 +179,6 @@ contains
       f = cur_h * cur_v**2 + half * g * cur_h**2
     end function flux_f
   end subroutine update
-
 
   subroutine initialize()
     implicit none

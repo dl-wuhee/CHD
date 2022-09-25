@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/danlee/Dan/Project/CHD/codes/1dsv-cpp",
+  "command": "/usr/bin/c++ -I/home/danlee/Dan/Project/CHD/codes/1dsv-cpp -o CMakeFiles/hello.dir/hello.cpp.o -c /home/danlee/Dan/Project/CHD/codes/1dsv-cpp/hello.cpp",
+  "file": "/home/danlee/Dan/Project/CHD/codes/1dsv-cpp/hello.cpp"
+}
+]

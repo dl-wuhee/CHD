@@ -65,10 +65,11 @@ $S$的平均值。有限体积法的一个非常吸引人的特性是离散方�
 \eqref{EqFV_Diffusion_Discretisation}表明：流出东边交界面的$\phi$的扩散通量减去流
 入西边交界面的$\phi$的扩散通量等于$\phi$的减少量。
 
+
 为了推导出可用的离散方程，式\eqref{EqFV_Diffusion_Discretisation}中控制体交界面上的
 $\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
-\begin{subequations}
-  \begin{align}
+\begin{equation}
+  \begin{aligned}
   \Gamma_{w} 
   &=
   \frac{\Gamma_{W}+\Gamma_{P}}{2}
@@ -76,10 +77,7 @@ $\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
   \Gamma_{e} 
   &=
   \frac{\Gamma_{P}+\Gamma_{E}}{2}
-  \end{align}
-\end{subequations}
-\begin{subequations}
-  \begin{align}
+  \\
   &\left(
     \Gamma A\frac{\mathrm{d} \phi}{\mathrm{d} x}
   \right)_{e}
@@ -97,8 +95,8 @@ $\Gamma$和梯度$\mathrm{d}\phi/\mathrm{d}x$必须要先求得。
   \left(
     \frac{\phi_{P}-\phi_{W}}{\delta x_{WP}}
   \right)
-  \end{align}
-\end{subequations}
+  \end{aligned}
+\end{equation}
 \begin{equation}
   \overline{S}\Delta V = S_{u} + S_{P}\phi_{P}
 \end{equation}
@@ -219,6 +217,7 @@ k\frac{\mathrm{d} T}{\mathrm{d} x}
   \right)
   T_{E}
 \end{equation}
+
 由于导热系数，截面面积和网格间距为常数，因此上式可以写出：
 \begin{equation}
   a_{P}T_{P} = a_{W}T_{W} + a_{E}T_{E}
