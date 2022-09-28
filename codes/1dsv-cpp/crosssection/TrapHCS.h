@@ -39,7 +39,6 @@ namespace odsv{
                 TrapSlope m;
                 TrapRough n;
 
-                virtual void Area() final;
                 virtual void cal_B() final;
                 virtual void cal_X() final;
                 virtual void cal_A() final;
@@ -57,7 +56,6 @@ namespace odsv{
                     : 
                         b(_b), m(_m), n(_n),
                         HydroCS(_n.n_b, o_c, l, d, r){
-                        Area();
                     }
 
                 virtual ~TrapHCS(){};

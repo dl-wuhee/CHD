@@ -4,10 +4,6 @@
 
 namespace odsv{
     namespace cs{
-        void TrapHCS::Area() {
-            O = half * (b + b + (m.m_l+m.m_r) * half * (dz_l + dz_r)) * half * (dz_l + dz_r);
-        }
-
         void TrapHCS::cal_B() {
             B = b + (m.m_l + m.m_r) * h;
         }

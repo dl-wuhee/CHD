@@ -2,9 +2,6 @@
 
 namespace odsv{
     namespace cs{
-        void RectHCS::Area() {
-            O = half * b * (dz_l + dz_r);
-        }
 
         void RectHCS::cal_B() {
             B = b;

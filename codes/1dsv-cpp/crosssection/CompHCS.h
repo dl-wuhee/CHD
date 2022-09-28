@@ -98,7 +98,6 @@ namespace odsv{
 
                 void cal_hf();
                 void cal_Am();
-                virtual void Area() final;
                 virtual void cal_B() final;
                 virtual void cal_X() final;
                 virtual void cal_A() final;
@@ -118,7 +117,6 @@ namespace odsv{
                     : 
                         h_m(_h_m), b(_b), m(_m), n(_n),
                         HydroCS(_n.n_mb, o_c, l, d, r){
-                            Area();
                             B_m = b.b_m + (m.m_ml + m.m_mr) * h_m; 
                             A_m = half * (b.b_m + B_m) * h_m; 
                         }

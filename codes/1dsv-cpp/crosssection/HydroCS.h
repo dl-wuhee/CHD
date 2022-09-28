@@ -10,7 +10,6 @@ namespace odsv{
     namespace cs{
         class HydroCS: public CrossSection, public HydroParas {
             protected:
-                virtual void Area() = 0;
                 virtual void cal_B() = 0;
                 virtual void cal_A() = 0;
                 virtual void cal_X() = 0;

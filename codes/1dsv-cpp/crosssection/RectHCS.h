@@ -8,7 +8,6 @@ namespace odsv{
         class RectHCS : public HydroCS {
             private:
                 double b;
-                virtual void Area() final;
                 virtual void cal_B() final;
                 virtual void cal_X() final;
                 virtual void cal_A() final;
@@ -23,7 +22,6 @@ namespace odsv{
                         const coordinates::Coords3D &d,
                         const coordinates::Coords3D &r)
                     : b(_b), HydroCS(n, o_c, l, d, r){
-                        Area();
                     }
                 virtual ~RectHCS(){};
         };

@@ -11,8 +11,6 @@ namespace odsv{
                 std::vector<coordinates::Coords3D> points; 
                 std::vector<coordinates::Coords3D> roughs; 
 
-
-                virtual void Area() final;
                 virtual void cal_B() final;
                 virtual void cal_X() final;
                 virtual void cal_A() final;
@@ -22,11 +20,7 @@ namespace odsv{
             public:
                 NatuHCS(const bool &o_c,
                         const std::vector<coordinates::Coords3D> & ps
-                       )
-                    : 
-                        HydroCS(o_c){
-                            Area();
-                        }
+                       );
 
                 virtual ~NatuHCS(){};
         };

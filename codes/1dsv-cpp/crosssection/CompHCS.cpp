@@ -11,10 +11,6 @@ namespace odsv{
             }
         }
 
-        void CompHCS::Area() {
-            O = zero; //half * (b + b + (m.m_l+m.m_r) * half * (dz_l + dz_r)) * half * (dz_l + dz_r);
-        }
-
         void CompHCS::cal_B() {
             cal_hf();
             if (h > h_m) {
