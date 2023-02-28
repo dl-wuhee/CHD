@@ -738,8 +738,8 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
   \nu
   \left(
   \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
-  \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
-  \frac{\partial^{2} \overline{u}}{\partial z x^{2}}
+  \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \right)
 \end{equation*}
 将上式左侧脉动值乘积的时均值移到等号右侧，得：
@@ -760,8 +760,8 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
   \nu
   \left(
   \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
-  \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
-  \frac{\partial^{2} \overline{u}}{\partial z x^{2}}
+  \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+  \frac{\partial^{2} \overline{u}}{\partial z^{2}}
   \right)
   \label{EqCGe_Ra_Me_temp1}
 \end{equation}
@@ -811,45 +811,49 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
   \label{EqCGe_Ra_Me_temp3}
 \end{equation}
 
-对式\eqref{EqCGe_Ra_Me_temp1}至\eqref{EqCGe_Ra_Me_temp3}分别乘上密度$\rho$，可得
+
+对式\eqref{EqCGe_Ra_Me_temp1}至\eqref{EqCGe_Ra_Me_temp3}中新增项进行处理，可得
 \begin{equation}
   \begin{aligned}
-    &\frac{\partial \rho\overline{u}}{\partial t} +
-    \frac{\partial \rho\widebar{u}\widebar{u}}{\partial x} +
-    \frac{\partial \rho\widebar{u}\widebar{v}}{\partial y} +
-    \frac{\partial \rho\widebar{u}\widebar{w}}{\partial z}
-    = \\
-    &\rho \overline{f_{x}}
-    -\frac{\partial \overline{p}}{\partial x} +
+    \frac{\partial \overline{u}}{\partial t} +
+    \frac{\partial \widebar{u}\widebar{u}}{\partial x} +
+    \frac{\partial \widebar{u}\widebar{v}}{\partial y} +
+    \frac{\partial \widebar{u}\widebar{w}}{\partial z}
+    = 
+    &\overline{f_{x}}
+    -
+    \frac{1}{\rho}
+    \frac{\partial \overline{p}}{\partial x} 
+    +
+    \nu
+    \left(
+    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
+    \frac{\partial^{2} \overline{u}}{\partial z^{2}}
+    \right)
+    +
+    \\
+    &
+    \frac{1}{\rho}
     \left[
       \frac{\partial (-\rho\overline{u^{\prime}u^{\prime}})}{\partial x} +
       \frac{\partial (-\rho\overline{u^{\prime}v^{\prime}})}{\partial y} +
       \frac{\partial (-\rho\overline{u^{\prime}w^{\prime}})}{\partial z}
     \right]
-    +
-    \mu
-    \left(
-    \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
-    \frac{\partial^{2} \overline{u}}{\partial y x^{2}} +
-    \frac{\partial^{2} \overline{u}}{\partial z x^{2}}
-    \right)
     \label{EqCGe_Ra_Me_1}
   \end{aligned}
 \end{equation}
 \begin{equation}
   \begin{aligned}
-    &\frac{\partial \rho\overline{v}}{\partial t} +
-    \frac{\partial \rho\widebar{v}\widebar{u}}{\partial x} +
-    \frac{\partial \rho\widebar{v}\widebar{v}}{\partial y} +
-    \frac{\partial \rho\widebar{v}\widebar{w}}{\partial z}
-    = \\
-    &\rho \overline{f_{y}}
-    -\frac{\partial \overline{p}}{\partial y} +
-    \left[
-      \frac{\partial (-\rho\overline{v^{\prime}u^{\prime}})}{\partial x} +
-      \frac{\partial (-\rho\overline{v^{\prime}v^{\prime}})}{\partial y} +
-      \frac{\partial (-\rho\overline{v^{\prime}w^{\prime}})}{\partial z}
-    \right]
+    \frac{\partial \overline{v}}{\partial t} +
+    \frac{\partial \widebar{v}\widebar{u}}{\partial x} +
+    \frac{\partial \widebar{v}\widebar{v}}{\partial y} +
+    \frac{\partial \widebar{v}\widebar{w}}{\partial z}
+    = 
+    & \overline{f_{y}}
+    -
+    \frac{1}{\rho}
+    \frac{\partial \overline{p}}{\partial y} 
     +
     \nu
     \left(
@@ -857,30 +861,45 @@ $\phi^{\prime}$和$f^{\prime}$为相应的脉动值。按照式\eqref{EqCGe_RA}�
     \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
     \frac{\partial^{2} \overline{v}}{\partial z^{2}}
     \right)
+    +
+    \\
+    &
+    \frac{1}{\rho}
+    \left[
+      \frac{\partial (-\rho\overline{v^{\prime}u^{\prime}})}{\partial x} +
+      \frac{\partial (-\rho\overline{v^{\prime}v^{\prime}})}{\partial y} +
+      \frac{\partial (-\rho\overline{v^{\prime}w^{\prime}})}{\partial z}
+    \right]
     \label{EqCGe_Ra_Me_2}
   \end{aligned}
 \end{equation}
 \begin{equation}
   \begin{aligned}
-    &\frac{\partial \rho\overline{w}}{\partial t} +
-    \frac{\partial \rho\widebar{w}\widebar{u}}{\partial x} +
-    \frac{\partial \rho\widebar{w}\widebar{v}}{\partial y} +
-    \frac{\partial \rho\widebar{w}\widebar{w}}{\partial z}
-    = \\
-    &\rho \overline{f_{z}}
-    -\frac{\partial \overline{p}}{\partial z} +
-    \left[
-      \frac{\partial (-\rho\overline{w^{\prime}u^{\prime}})}{\partial x} +
-      \frac{\partial (-\rho\overline{w^{\prime}v^{\prime}})}{\partial y} +
-      \frac{\partial (-\rho\overline{w^{\prime}w^{\prime}})}{\partial z}
-    \right]
+    \frac{\partial \overline{w}}{\partial t} +
+    \frac{\partial \widebar{w}\widebar{u}}{\partial x} +
+    \frac{\partial \widebar{w}\widebar{v}}{\partial y} +
+    \frac{\partial \widebar{w}\widebar{w}}{\partial z}
+    = 
+    &\overline{f_{z}}
+    -
+    \frac{1}{\rho}
+    \frac{\partial \overline{p}}{\partial z}
     +
-    \mu
+    \nu
     \left(
     \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
     \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
     \frac{\partial^{2} \overline{w}}{\partial z^{2}}
     \right)
+    +
+    \\
+    &
+    \frac{1}{\rho}
+    \left[
+      \frac{\partial (-\rho\overline{w^{\prime}u^{\prime}})}{\partial x} +
+      \frac{\partial (-\rho\overline{w^{\prime}v^{\prime}})}{\partial y} +
+      \frac{\partial (-\rho\overline{w^{\prime}w^{\prime}})}{\partial z}
+    \right]
     \label{EqCGe_Ra_Me_3}
   \end{aligned}
 \end{equation}
@@ -944,20 +963,23 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
     \\
     \begin{aligned}
       \frac{\partial \overline{u}}{\partial t} +
-      &\frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
+      \frac{\partial (\widebar{u}\widebar{u})}{\partial x} +
       \frac{\partial (\widebar{u}\widebar{v})}{\partial y} +
       \frac{\partial (\widebar{u}\widebar{w})}{\partial z}
-      = \\
+      = 
       &\overline{f_{x}} -
-      \frac{1}{\rho}\frac{\partial \overline{p}}{\partial x} +
-      \nu_{t}
+      \frac{1}{\rho}\frac{\partial \overline{p}}{\partial x}
+      +
+      \nu
       \left(
       \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
       \frac{\partial^{2} \overline{u}}{\partial z^{2}}
       \right)
       +
-      \nu
+      \\
+      &
+      \nu_{t}
       \left(
       \frac{\partial^{2} \overline{u}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{u}}{\partial y^{2}} +
@@ -967,20 +989,23 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
     \\
     \begin{aligned}
       \frac{\partial \overline{v}}{\partial t} +
-      &\frac{\partial (\widebar{v}\widebar{u})}{\partial x} +
+      \frac{\partial (\widebar{v}\widebar{u})}{\partial x} +
       \frac{\partial (\widebar{v}\widebar{v})}{\partial y} +
       \frac{\partial (\widebar{v}\widebar{w})}{\partial z}
-      = \\
+      = 
       &\overline{f_{y}} -
       \frac{1}{\rho}\frac{\partial \overline{p}}{\partial y} +
-      \nu_{t}
+      +
+      \nu
       \left(
       \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
       \frac{\partial^{2} \overline{v}}{\partial z^{2}}
       \right)
       +
-      \nu
+      \\
+      &
+      \nu_{t}
       \left(
       \frac{\partial^{2} \overline{v}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{v}}{\partial y^{2}} +
@@ -990,20 +1015,24 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
     \\
     \begin{aligned}
       \frac{\partial \overline{w}}{\partial t} +
-      &\frac{\partial (\widebar{w}\widebar{u})}{\partial x} +
+      \frac{\partial (\widebar{w}\widebar{u})}{\partial x} +
       \frac{\partial (\widebar{w}\widebar{v})}{\partial y} +
       \frac{\partial (\widebar{w}\widebar{w})}{\partial z}
-      = \\
-      &\overline{f_{z}} -
-      \frac{1}{\rho}\frac{\partial \overline{p}}{\partial z} +
-      \nu_{t}
+      = 
+      &
+      \overline{f_{z}} -
+      \frac{1}{\rho}\frac{\partial \overline{p}}{\partial z} 
+      +
+      \nu
       \left(
       \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
       \frac{\partial^{2} \overline{w}}{\partial z^{2}}
       \right)
       +
-      \nu
+      \\
+      &
+      \nu_{t}
       \left(
       \frac{\partial^{2} \overline{w}}{\partial x^{2}} +
       \frac{\partial^{2} \overline{w}}{\partial y^{2}} +
@@ -1236,10 +1265,10 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
   \mathrm{d}z
   -
   \left.\overline{u}\right|_{z_{s}}
-  \frac{\partial z_{s}}{\partial z}
+  \frac{\partial z_{s}}{\partial x}
   +
   \left.\overline{u}\right|_{z_{b}}
-  \frac{\partial z_{b}}{\partial z}
+  \frac{\partial z_{b}}{\partial x}
   \label{EqCGeRaeCE_Int_x}
 \end{equation}
 \begin{equation}
@@ -1253,10 +1282,10 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
   \mathrm{d}z
   -
   \left.\overline{v}\right|_{z_{s}}
-  \frac{\partial z_{s}}{\partial z}
+  \frac{\partial z_{s}}{\partial y}
   +
   \left.\overline{v}\right|_{z_{b}}
-  \frac{\partial z_{b}}{\partial z}
+  \frac{\partial z_{b}}{\partial y}
   \label{EqCGeRaeCE_Int_y}
 \end{equation}
 式\eqref{EqCGeRaeCE_Int}中最后一项
@@ -1821,14 +1850,14 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
     \frac{\partial (HUU+gH^{2}/2)}{\partial x} +
     \frac{\partial HUV}{\partial y}
     =
-    -gH\frac{\partial z_{s}}{\partial x}
+    -gH\frac{\partial z_{b}}{\partial x}
     -g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
     \\
     \frac{\partial HV}{\partial t} +
     \frac{\partial HUV}{\partial x} +
     \frac{\partial (HVV+gH^{2}/2)}{\partial y}
     =
-    -gH\frac{\partial z_{s}}{\partial y}
+    -gH\frac{\partial z_{b}}{\partial y}
     -g\frac{n^{2}V\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   \end{gathered}
 \end{equation}
