@@ -944,7 +944,7 @@ $\widebar{u}$，$\widebar{v}$，$\widebar{w}$和$\widebar{p}$），而雷诺时�
   \right|
   \frac{\partial \overline{u}}{\partial y}
 \end{equation}
-式中，$l$为掺长。普朗特认为，在近壁区，可以假定讨论点的掺长与该店至壁面的距离成
+式中，$l$为掺长。普朗特认为，在近壁区，可以假定讨论点的掺长与该点至壁面的距离成
 正比，即
 \begin{equation}
   l = \kappa y
@@ -1736,9 +1736,9 @@ $\beta_{xx}$的取值一般在1.02与1.05之间，可近似取为1.0。因此
 式\eqref{EqCGe_Shear_Total}中右边后两项分别为由底部床面阻力和自由表面风阻力引起
 的阻力项，通常可以式\eqref{EqCGe_Shear}表示：
 \begin{equation}
-  g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
-  -
   C_{w}\frac{\rho_{a}}{\rho}\omega^{2}\cos\beta
+  -
+  g\frac{n^{2}U\sqrt{U^{2}+V^{2}}}{H^{1/3}}
   \label{EqCGe_Shear}
 \end{equation}
 式中，$C_{w}$为无因次风应力系数，$\rho_{a}$为空气密度，$\omega$为风速，$\beta$为
@@ -2213,54 +2213,54 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
 
 
 
-（3）以水位$z$和流量$U$为因变量的圣维南方程组
+（3）以水位$z$和断面平均流速$v$为因变量的圣维南方程组
 \begin{equation}
   \begin{gathered}
     \frac{\partial z}{\partial t}
     +
-    U\frac{\partial z}{\partial x}
+    v\frac{\partial z}{\partial x}
     +
-    \frac{A}{B}\frac{\partial U}{\partial x}
+    \frac{A}{B}\frac{\partial v}{\partial x}
     =
     \frac{1}{B}
     \left(
     q - BiU - U\left.\frac{\partial A}{\partial x}\right|_{z}
     \right)
     \\
-    \frac{\partial U}{\partial t}
+    \frac{\partial v}{\partial t}
     +
-    U\frac{\partial U}{\partial x}
+    v\frac{\partial v}{\partial x}
     +
     g\frac{\partial z}{\partial x}
     =
-    -g\frac{U^{2}}{C^{2}R}
+    -g\frac{v^{2}}{C^{2}R}
   \end{gathered}
   \label{EqCGe_SV_zU}
 \end{equation}
 
-（4）以水深$h$和流量$U$为因变量的圣维南方程组
+（4）以水深$h$和断面平均流速$v$为因变量的圣维南方程组
 \begin{equation}
   \begin{gathered}
     \frac{\partial h}{\partial t}
     +
-    U\frac{\partial h}{\partial x}
+    v\frac{\partial h}{\partial x}
     +
-    \frac{A}{B}\frac{\partial U}{\partial x}
+    \frac{A}{B}\frac{\partial v}{\partial x}
     =
     \frac{1}{B}
     \left(
-    q - U\left.\frac{\partial A}{\partial x}\right|_{h}
+    q - v\left.\frac{\partial A}{\partial x}\right|_{h}
     \right)
     \\
-    \frac{\partial U}{\partial t}
+    \frac{\partial v}{\partial t}
     +
-    U\frac{\partial U}{\partial x}
+    v\frac{\partial v}{\partial x}
     +
     g\frac{\partial z}{\partial x}
     =
     g
     \left(
-    i-\frac{U^{2}}{C^{2}R}
+    i-\frac{v^{2}}{C^{2}R}
     \right)
   \end{gathered}
   \label{EqCGe_SV_hU}
