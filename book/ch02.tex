@@ -2172,7 +2172,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     \frac{\partial A}{\partial x}
     \right|_{z}
     -
-    gA\frac{Q^{2}}{K^{2}}
+    gA\frac{Q|Q|}{K^{2}}
   \end{gathered}
   \label{EqCGe_SV_zQ}
 \end{equation}
@@ -2206,7 +2206,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     \frac{\partial A}{\partial x}
     \right|_{h}
     -
-    gA\frac{Q^{2}}{K^{2}}
+    gA\frac{Q|Q|}{K^{2}}
   \end{gathered}
   \label{EqCGe_SV_hQ}
 \end{equation}
@@ -2233,7 +2233,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     g\frac{\partial z}{\partial x}
     =
-    -g\frac{v^{2}}{C^{2}R}
+    -g\frac{v|v|}{C^{2}R}
   \end{gathered}
   \label{EqCGe_SV_zU}
 \end{equation}
@@ -2256,11 +2256,11 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     v\frac{\partial v}{\partial x}
     +
-    g\frac{\partial z}{\partial x}
+    g\frac{\partial h}{\partial x}
     =
     g
     \left(
-    i-\frac{v^{2}}{C^{2}R}
+    i-\frac{v|v|}{C^{2}R}
     \right)
   \end{gathered}
   \label{EqCGe_SV_hU}
@@ -2282,7 +2282,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     =
     gAi
     -
-    gA\frac{n^{2}Q|Q|}{AR^{4/3}}
+    gA\frac{Q|Q|}{K^{2}}
   \end{gathered}
   \label{EqCGe_SV_AQ_2}
 \end{equation}
@@ -2300,12 +2300,13 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     \frac{\partial}{\partial x}\left(\frac{Q^{2}}{A}+gI\right)
     =
     gAi
-    -g\frac{n^{2}|U|}{R^{4/3}}Q
+    -gA\frac{Q|Q|}{K^{2}}
   \end{gathered}
   \label{EqCGe_SV_AQ_1}
 \end{equation}
-其中， $I = \int_{0}^{h(x,t)}(h-\eta)\frac{\partial A(x, \eta )}{\partial \eta}
-\mathrm{d}\eta$。对矩形渠道,\
+其中， $I = \int_{0}^{h(x,t)}(h-\eta)\xi(\eta) \mathrm{d}\eta$，
+$\xi(\eta) =\frac{\partial A(x, \eta )}{\partial \eta}$为水深为$\eta$处水面宽
+度。对矩形渠道,\
 \begin{equation}
   I = \frac{A^{2 }}{2B}
 \end{equation}
@@ -2333,7 +2334,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   \mathbf{G} =
   \begin{bmatrix}
     0 \\
-    gA(i - \frac{n^{2}|Q|Q}{A^{2}R^{4/3 }}) \\
+    gA(i - \frac{|Q|Q}{K^{2}}) \\
   \end{bmatrix}
 \end{equation}
 

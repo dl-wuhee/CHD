@@ -109,7 +109,7 @@ MacCormack格式是一种两步（预测步和校正步）有限差分格式，�
   \mathbf{S}_{i}^{k}\Delta t
 \end{equation}
 预测步给出了$k+1$时间层的流动的近似值，记为预测值。在校正步，通量$\mathbf{F}$采
-用向后差分格式，用$k+1$时间层信息来计算。
+用向后差分格式，用预测步信息来计算。
 \begin{equation}
   \mathbf{U}^{\mathrm{jz}} =
   \mathbf{U}^{k} -
@@ -311,7 +311,7 @@ s =
 %\subsubsection{Pressimann格式}
 
 % ToDo List end
-\subsection{下游有水的缓流溃坝波}
+\subsubsection{显示格式求解示例——下游有水的缓流溃坝波}
 考虑光滑平底矩形渠道内的溃坝波问题。
 渠道总长$L=100\mathrm{m}$，
 坝面所在位置$x=30\mathrm{m}$，
@@ -336,6 +336,38 @@ s =
   \caption{MacCormack TVD格式计算结果}
   \label{FgEx_tvd_result_t_5}
 \end{figure}
+
+
+\subsection{隐式格式}
+\subsubsection{四点偏心隐式格式(Preissmann格式)}
+Preissmann格式中偏导项和其他系数按式\ref{EqEx_Preissmann_general}来近似：
+\begin{equation}
+\begin{gathered}
+\frac{\partial f}{\partial t}
+=
+\frac
+{(f_{i}^{k+1}+f_{i+1}^{k+1})-(f_{i}^{k}+f_{i+1}^{k})}
+{2\Delta t}
+\\
+\frac{\partial f}{\partial x}
+=
+\frac
+{\alpha(f_{i+1}^{k+1} - f_{i}^{k+1})}
+{\Delta x}
++
+\frac
+{(1-\alpha)(f_{i+1}^{k} - f_{i}^{k})}
+{\Delta x}
+\\
+f
+=
+\frac{1}{2}\alpha(f_{i+1}^{k+1}+f_{i}^{k+1})
++
+\frac{1}{2}(1-\alpha)(f_{i+1}^{k}+f_{i}^{k})
+\end{gathered}
+\label{EqEx_Preissmann_general}
+\end{equation}
+式中，$\alpha$是权重系数，偏导中的$f$为$h$和$v$，系数中的$f$表示$S_f$。
 
 
 
