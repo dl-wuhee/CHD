@@ -2077,16 +2077,16 @@ $\overline{A}$为微小流段的平均过水面积。当流段内过水断面面
 式中，$\chi$为过水断面湿周，$R$为过水断面水力半径，$J$为水力坡度，
 $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
 
-其次，由于流速$U$是$x$和$t$的函数，则水流沿$x$方向的加速度$a_{x}$为
+由于流速$v$是$x$和$t$的函数，则水流沿$x$方向的加速度$a_{x}$为
 \begin{equation}
   a_{x}
   =
-  \frac{\mathrm{d} U}{\mathrm{d} t}
+  \frac{\mathrm{d} v}{\mathrm{d} t}
   =
-  \frac{\partial U}{\partial t}
+  \frac{\partial v}{\partial t}
   +
-  U
-  \frac{\partial U}{\partial x}
+  v
+  \frac{\partial v}{\partial x}
 \end{equation}
 微小流段内的水体质量为$\mathrm{d}m=\rho A\mathrm{d}x$。
 
@@ -2098,10 +2098,10 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   =
   \rho A\mathrm{d}x
   \left(
-  \frac{\partial U}{\partial t}
+  \frac{\partial v}{\partial t}
   +
-  U
-  \frac{\partial U}{\partial x}
+  v
+  \frac{\partial v}{\partial x}
   \right)
 \end{equation}
 上式两边同除以$\gamma A\mathrm{d}x$并整理得：
@@ -2109,10 +2109,10 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   \frac{\partial z}{\partial x}
   +
   \frac{1}{g}
-  \frac{\partial U}{\partial t}
+  \frac{\partial v}{\partial t}
   +
-  \frac{U}{g}
-  \frac{\partial U}{\partial x}
+  \frac{v}{g}
+  \frac{\partial v}{\partial x}
   +
   J
   =
@@ -2138,82 +2138,203 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
 
 \subsection{圣维南方程不同形式}
 连续性方程\eqref{EqCGe_SVe_Ce}和运动方程\eqref{EqCGe_SVe_Me}构成了描述明槽非恒定
-渐变流的圣维南方程组。在实际应用中，为了使用方便，常对式\eqref{EqCGe_SVe_Ce}和
+渐变流的圣维南方程组。在实际应用中，为了使用方便，利用下列关系式，对式\eqref{EqCGe_SVe_Ce}和
 \eqref{EqCGe_SVe_Me}进行改写，得到不同因变量组合的圣维南方程组。
 
 % Todo: 列出下列各式的具体推导过程。
-
-（1）以水位$z$和流量$Q$为因变量的圣维南方程组
 \begin{equation}
-  \begin{gathered}
-    B\frac{\partial z}{\partial t}
-    +
-    \frac{\partial Q}{\partial x}
+    z = h + z_{b},\, Q=vA,\, A=\overline{B}h
+  \end{equation}
+  \begin{equation}
+    \frac{\partial z}{\partial t}
     =
-    0
-    \\
-    \frac{\partial Q}{\partial t}
-    +
-    \frac{2Q}{A}\frac{\partial Q}{\partial x}
-    +
-    \left[
-      gA -
-      B
-      \left(
-      \frac{Q}{A}
-      \right)^{2}
-    \right]
+    \frac{\partial h}{\partial t}
+  \end{equation}
+\begin{equation}
     \frac{\partial z}{\partial x}
     =
-    \left(
-    \frac{Q}{A}
-    \right)^{2}
-    \left.
-    \frac{\partial A}{\partial x}
-    \right|_{z}
-    -
-    gA\frac{Q|Q|}{K^{2}}
-  \end{gathered}
-  \label{EqCGe_SV_zQ}
-\end{equation}
-
-（2）以水深$h$和流量$Q$为因变量的圣维南方程组
-\begin{equation}
-  \begin{gathered}
-    B\frac{\partial h}{\partial t}
+    \frac{\partial h}{\partial x}
     +
-    \frac{\partial Q}{\partial x}
+    \frac{\partial z_{b}}{\partial x}
     =
-    0
+    \frac{\partial h}{\partial x}
+    -
+    i
+  \end{equation}
+  \begin{equation}
+    \Delta A|_{x}=B\Delta h=B\Delta z
+  \end{equation}
+  \begin{equation}
+    \Delta A|_{t} 
+    =
+    \Delta A|_{h} + B\Delta h
+    =
+    \Delta A|_{z} + B\Delta z
+  \end{equation}
+  %\begin{equation}
+    %\frac{\partial \overline{B}}{\partial t}
+    %=
+    %0
+    %,\,\,
+    %\frac{\partial \overline{B}}{\partial x}
+    %=
+    %0
+  %\end{equation}
+  \begin{equation}
+    \frac{\partial A}{\partial t}
+    =
+    B\frac{\partial h}{\partial t}
+    =
+    B\frac{\partial z}{\partial t}
+    =
+    \overline{B}\frac{\partial h}{\partial t}
+    =
+    \overline{B}\frac{\partial z}{\partial t}
+  \end{equation}
+  \begin{equation}
+    \frac{\partial A}{\partial x}
+    =
+    B\frac{\partial h}{\partial x}
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{h}
+    =
+    B\frac{\partial z}{\partial x}
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{z}
+    =
+    B\frac{\partial z}{\partial x}
+    +
+    Bi
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{h}
+  \end{equation}
+  \begin{equation}
+    \begin{aligned}
+    \frac{\partial Q}{\partial x}
+    &=
+    \frac{\partial (vA)}{\partial x}
+    =
+    A\frac{\partial v}{\partial x}
+    +
+    v\frac{\partial A}{\partial x}
+    =
+    A\frac{\partial v}{\partial x}
+    +
+    v
+    \left(
+    B\frac{\partial h}{\partial x}
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{h}
+      \right)
+      \\
+    &=
+    A\frac{\partial v}{\partial x}
+    +
+    v\left(
+    B\frac{\partial z}{\partial x}
+    +
+    Bi
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{z}
+    \right)
     \\
+    &=
+    \frac{\partial (\overline{B}hv)}{\partial x}
+    =
+    \overline{B}\frac{\partial (hv)}{\partial x}
+    \end{aligned}
+  \end{equation}
+  \begin{equation}
+    \frac{\partial (hv)}{\partial t}
+    =
+    h\frac{\partial v}{\partial t}
+    +
+    v\frac{\partial h}{\partial t}
+    =
+    h\frac{\partial v}{\partial t}
+    -
+    v\frac{\partial (hv)}{\partial x}
+  \end{equation}
+  \begin{equation}
+    \begin{aligned}
+    A\frac{\partial v}{\partial t}
+    &=
+    \frac{\partial vA}{\partial t}
+    -
+    v\frac{\partial A}{\partial t}
+    =
+    \frac{\partial Q}{\partial t}
+    -
+    vB\frac{\partial h}{\partial t}
+    =
+    \frac{\partial Q}{\partial t}
+    -
+    vB\frac{\partial z}{\partial t}
+    \\
+    &=
     \frac{\partial Q}{\partial t}
     +
-    \frac{2Q}{A}\frac{\partial Q}{\partial x}
-    +
-    \left[
-      gA -
-      B
-      \left(
-      \frac{Q}{A}
-      \right)^{2}
-    \right]
-    \frac{\partial h}{\partial x}
+    v\frac{\partial Q}{\partial x}
+    %-
+    %vq
+    % don't know how to remove the vq term
     =
-    \left(
-    \frac{Q}{A}
-    \right)^{2}
-    \left.
-    \frac{\partial A}{\partial x}
-    \right|_{h}
+    \frac{\partial Q}{\partial t}
+    +
+    \frac{Q}{A}\frac{\partial Q}{\partial x}
+    %-
+    %vq
+  \end{aligned}
+  \end{equation}
+\begin{equation}
+    \begin{aligned}
+    A\frac{\partial v}{\partial x}
+    =
+    \frac{\partial vA}{\partial x}
     -
-    gA\frac{Q|Q|}{K^{2}}
-  \end{gathered}
-  \label{EqCGe_SV_hQ}
+    v\frac{\partial A}{\partial x}
+    &=
+    \frac{\partial Q}{\partial x}
+    -
+    B\frac{Q}{A}\left(
+    \frac{\partial h}{\partial x}
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{h}
+      \right)
+    \\
+    &=
+    \frac{\partial Q}{\partial x}
+    -
+    B\frac{Q}{A}\left(
+    \frac{\partial z}{\partial x}
+    +
+    i
+    +
+    \left.\frac{\partial A}{\partial x}\right|_{z}
+      \right)
+  \end{aligned}
+  \end{equation}
+  \begin{equation}
+    \begin{aligned}
+    \frac{\partial (\frac{1}{2}gh^{2})}{\partial x}
+    &=
+    \frac{\partial (\frac{1}{2}g(z-z_{b})^{2})}{\partial x}
+    =
+    \frac{\partial (\frac{1}{2}g(z^{2}-2zz_{b}))}{\partial x}
+    +
+    \frac{\partial (\frac{1}{2}gz_{b}^{2})}{\partial x}
+    \\
+    &=
+    \frac{\partial (\frac{1}{2}g(z^{2}-2zz_{b}))}{\partial x}
+    -
+    gz_{b}i
+  \end{aligned}
 \end{equation}
 
 
 
-（3）以水位$z$和断面平均流速$v$为因变量的圣维南方程组
+
+（1）以水位$z$和断面平均流速$v$为因变量的圣维南方程组
 \begin{equation}
   \begin{gathered}
     \frac{\partial z}{\partial t}
@@ -2224,7 +2345,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     =
     \frac{1}{B}
     \left(
-    q - BiU - U\left.\frac{\partial A}{\partial x}\right|_{z}
+    q - Biv - v\left.\frac{\partial A}{\partial x}\right|_{h}
     \right)
     \\
     \frac{\partial v}{\partial t}
@@ -2238,7 +2359,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   \label{EqCGe_SV_zU}
 \end{equation}
 
-（4）以水深$h$和断面平均流速$v$为因变量的圣维南方程组
+（2）以水深$h$和断面平均流速$v$为因变量的圣维南方程组
 \begin{equation}
   \begin{gathered}
     \frac{\partial h}{\partial t}
@@ -2266,7 +2387,248 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   \label{EqCGe_SV_hU}
 \end{equation}
 
-（5）以过水断面
+对无旁侧汇流的矩形渠道，上式可简化为：
+\begin{equation}
+  \begin{gathered}
+    \frac{\partial h}{\partial t}
+    +
+    v\frac{\partial h}{\partial x}
+    +
+    h\frac{\partial v}{\partial x}
+    =
+    0
+    \\
+    \frac{\partial v}{\partial t}
+    +
+    v\frac{\partial v}{\partial x}
+    +
+    g\frac{\partial h}{\partial x}
+    =
+    g
+    \left(
+    i-\frac{v|v|}{C^{2}R}
+    \right)
+  \end{gathered}
+  \label{EqCGe_SV_hU_rect}
+\end{equation}
+写成守恒形式为：
+\begin{equation}
+  \begin{gathered}
+    \frac{\partial h}{\partial t}
+    +
+    \frac{\partial (hv)}{\partial x}
+    =
+    0
+    \\
+    \frac{\partial v}{\partial t}
+    +
+    \frac{\partial (\frac{1}{2}v^{2} + gh)}{\partial x}
+    =
+    g
+    \left(
+    i-\frac{v|v|}{C^{2}R}
+    \right)
+  \end{gathered}
+  \label{EqCGe_SV_hU_rect_conser}
+\end{equation}
+其矩阵形式为：
+\begin{equation}
+  \begin{gathered}
+\frac{\partial \mathbf{U}}{\partial t} +
+\frac{\partial \mathbf{F}}{\partial x} =
+\mathbf{G}
+\\
+  \mathbf{U} =
+  \begin{bmatrix}
+    h \\
+    v \\
+  \end{bmatrix}
+  ,
+  \mathbf{F} =
+  \begin{bmatrix}
+    hv \\
+    \frac{1}{2}v^{2}+gh \\
+  \end{bmatrix}
+  ,
+  \mathbf{G} =
+  \begin{bmatrix}
+    0 \\
+    g(i - \frac{|v|v}{C^{2}R}) \\
+  \end{bmatrix}
+\end{gathered}
+  \label{EqCGe_SV_hU_rect_conser_matrix}
+\end{equation}
+
+（3）以水深$h$和单宽流量$hv$为因变量的圣维南方程组
+\begin{equation}
+  \begin{gathered}
+    \frac{\partial h}{\partial t}
+    +
+    \frac{\partial (hv)}{\partial x}
+    =
+    q
+    \\
+    \frac{\partial (hv)}{\partial t}
+    +
+    \frac{\partial (hv^{2} + \frac{1}{2}gh^{2})}{\partial x}
+    =
+    gh
+    \left(
+    i-\frac{v|v|}{C^{2}R}
+    \right)
+  \end{gathered}
+  \label{EqCGe_SV_hq_rect_conser}
+\end{equation}
+其矩阵形式为：
+\begin{equation}
+  \begin{gathered}
+\frac{\partial \mathbf{U}}{\partial t} +
+\frac{\partial \mathbf{F}}{\partial x} =
+\mathbf{G}
+\\
+  \mathbf{U} =
+  \begin{bmatrix}
+    h \\
+    hv \\
+  \end{bmatrix}
+  ,
+  \mathbf{F} =
+  \begin{bmatrix}
+    hv \\
+    hv^{2}+\frac{1}{2}gh^{2} \\
+  \end{bmatrix}
+  ,
+  \mathbf{G} =
+  \begin{bmatrix}
+    q \\
+    gh(i - \frac{|v|v}{C^{2}R}) \\
+  \end{bmatrix}
+\end{gathered}
+  \label{EqCGe_SV_hq_rect_conser_matrix}
+\end{equation}
+
+（4）以水深$z$和单宽流量$hv$为因变量的圣维南方程组
+\begin{equation}
+  \begin{gathered}
+    \frac{\partial z}{\partial t}
+    +
+    \frac{\partial (hv)}{\partial x}
+    =
+    q
+    \\
+    \frac{\partial (hv)}{\partial t}
+    +
+    \frac{\partial \left(hv^{2} + \frac{1}{2}g(z^{2}-2zz_{b})\right)}{\partial x}
+    =
+    g
+    \left(
+    zi-h\frac{v|v|}{C^{2}R}
+    \right)
+  \end{gathered}
+  \label{EqCGe_SV_zq_rect_conser}
+\end{equation}
+其矩阵形式为：
+\begin{equation}
+  \begin{gathered}
+\frac{\partial \mathbf{U}}{\partial t} +
+\frac{\partial \mathbf{F}}{\partial x} =
+\mathbf{G}
+\\
+  \mathbf{U} =
+  \begin{bmatrix}
+    z \\
+    hv \\
+  \end{bmatrix}
+  ,
+  \mathbf{F} =
+  \begin{bmatrix}
+    hv \\
+    hv^{2}+\frac{1}{2}g(z^{2}-2zz_{b}) \\
+  \end{bmatrix}
+  ,
+  \mathbf{G} =
+  \begin{bmatrix}
+    q \\
+    g(zi - h\frac{|v|v}{C^{2}R}) \\
+  \end{bmatrix}
+\end{gathered}
+  \label{EqCGe_SV_zq_rect_conser_matrix}
+\end{equation}
+
+（5）以水位$z$和流量$Q$为因变量的圣维南方程组
+\begin{equation}
+  \begin{gathered}
+    B\frac{\partial z}{\partial t}
+    +
+    \frac{\partial Q}{\partial x}
+    =
+    q
+    \\
+    \frac{\partial Q}{\partial t}
+    +
+    \frac{2Q}{A}\frac{\partial Q}{\partial x}
+    +
+    \left[
+      gA -
+      B
+      \left(
+      \frac{Q}{A}
+      \right)^{2}
+    \right]
+    \frac{\partial z}{\partial x}
+    =
+    \left(
+    \frac{Q}{A}
+    \right)^{2}
+    \left.
+    \frac{\partial A}{\partial x}
+    \right|_{z}
+    -
+    gA\frac{Q|Q|}{K^{2}}
+  \end{gathered}
+  \label{EqCGe_SV_zQ}
+\end{equation}
+
+（6）以水深$h$和流量$Q$为因变量的圣维南方程组
+\begin{equation}
+  \begin{gathered}
+    B\frac{\partial h}{\partial t}
+    +
+    \frac{\partial Q}{\partial x}
+    =
+    q
+    \\
+    \frac{\partial Q}{\partial t}
+    +
+    \frac{2Q}{A}\frac{\partial Q}{\partial x}
+    +
+    \left[
+      gA -
+      B
+      \left(
+      \frac{Q}{A}
+      \right)^{2}
+    \right]
+    \frac{\partial h}{\partial x}
+    =
+    \left(
+    \frac{Q}{A}
+    \right)^{2}
+    \left.
+    \frac{\partial A}{\partial x}
+    \right|_{h}
+    +
+    gA\left(
+      i
+    -
+    \frac{Q|Q|}{K^{2}}
+    \right)
+  \end{gathered}
+  \label{EqCGe_SV_hQ}
+\end{equation}
+
+
+（7）以过水断面
 面积$A$和$Q$为因变量的圣维南方程组
 \begin{equation}
   \begin{gathered}
@@ -2274,12 +2636,12 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    0
+    q
     \\
     \frac{\partial Q}{\partial t}
     +
-    \frac{\partial}{\partial x}\left(\frac{Q^{2}}{A} + gA\frac{\partial h}{\partial x}\right)
-    =
+    \frac{\partial}{\partial x}\left(\frac{Q^{2}}{A}\right)
+ + gA\frac{\partial h}{\partial x}    =
     gAi
     -
     gA\frac{Q|Q|}{K^{2}}
@@ -2293,7 +2655,7 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    0
+    q
     \\
     \frac{\partial Q}{\partial t}
     +
@@ -2306,36 +2668,43 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
 \end{equation}
 其中， $I = \int_{0}^{h(x,t)}(h-\eta)\xi(\eta) \mathrm{d}\eta$，
 $\xi(\eta) =\frac{\partial A(x, \eta )}{\partial \eta}$为水深为$\eta$处水面宽
-度。对矩形渠道,\
+度。
+
+对矩形渠道，
 \begin{equation}
-  I = \frac{A^{2 }}{2B}
+  I = \frac{A^{2 }}{2B} = \frac{Ah}{2}
+\end{equation}
+
+对梯形渠道，
+\begin{equation}
+  I = \frac{A^{2 }}{2B} + \frac{mh^{3}}{3}
 \end{equation}
 
 该方程组的矩阵形式为
 \begin{equation}
+  \begin{gathered}
 \frac{\partial \mathbf{U}}{\partial t} +
 \frac{\partial \mathbf{F}}{\partial x} =
 \mathbf{G}
-\end{equation}
-
-\begin{equation}
+\\
   \mathbf{U} =
   \begin{bmatrix}
     A \\
-    Q \\
+    Q 
   \end{bmatrix}
   ,
   \mathbf{F} =
   \begin{bmatrix}
     Q \\
-    \frac{Q^{2}}{A}+gI \\
+    \frac{Q^{2}}{A}+gI
   \end{bmatrix}
   ,
   \mathbf{G} =
   \begin{bmatrix}
-    0 \\
-    gA(i - \frac{|Q|Q}{K^{2}}) \\
+    q \\
+    gA\left(i - \frac{|Q|Q}{K^{2}}\right)
   \end{bmatrix}
+\end{gathered}
 \end{equation}
 
 \section{偏微分方程类型和性质}

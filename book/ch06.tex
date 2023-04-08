@@ -4,7 +4,7 @@
 对矩形断面渠道，一维圣维南方程组的守恒形式为：
 \begin{equation}
   \frac{\partial \mathbf{U}}{\partial t} +
-  \frac{\partial \mathbf{F}}{\partial x} =
+  \frac{\partial \mathbf{F}(\mathbf{U})}{\partial x} =
   \mathbf{S}
 \end{equation}
 其中，$\mathbf{U}$为未知量矢量，$\mathbf{F}$为通量矢量，$\mathbf{S}$为源项矢量，
@@ -14,7 +14,7 @@
   \mathbf{U} = 
   \begin{bmatrix}
     h \\
-    v
+    hv
   \end{bmatrix}
   ,
   \mathbf{F} = 
@@ -26,11 +26,11 @@
   \mathbf{S} = 
   \begin{bmatrix}
     0 \\
-    ghi - C_{f}v|v|
+    ghi - C_{f}|v|v
   \end{bmatrix}
 \end{equation}
 式中，$v(x,t)$为断面平均流速，$h(x,t)$为断面水深，$i$为底坡，$g$为重力加速度,
-$C_{f}$为阻力系数。
+$C_{f}=gh/(C^{2}R)$为阻力系数。
 
 \subsection{初始条件}
 为了计算圣维南方程的瞬态解，必须要先知道所有网格节点上的水深和流速值。这些值不能
@@ -105,7 +105,7 @@ MacCormack格式是一种两步（预测步和校正步）有限差分格式，�
   \mathbf{U}^{\mathrm{yc}} =
   \mathbf{U}^{k} -
   \frac{\Delta t }{\Delta x }
-  (\mathbf{F}_{i}^{k} - \mathbf{F}_{i}^{k}) +
+  (\mathbf{F}_{i+1}^{k} - \mathbf{F}_{i}^{k}) +
   \mathbf{S}_{i}^{k}\Delta t
 \end{equation}
 预测步给出了$k+1$时间层的流动的近似值，记为预测值。在校正步，通量$\mathbf{F}$采
@@ -114,7 +114,7 @@ MacCormack格式是一种两步（预测步和校正步）有限差分格式，�
   \mathbf{U}^{\mathrm{jz}} =
   \mathbf{U}^{k} -
   \frac{\Delta t }{\Delta x }
-  (\mathbf{F}_{i}^{\mathrm{yc}} - \mathbf{F}_{i}^{\mathrm{yc}}) +
+  (\mathbf{F}_{i}^{\mathrm{yc}} - \mathbf{F}_{i-1}^{\mathrm{yc}}) +
   \mathbf{S}_{i}^{\mathrm{yc}}\Delta t
 \end{equation}
 $k+1$时间层的最终结果是预测步和校正步得出的结果取平均得到的。
@@ -171,7 +171,7 @@ MacCormack格式中非物理振荡可以通过引入人工扩散来降低。在�
 其中，
 \begin{equation}
   {\varepsilon}_{i+1/2} =
-  K\max({\varepsilon}_{i+1}-{\varepsilon}_{i})
+  K\max({\varepsilon}_{i+1},{\varepsilon}_{i})
 \end{equation}
 ${\varepsilon}_{i}$是基于水深计算得出的参数。
 \begin{equation}
