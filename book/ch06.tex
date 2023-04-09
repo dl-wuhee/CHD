@@ -100,21 +100,21 @@ D =
 
 \subsubsection{MacCormack预测校正格式}
 MacCormack格式是一种两步（预测步和校正步）有限差分格式，具备激波捕捉能力。在预测
-步，通量$\mathbf{F}$采用向前差分格式，用$k$时间层信息来计算。
+步，通量$\mathbf{F}$采用向后差分格式，用$k$时间层信息来计算。
 \begin{equation}
   \mathbf{U}^{\mathrm{yc}} =
   \mathbf{U}^{k} -
   \frac{\Delta t }{\Delta x }
-  (\mathbf{F}_{i+1}^{k} - \mathbf{F}_{i}^{k}) +
+  (\mathbf{F}_{i}^{k} - \mathbf{F}_{i-1}^{k}) +
   \mathbf{S}_{i}^{k}\Delta t
 \end{equation}
 预测步给出了$k+1$时间层的流动的近似值，记为预测值。在校正步，通量$\mathbf{F}$采
-用向后差分格式，用预测步信息来计算。
+用向前差分格式，用预测步信息来计算。
 \begin{equation}
   \mathbf{U}^{\mathrm{jz}} =
   \mathbf{U}^{k} -
   \frac{\Delta t }{\Delta x }
-  (\mathbf{F}_{i}^{\mathrm{yc}} - \mathbf{F}_{i-1}^{\mathrm{yc}}) +
+  (\mathbf{F}_{i+1}^{\mathrm{yc}} - \mathbf{F}_{i}^{\mathrm{yc}}) +
   \mathbf{S}_{i}^{\mathrm{yc}}\Delta t
 \end{equation}
 $k+1$时间层的最终结果是预测步和校正步得出的结果取平均得到的。
