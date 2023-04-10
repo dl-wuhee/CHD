@@ -176,7 +176,7 @@ MacCormack格式中非物理振荡可以通过引入人工扩散来降低。在�
 ${\varepsilon}_{i}$是基于水深计算得出的参数。
 \begin{equation}
   {\varepsilon}_{i} =
-  \frac{|h_{i+1}-2h_{i}+h_{i-1}|}{|h_{i+1}|+2|h_{i}|+|h_{i-1}|}
+  \frac{|h_{i+1}-h_{i}+h_{i-1}|}{|h_{i+1}|-|h_{i}|+|h_{i-1}|}
 \end{equation}
 $K$为人工粘性系数，需要校验，通常取值范围为0.5\textasciitilde 3。这一格式只在振荡发展区域内引入
 数值扩散，而其他区域内的解不受影响。
@@ -229,9 +229,9 @@ MacCormack格式的TVD格式由Garcia-Navarro\cite{ref7}等于1992年给出。�
 \end{equation}
 平均速度和波速如下
 \begin{equation}
-  v_{i+1/2} = 
+  U_{i+1/2} = 
   \frac
-  {v_{i}\sqrt{h_{i}} + v_{i+1}\sqrt{h_{i+1}}}
+  {U_{i}\sqrt{h_{i}} + U_{i+1}\sqrt{h_{i+1}}}
   {\sqrt{h_{i}}+\sqrt{h_{i+1}}}
   ,\quad
   c_{i+1/2} =
@@ -242,9 +242,9 @@ MacCormack格式的TVD格式由Garcia-Navarro\cite{ref7}等于1992年给出。�
 \end{equation}
 特征值和平均特征值如下
 \begin{equation}
-  \lambda_{i}^{1,2} = v_{i}\pm c_{i}
+  \lambda_{i}^{1,2} = U_{i}\pm c_{i}
   ,\quad
-  \lambda_{i+1/2}^{1,2} = v_{i+1/2}\pm c_{i+1/2}
+  \lambda_{i+1/2}^{1,2} = U_{i+1/2}\pm c_{i+1/2}
 \end{equation}
 特征向量定义如下
 \begin{equation}
@@ -259,8 +259,8 @@ MacCormack格式的TVD格式由Garcia-Navarro\cite{ref7}等于1992年给出。�
 \begin{equation}
   \psi_{i+1/2}^{1,2} =
   \begin{cases}
-    |\lambda_{i+1/2}^{1,2}| & \mathrm{if} \quad |\lambda_{i+1/2}^{1,2}| \ge \varepsilon_{i+1/2}^{1,2} \\
-    \varepsilon_{i+1/2}^{1,2} & \mathrm{else}
+    |\lambda_{i+1/2}^{1,2}| & \mbox{如果} \quad |\lambda_{i+1/2}^{1,2}| \ge \varepsilon_{i+1/2}^{1,2} \\
+    \varepsilon_{i+1/2}^{1,2} & \mbox{否则} 
   \end{cases}
 \end{equation}
 其中，
