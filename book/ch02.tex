@@ -2138,7 +2138,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
 
 \subsection{圣维南方程不同形式}
 连续性方程\eqref{EqCGe_SVe_Ce}和运动方程\eqref{EqCGe_SVe_Me}构成了描述明槽非恒定
-渐变流的圣维南方程组。在实际应用中，为了使用方便，利用下列关系式，对式\eqref{EqCGe_SVe_Ce}和
+渐变流的圣维南方程组。在实际应用中，为了使用方便，忽略旁侧入流流量($q=0$)，
+利用下列关系式，对式\eqref{EqCGe_SVe_Ce}和
 \eqref{EqCGe_SVe_Me}进行改写，得到不同因变量组合的圣维南方程组。
 
 % Todo: 列出下列各式的具体推导过程。
@@ -2345,7 +2346,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     =
     \frac{1}{B}
     \left(
-    q - Biv - v\left.\frac{\partial A}{\partial x}\right|_{h}
+    %q
+    - Biv - v\left.\frac{\partial A}{\partial x}\right|_{h}
     \right)
     \\
     \frac{\partial v}{\partial t}
@@ -2370,7 +2372,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     =
     \frac{1}{B}
     \left(
-    q - v\left.\frac{\partial A}{\partial x}\right|_{h}
+    %q
+    - v\left.\frac{\partial A}{\partial x}\right|_{h}
     \right)
     \\
     \frac{\partial v}{\partial t}
@@ -2466,7 +2469,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial (hv)}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial (hv)}{\partial t}
     +
@@ -2500,7 +2504,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   ,
   \mathbf{G} =
   \begin{bmatrix}
-    q \\
+    %q \\
+    0 \\
     gh(i - \frac{|v|v}{C^{2}R}) \\
   \end{bmatrix}
 \end{gathered}
@@ -2514,7 +2519,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial (hv)}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial (hv)}{\partial t}
     +
@@ -2548,7 +2554,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
   ,
   \mathbf{G} =
   \begin{bmatrix}
-    q \\
+    %q \\
+    0 \\
     g(zi - h\frac{|v|v}{C^{2}R}) \\
   \end{bmatrix}
 \end{gathered}
@@ -2562,7 +2569,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial Q}{\partial t}
     +
@@ -2596,7 +2604,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial Q}{\partial t}
     +
@@ -2636,7 +2645,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial Q}{\partial t}
     +
@@ -2655,7 +2665,8 @@ $\tau_{0}=\gamma RJ$为侧壁表面平均切应力。
     +
     \frac{\partial Q}{\partial x}
     =
-    q
+    %q
+    0
     \\
     \frac{\partial Q}{\partial t}
     +
@@ -2701,7 +2712,8 @@ $\xi(\eta) =\frac{\partial A(x, \eta )}{\partial \eta}$为水深为$\eta$处水�
   ,
   \mathbf{G} =
   \begin{bmatrix}
-    q \\
+    %q \\
+    0 \\
     gA\left(i - \frac{|Q|Q}{K^{2}}\right)
   \end{bmatrix}
 \end{gathered}
