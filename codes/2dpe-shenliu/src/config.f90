@@ -29,6 +29,10 @@ contains
 end module config
 
 !program test
+  !use config 
+  !implicit none
+!end program test
+!program test
   !use config
   !implicit none
   !real(kind=dp) :: h, omega
